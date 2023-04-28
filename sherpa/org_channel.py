@@ -4,7 +4,7 @@ import json
 import discord
 from discord.ext import commands, tasks
 
-from organizari.functions import get_org_by_msg_id, data_updater
+from sherpa.functions import get_org_by_msg_id, data_updater
 
 global activity_details, GUILD_ID, org_id
 activity_details = {
@@ -37,13 +37,13 @@ org_id = 1101037441999179827
 
 
 def data_reader():
-    with open('./organizari/org_sherpa.json', 'r') as f:
+    with open('./sherpa/org_sherpa.json', 'r') as f:
         _temp = json.load(f)
         return _temp
 
 
 def data_logger(org_dict):
-    with open('./organizari/org_sherpa.json', 'w') as f:
+    with open('./sherpa/org_sherpa.json', 'w') as f:
         json.dump(org_dict, f)
 
 
@@ -115,7 +115,7 @@ async def check_if_beginner(guild: discord.Guild, member_id, role_id) -> bool:
 
 
 async def org_refresher(bot, org_channel_id):
-    with open('./organizari/org_sherpa.json', 'r') as f:
+    with open('./sherpa/org_sherpa.json', 'r') as f:
         _temp = json.load(f)
 
     orgs = _temp['org']
@@ -403,14 +403,14 @@ async def button_functions(interaction: discord.Interaction, label, org_dict, me
 
             data_updater(org_old=org_dict, org_new={})
 
-            # with open('./organizari/org_sherpa.json', 'r') as f:
+            # with open('./sherpa/org_sherpa.json', 'r') as f:
             #     _temp = json.load(f)
             # _temp = _temp['org']
             # for _org in _temp:
             #     if _org == org_dict:
             #         _temp.remove(_org)
             # new_dump = {'org': _temp}
-            # with open('./organizari/org_sherpa.json', 'w') as f:
+            # with open('./sherpa/org_sherpa.json', 'w') as f:
             #     json.dump(new_dump, f)
 
     if button_label == 'join':

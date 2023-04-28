@@ -199,7 +199,7 @@ chat_gpt/support_ids.txt
 chat_gpt/threads/
 chat_gpt/support_ids.txt
 utilities/donator_db.json
-organizari/org_sherpa.json
+sherpa/org_sherpa.json
 
 utilities/donator_db.json
 chat_gpt/support_ids.txt
@@ -208,7 +208,7 @@ chat_gpt/threads_ids.txt
 utilities/donator_db.json
 chat_gpt/support_ids.txt
 chat_gpt/threads_ids.txt
-organizari/org_sherpa.json
+sherpa/org_sherpa.json
 utilities/donator_db.json
 Assets/ST.png
 Assets/ST_exp.png

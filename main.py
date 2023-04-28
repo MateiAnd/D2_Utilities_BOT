@@ -11,10 +11,10 @@ import sys
 from os import environ
 
 from chat_gpt.ask_gpt import init_gpt, hello_gpt
-from organizari.functions import make_reminder_string, data_updater
-from organizari.org_channel import org_refresher
+from sherpa.functions import make_reminder_string, data_updater
+from sherpa.org_channel import org_refresher
 from utilities import donator_manage, donator_automod
-from organizari import create_org, org_channel
+from sherpa import create_org, org_channel
 from chat_gpt import ask_gpt
 import openai
 from help.help_embed import init_help
@@ -86,7 +86,7 @@ class UtilsBot(commands.Bot):
         print('------')
 
 
-sherpa_command = discord.app_commands.Group(name='sherpa', description='Optiuni pentru organizari de tip SHERPA',
+sherpa_command = discord.app_commands.Group(name='sherpa', description='Optiuni pentru sherpa de tip SHERPA',
                                             guild_ids=[GUILD_ID])
 bot = UtilsBot()
 command_tree = bot.tree  # discord.app_commands.CommandTree(bot)
@@ -319,7 +319,7 @@ async def post_refresher():
     reminder_id = REMINDER_CHANNEL  # 1078798703902597252
     print(G_ORG_CHANNEL)
 
-    with open('./organizari/org_sherpa.json', 'r') as f:
+    with open('sherpa/org_sherpa.json', 'r') as f:
         org_dict = json.load(f)["org"]
 
     if not org_dict:

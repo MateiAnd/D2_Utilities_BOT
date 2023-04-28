@@ -2,7 +2,7 @@ import json
 
 
 def get_org_by_msg_id(msg_id: int):
-    with open('./organizari/org_sherpa.json', 'r') as f:
+    with open('./sherpa/org_sherpa.json', 'r') as f:
         _temp = json.load(f)
     org_data = _temp['org']
     for org in org_data:
@@ -30,7 +30,7 @@ Rezerve: {rezerve}'''
 
 
 def data_updater(org_old, org_new):
-    with open('./organizari/org_sherpa.json', 'r') as f:
+    with open('./sherpa/org_sherpa.json', 'r') as f:
         _temp = json.load(f)
 
     _temp = _temp['org']
@@ -42,5 +42,5 @@ def data_updater(org_old, org_new):
 
     new_dump = {'org': _temp}
 
-    with open('./organizari/org_sherpa.json', 'w') as f:
+    with open('./sherpa/org_sherpa.json', 'w') as f:
         json.dump(new_dump, f)

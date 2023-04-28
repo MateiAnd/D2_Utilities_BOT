@@ -90,7 +90,7 @@ class HelpMessage(discord.Embed):
                        value='‎',
                        inline=False)
 
-        self.add_field(name='Comenzi organizari',
+        self.add_field(name='Comenzi sherpa',
                        value=user_cmd,
                        inline=False)
 
