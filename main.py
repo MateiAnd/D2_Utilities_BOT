@@ -115,23 +115,8 @@ async def privat_1(interaction: discord.Interaction, role_call: discord.Role):
     print(f'{"—" * 10} \nInitializare curatenie pentru {role_call.name} ')
 
     author = interaction.user.roles
-    allowed_roles = [729027061322350762, 790256564110884864, 710818161867620412, 919993853933670480]
 
-    is_allowed = 0
-    for role in allowed_roles:
-        if str(role) in str(author):
-            is_allowed = 1
-        else:
-            pass
-
-    if is_allowed:
-        if role_call:
-            await bot_clan_members.init(bot, role_call, interaction)
-        else:
-            await interaction.response.defer()
-            await interaction.response.send_message(content='Teapa', ephemeral=True)
-    else:
-        await interaction.response.send_message(content='Teapa', ephemeral=True)
+    await bot_clan_members.init(bot, role_call, interaction)
 
 
 @command_tree.command(name='generate_clan_invite_embed', description='Admin-only',
