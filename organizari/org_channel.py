@@ -238,7 +238,7 @@ class OrgEmbed(discord.Embed):
         super().__init__(title=f"{org_dict['Type']} — SHERPA",
                          description=f'Canal ghid: <#{1046138519506137208}>',
                          color=hex_color)
-        self.set_author(name='KH Sherpa',
+        self.set_author(name='D2-RO Sherpa',
                         url=r'https://destiny2.ro/',
                         icon_url='https://cdn.discordapp.com/attachments/1101368918318260274/1101498772560806001/logo_mic.png')
 
