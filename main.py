@@ -319,6 +319,7 @@ async def edit_rog(interaction: discord.Interaction, id: str):
 @tasks.loop(minutes=1)
 async def post_refresher():
     reminder_id = REMINDER_CHANNEL  # 1078798703902597252
+    print(org_channel)
 
     with open('./organizari/org_sherpa.json', 'r') as f:
         org_dict = json.load(f)["org"]
