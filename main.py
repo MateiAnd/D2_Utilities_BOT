@@ -319,7 +319,6 @@ async def edit_rog(interaction: discord.Interaction, id: str):
 @tasks.loop(minutes=1)
 async def post_refresher():
     reminder_id = REMINDER_CHANNEL  # 1078798703902597252
-    org_id = org_channel  # 1078798703902597252
 
     with open('./organizari/org_sherpa.json', 'r') as f:
         org_dict = json.load(f)["org"]
@@ -367,12 +366,12 @@ async def post_refresher():
         elif minute_difference < 0 and org['Org_info']['Reminder'] == 3:
             org['Org_info']['Active'] = False
             data_updater(org_old=_org, org_new=org)
-            _org_channel = await bot.fetch_channel(org_id)
+            _org_channel = await bot.fetch_channel(org_channel)
             message = await _org_channel.fetch_message(org['Message_id'])
             await org_channel.edit_mesaj(bot, message, org, True)
 
         if minute_difference < -240 and org['Org_info']['Active'] is False:
-            _org_channel = await bot.fetch_channel(org_id)
+            _org_channel = await bot.fetch_channel(org_channel)
             message = await _org_channel.fetch_message(org['Message_id'])
 
             guild = await bot.fetch_guild(GUILD_ID)
