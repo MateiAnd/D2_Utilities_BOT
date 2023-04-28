@@ -20,6 +20,7 @@ import openai
 from help.help_embed import init_help
 from audit_log import audit_builder
 
+sherpa_command = discord.app_commands.Group(name='sherpa', description='Optiuni pentru organizari de tip SHERPA')
 
 global GUILD_ID, PLAYER_UPDATES_CHANNEL, ORG_CHANNEL, REMINDER_CHANNEL, WELCOME_CHANNEL, org_channel
 GUILD_ID = 1075455824643764314
@@ -327,7 +328,6 @@ async def lock_for_donator(interaction: discord.Interaction):
 
 '''
 
-sherpa_command = discord.app_commands.Group(name='sherpa', description='Optiuni pentru organizari de tip SHERPA')
 # @command_tree.command(name='sherpa_create', description='Creaza o noua organizare de Sherpa.',
 #                       guild=discord.Object(id=GUILD_ID))
 @sherpa_command.command(name='create', description='Creaza o noua organizare de Sherpa.')
