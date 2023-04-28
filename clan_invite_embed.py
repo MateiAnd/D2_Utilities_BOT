@@ -8,22 +8,18 @@ class ClanEmbed(discord.Embed):
         super().__init__(title="CLAN LINKS", color=0xc75450)
 
         self.url_dict = {
-            'A': 'https://cdn.discordapp.com/attachments/752509452279742545/1092133330285244497/360_F_315942126_eVHcsAL0e2z9OW3yNLBJ8JpeQorDFlQj.png',  # http://destiny2.ro/clana
-            'B': 'http://destiny2.ro/clanb',
-            'C': 'http://destiny2.ro/clanc',
-            'F': 'http://destiny2.ro/clanf',
+            'A': 'http://destiny2.ro/clana',  # 'https://cdn.discordapp.com/attachments/752509452279742545/1092133330285244497/360_F_315942126_eVHcsAL0e2z9OW3yNLBJ8JpeQorDFlQj.png',
+            'B': 'http://destiny2.ro/clanc',
             'X': 'http://destiny2.ro/clanx'
         }
 
         self.clan_admin = {
-            'A': [160472069606342656, 492731788079267840, 489214493503520778],
-            'B': [614544813530021920, 273722496212008960],
-            'C': [527863507270631445],
-            'F': [264069820633448448],
-            'X': [740857014439247902, 249290472189591554, 335821679953707019]
+            'A': [160472069606342656, 489214493503520778],
+            'B': [527863507270631445],
+            'X': [740857014439247902]
         }
 
-        self.set_author(name='Karpathian Horsemen',
+        self.set_author(name='Destiny 2 Romania',
                         icon_url='https://cdn.discordapp.com/icons/710809754057834496/c1e14b8c875da15ad7f84409c5559c79.jpg')
         self.set_thumbnail(url='https://www.pngitem.com/pimgs/m/63-636562_join-us-won-t-you-hd-png-download.png')
 
@@ -49,7 +45,7 @@ class ClanEmbed(discord.Embed):
                            value=f'Clan {"<:steam:886894682389508136>" if clan != "X" else "<:xbox:896241390005145651>"} [Karpathian Horsemen #{clan}]({self.url_dict[clan]}) **{locuri_clan}** \n Contact: {ping_str} \n {"—" * 25} \n',
                            inline=False)
 
-        self.set_footer(text='© Karpathian Horsemen',
+        self.set_footer(text='© Destiny 2 Romania',
                         icon_url='https://cdn.discordapp.com/icons/710809754057834496/c1e14b8c875da15ad7f84409c5559c79.jpg')
 
 
@@ -75,7 +71,7 @@ async def init(interaction, bot):
 
 def get_clan_stats():
     clan_numbers = {}
-    letters = ['A', 'B', 'C', 'F', 'X']
+    letters = ['A', 'B', 'X']
 
     for letter in letters:
         clan_dict = contact_destiny_api.get_destiny_clan_memebrs_by_letter(letter)
