@@ -317,7 +317,6 @@ async def edit_rog(interaction: discord.Interaction, id: str):
 @tasks.loop(minutes=1)
 async def post_refresher():
     reminder_id = REMINDER_CHANNEL  # 1078798703902597252
-    print(G_ORG_CHANNEL)
 
     with open('sherpa/org_sherpa.json', 'r') as f:
         org_dict = json.load(f)["org"]
@@ -339,7 +338,6 @@ async def post_refresher():
         current_server_time = datetime.now()
         time_difference = user_datetime - current_server_time
         minute_difference = int(time_difference.total_seconds() / 60)
-        print(minute_difference)
 
         if minute_difference < 60 and org['Org_info']['Reminder'] == 0:
             reminder_channel = await bot.fetch_channel(reminder_id)
