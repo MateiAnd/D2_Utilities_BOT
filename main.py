@@ -59,7 +59,6 @@ class UtilsBot(commands.Bot):
         print('Starting tasks...')
 
         if not (test_bot):
-            G_ORG_CHANNEL = ORG_CHANNEL[0]
             do_refresh_embed.start()
             do_refresh_bot.start()
             do_refresh_donator.start()
@@ -67,7 +66,6 @@ class UtilsBot(commands.Bot):
             post_refresher.start()
         else:
             print('—— Bot de teste')
-            G_ORG_CHANNEL = ORG_CHANNEL[1]
 
 
         print('Done!')
@@ -792,9 +790,11 @@ global test_bot
 global test_bot
 if len(sys.argv) > 1:
     test_bot = False
+    G_ORG_CHANNEL = ORG_CHANNEL[0]
     TOKEN = sys.argv[1]
     bot.run(TOKEN)
 else:
+    G_ORG_CHANNEL = ORG_CHANNEL[1]
     test_bot = True
     TOKEN = str(environ.get('TOKEN_TEST'))
     bot.run(TOKEN)
