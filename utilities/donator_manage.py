@@ -3,18 +3,23 @@ import discord
 from discord.utils import get
 
 
+global GUILD_ID, PLAYER_UPDATES_CHANNEL, SERVER_BOOSTER, DONATOR_ROLE
+GUILD_ID = 710809754057834496
+PLAYER_UPDATES_CHANNEL = 1086041802831843359
+SERVER_BOOSTER = 728638426672529510
+DONATOR_ROLE = 790921054419681280
+
 async def init(bot, interaction):
     await interaction.response.defer()
     donator_dict = {}
     delete_donator = {}
-    guilds = bot.guilds
     members = bot.get_all_members()
-    for server in guilds:
-        if server.name == 'Karpathian Horsemen':
-            server_booster = server.get_role(728638426672529510)
-            donator_role = server.get_role(790921054419681280)
 
-    update_channel = await bot.fetch_channel(1078798703902597252)
+    server = await bot.fetch_guild(GUILD_ID)
+    server_booster = server.get_role(728638426672529510)
+    donator_role = server.get_role(790921054419681280)
+
+    update_channel = await bot.fetch_channel(PLAYER_UPDATES_CHANNEL)
 
     for member in members:
         if server_booster in member.roles:
@@ -86,10 +91,8 @@ class CustomEmbed_3(discord.Embed):
 async def add_donator(interaction, bot, member, time):
     await interaction.response.defer()
 
-    guilds = bot.guilds
-    for server in guilds:
-        if server.name == 'Karpathian Horsemen':
-            donator_role = server.get_role(790921054419681280)
+    server = await bot.fetch_guild(GUILD_ID)
+    donator_role = server.get_role(790921054419681280)
 
     new_donator_dict = {'name': member.display_name,
                         'id': member.id,
