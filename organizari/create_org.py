@@ -49,6 +49,7 @@ def time_flagger(date_string, org_dict):
     current_server_time = datetime.now()
     time_difference = user_datetime - current_server_time
     minute_difference = int(time_difference.total_seconds() / 60)
+    print(f'-- setup {minute_difference}')
 
     if 30 < minute_difference < 60:
         org_dict['Org_info']['Reminder'] = 1
@@ -416,15 +417,19 @@ class ThirdModal(discord.ui.Modal):  # , title='Adauga ora si data'
 
     async def on_submit(self, interaction: discord.Interaction):
         await interaction.response.defer()
-        import datetime
+        import datetime, pytz
 
         ora, data = self.children
         timp_str = f'{data.value} {ora.value}'
         datetime_obj = datetime.datetime.strptime(timp_str, '%d/%m/%Y %H:%M')
-        epoch_time = datetime_obj.timestamp()
+        source_tz = pytz.timezone("Europe/Bucharest")
+        dt = source_tz.localize(datetime_obj)
+
+        # Convert the datetime object to epoch time in the server's local timezone
+        epoch_time = dt.timestamp()
 
         if datetime.datetime.now().timestamp() < epoch_time:
-            await third_message(org_dict=self.org_dict, author=self.author, string=str(int(epoch_time - 3600)))
+            await third_message(org_dict=self.org_dict, author=self.author, string=str(int(epoch_time)))
         else:
             await interaction.response.send_modal(ThirdModal(self.org_dict, self.author))
 
