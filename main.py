@@ -87,6 +87,12 @@ class UtilsBot(commands.Bot):
         print('------')
 
 
+bot = UtilsBot()
+command_tree = bot.tree  # discord.app_commands.CommandTree(bot)
+sherpa_command = discord.app_commands.Group(name='sherpa', description='Optiuni pentru organizari de tip SHERPA')
+command_tree.add_command(sherpa_command)
+
+
 '''
 pentru event
 '''
@@ -809,11 +815,6 @@ async def test_voice(interaction: discord.Interaction):
 —————————————————————————————————————————————————————————————————————————————————————————————————
 
 '''
-
-bot = UtilsBot()
-command_tree = bot.tree  # discord.app_commands.CommandTree(bot)
-sherpa_command = discord.app_commands.Group(name='sherpa', description='Optiuni pentru organizari de tip SHERPA')
-command_tree.add_command(sherpa_command)
 
 global test_bot
 # TOKEN = str(environ.get('TOKEN'))  # sus la run dropdown file -> edit config -> enviroment variables -> TOKEN
