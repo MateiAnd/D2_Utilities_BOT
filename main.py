@@ -45,6 +45,7 @@ class UtilsBot(commands.Bot):
     #     self.add_view(view)
 
     async def on_ready(self):
+        command_tree.add_command(sherpa_command)
         if not self.synced:
             await command_tree.sync(guild=discord.Object(id=GUILD_ID))
             self.synced = True
@@ -87,10 +88,9 @@ class UtilsBot(commands.Bot):
         print('------')
 
 
+sherpa_command = discord.app_commands.Group(name='sherpa', description='Optiuni pentru organizari de tip SHERPA')
 bot = UtilsBot()
 command_tree = bot.tree  # discord.app_commands.CommandTree(bot)
-sherpa_command = discord.app_commands.Group(name='sherpa', description='Optiuni pentru organizari de tip SHERPA')
-command_tree.add_command(sherpa_command)
 
 
 '''
