@@ -113,9 +113,6 @@ event_last_user = None
                       guild=discord.Object(id=GUILD_ID))
 async def privat_1(interaction: discord.Interaction, role_call: discord.Role):
     print(f'{"—" * 10} \nInitializare curatenie pentru {role_call.name} ')
-
-    author = interaction.user.roles
-
     await bot_clan_members.init(bot, role_call, interaction)
 
 
@@ -123,20 +120,8 @@ async def privat_1(interaction: discord.Interaction, role_call: discord.Role):
                       guild=discord.Object(id=GUILD_ID))
 async def privat_2(interaction: discord.Interaction):
     print(f'{"—" * 10} \nGenerare embed cu invinte link')
-    author = interaction.user.roles
-    allowed_roles = [729027061322350762, 790256564110884864]
+    await clan_invite_embed.init(interaction, bot)
 
-    is_allowed = 0
-    for role in allowed_roles:
-        if str(role) in str(author):
-            is_allowed = 1
-        else:
-            pass
-
-    if is_allowed:
-        await clan_invite_embed.init(interaction, bot)
-    else:
-        await interaction.response.send_message(content='Teapa', ephemeral=True)
 
 
 @command_tree.command(name='fix_uhenp', description='Uhenp-only', guild=discord.Object(id=GUILD_ID))
