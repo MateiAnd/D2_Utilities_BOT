@@ -46,7 +46,7 @@ class ClanEmbed(discord.Embed):
                            inline=False)
 
         self.set_footer(text='© Destiny 2 Romania',
-                        icon_url='https://cdn.discordapp.com/icons/710809754057834496/c1e14b8c875da15ad7f84409c5559c79.jpg')
+                        icon_url='https://cdn.discordapp.com/attachments/1101368918318260274/1101498772560806001/logo_mic.png')
 
 
 async def init(interaction, bot):

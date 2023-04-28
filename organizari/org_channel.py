@@ -240,7 +240,7 @@ class OrgEmbed(discord.Embed):
                          color=hex_color)
         self.set_author(name='KH Sherpa',
                         url=r'https://destiny2.ro/',
-                        icon_url='https://cdn.discordapp.com/attachments/1086761501852958820/1086778406210895872/Karp_Disc.png')
+                        icon_url='https://cdn.discordapp.com/attachments/1101368918318260274/1101498772560806001/logo_mic.png')
 
         self.add_field(name='ID',
                        value=org_dict['ID'],
