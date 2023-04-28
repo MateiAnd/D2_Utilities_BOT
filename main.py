@@ -21,7 +21,7 @@ from help.help_embed import init_help
 from audit_log import audit_builder
 
 
-global GUILD_ID, PLAYER_UPDATES_CHANNEL, ORG_CHANNEL, REMINDER_CHANNEL, WELCOME_CHANNEL, org_channel
+global GUILD_ID, PLAYER_UPDATES_CHANNEL, ORG_CHANNEL, REMINDER_CHANNEL, WELCOME_CHANNEL, G_ORG_CHANNEL
 GUILD_ID = 1075455824643764314
 PLAYER_UPDATES_CHANNEL = 1100486602922397776
 ORG_CHANNEL = [1101037441999179827, 1100487208936423556]
@@ -59,7 +59,7 @@ class UtilsBot(commands.Bot):
         print('Starting tasks...')
 
         if not (test_bot):
-            org_channel = ORG_CHANNEL[0]
+            G_ORG_CHANNEL = ORG_CHANNEL[0]
             do_refresh_embed.start()
             do_refresh_bot.start()
             do_refresh_donator.start()
@@ -67,7 +67,7 @@ class UtilsBot(commands.Bot):
             post_refresher.start()
         else:
             print('—— Bot de teste')
-            org_channel = ORG_CHANNEL[1]
+            G_ORG_CHANNEL = ORG_CHANNEL[1]
 
 
         print('Done!')
@@ -78,7 +78,7 @@ class UtilsBot(commands.Bot):
         discord.utils.setup_logging()
 
         async def main():
-            await org_refresher(bot, org_channel)
+            await org_refresher(bot, G_ORG_CHANNEL)
 
         if __name__ == "__main__":
             await main()
@@ -319,7 +319,7 @@ async def edit_rog(interaction: discord.Interaction, id: str):
 @tasks.loop(minutes=1)
 async def post_refresher():
     reminder_id = REMINDER_CHANNEL  # 1078798703902597252
-    print(org_channel)
+    print(G_ORG_CHANNEL)
 
     with open('./organizari/org_sherpa.json', 'r') as f:
         org_dict = json.load(f)["org"]
@@ -367,12 +367,12 @@ async def post_refresher():
         elif minute_difference < 0 and org['Org_info']['Reminder'] == 3:
             org['Org_info']['Active'] = False
             data_updater(org_old=_org, org_new=org)
-            _org_channel = await bot.fetch_channel(org_channel)
+            _org_channel = await bot.fetch_channel(G_ORG_CHANNEL)
             message = await _org_channel.fetch_message(org['Message_id'])
             await org_channel.edit_mesaj(bot, message, org, True)
 
         if minute_difference < -240 and org['Org_info']['Active'] is False:
-            _org_channel = await bot.fetch_channel(org_channel)
+            _org_channel = await bot.fetch_channel(G_ORG_CHANNEL)
             message = await _org_channel.fetch_message(org['Message_id'])
 
             guild = await bot.fetch_guild(GUILD_ID)
