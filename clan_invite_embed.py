@@ -25,7 +25,7 @@ class ClanEmbed(discord.Embed):
 
 
         self.add_field(name='',
-                       value=f'Nu se accepta solicitarea fara sa anuntati administratorii de clan cu un @ pe <#938294344853647431>! \n\n Ultimele 5 locuri din clan sunt rezervate pentru membri ai comunitatii care doresc sa completeze triumfe! \n \n{"—" * 30}',
+                       value=f'Nu se accepta solicitarea fara sa anuntati administratorii de clan cu un @ pe <#1101490205254488064>! \n\n Ultimele 5 locuri din clan sunt rezervate pentru membri ai comunitatii care doresc sa completeze triumfe! \n \n{"—" * 30}',
                        inline=False)
 
 
@@ -42,7 +42,7 @@ class ClanEmbed(discord.Embed):
                 locuri_clan = 'CLAN INCHIS'
 
             self.add_field(name='',
-                           value=f'Clan {"<:steam:886894682389508136>" if clan != "X" else "<:xbox:896241390005145651>"} [Karpathian Horsemen #{clan}]({self.url_dict[clan]}) **{locuri_clan}** \n Contact: {ping_str} \n {"—" * 25} \n',
+                           value=f'Clan {"<:steam:886894682389508136>" if clan != "X" else "<:xbox:896241390005145651>"} [Destiny 2 Romania #{clan}]({self.url_dict[clan]}) **{locuri_clan}** \n Contact: {ping_str} \n {"—" * 25} \n',
                            inline=False)
 
         self.set_footer(text='© Destiny 2 Romania',
