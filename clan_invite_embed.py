@@ -42,7 +42,7 @@ class ClanEmbed(discord.Embed):
             #     locuri_clan = 'CLAN INCHIS'
 
             self.add_field(name='',
-                           value=f'Clan {"<:steam:886894682389508136>" if clan != "X" else "<:xbox:896241390005145651>"} [Destiny 2 Romania #{clan}]({self.url_dict[clan]}) **{locuri_clan}** \n Contact: {ping_str} \n {"—" * 25} \n',
+                           value=f'Clan {"<:steam:1101491300777328641>" if clan != "X" else "<:xbox:1101491452753743932>"} [Destiny 2 Romania #{clan}]({self.url_dict[clan]}) **{locuri_clan}** \n Contact: {ping_str} \n {"—" * 25} \n',
                            inline=False)
 
         self.set_footer(text='© Destiny 2 Romania',
