@@ -362,7 +362,7 @@ async def post_refresher():
             org['Org_info']['Reminder'] = 3
             data_updater(org_old=_org, org_new=org)
 
-        elif minute_difference < 0 and org['Org_info']['Reminder'] == 3:
+        elif minute_difference < 0 and org['Org_info']['Reminder'] == 3 and org['Org_info']['Active'] == True:
             org['Org_info']['Active'] = False
             data_updater(org_old=_org, org_new=org)
             _org_channel = await bot.fetch_channel(G_ORG_CHANNEL)
