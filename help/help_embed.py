@@ -2,7 +2,7 @@ import discord.ext.commands
 
 
 global admin_cmd, donator_cmd, user_cmd, exp_cmd
-admin_cmd=''' Aceste comenzi se vor da numai pe <#797387549089333268>
+admin_cmd=''' Aceste comenzi se vor da numai pe <#1075455825205800971>
 
 `/curatenie_generala role_call: rol_clan` — comanda va verifica membri din clan contra membri de pe discord si va afisa membri inactivi peste 30 de zile si membri absenti/ neinregistrati de pe discord.
 
@@ -11,27 +11,27 @@ admin_cmd=''' Aceste comenzi se vor da numai pe <#797387549089333268>
 `/donator_add @member year:int month:int day:int` — Adauga manual o persoana pe lista de donatori cu data de expirare rol
 '''
 
-donator_cmd='''Aceste comenzi se for apela numai pe <#710825700092805201>
+donator_cmd='''Aceste comenzi se for apela numai pe <#1075455825549742158>
 
 `/trasnfer #voice_channel` — Aceasta comanda te va transfera pe un canal voce indiferent de numarul de membri activi in canal. Exemplu utilizare: Vrei sa intri pe PVE-3 dar sunt deja 3 persoane, intra pe orice canal voce si apeleaza `/transfer PVE-3`.
 
 `/lock_channel` — Comanda va restrange user limit-ul pentru canalele de activitati la numarul actual de membri din canal, ca sa nu fiti deranjati cat timp faceti activitati. Restrangerea se reseteaza la inchiderea canalului.
 '''
 
-user_cmd = '''Aceste comenzi se for apela numai pe <#710825700092805201>
+user_cmd = '''Aceste comenzi se for apela numai pe <#1075455825549742158>
 
 `/organizare create` — Programeaza o organizare de Raid / Dungeon / Nightfall / PVP / Gambit / Sezonal care va fi postata pe <#745904725983101017>. Orice membru al serverului se paote alatura organizarii.
 
 `/organizare edit id:int` — Modifica o organizare creata de tine 
 '''
-exp_cmd = '''Aceste comenzi se for apela numai pe <#710825700092805201>
+exp_cmd = '''Aceste comenzi se for apela numai pe <#1075455825549742158>
 
 `/sherpa create` — Programeaza o organizare de SHERPA Raid / Dungeon care va fi postata pe <#745904725983101017>. Orice membru al serverului se paote alatura organizarii. Vei primit un rol temporar cu care ai posibilitati de administrare a canalului special creat pentru activitate
 
 `/sherpa edit id:int` — Modifica o organizare SHERPA creata de tine 
 
 
-Aceasta comanda se poate apela numai pe <#1088925468683681875>:
+Aceasta comanda se poate apela numai pe <#1101408260642320428>:
 
 `/support_gpt` — Comanda va crea un thread unde ai acces la ChatBro. El este antrenat sa raspunda la intrebarile desrpe serverul de discord si Destiny pana la data de 21 Septembie 2021.
 '''

@@ -9,23 +9,23 @@ from organizari.functions import get_org_by_msg_id, data_updater
 global activity_details, GUILD_ID, org_id
 activity_details = {
     # attribute_list  =      role_id, guide_id, hex_color, active_img, expired_img
-    "King's fall": [1019178278822613022, 1048983462125768745, 0xff2f00, r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769004074512444/KF.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769009954918560/KF_exp.png'],
-    'Deep Stone Crypt': [797118742198747146, 1049223783724109834, 0x0088ff, r'https://cdn.discordapp.com/attachments/1086761501852958820/1086768506252558416/DSC.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1086768517837234306/DSC_exp.png'],
-    'Garden of Salvation': [797123730886885436, 1046140173102104639, 0x367800, r'https://cdn.discordapp.com/attachments/1086761501852958820/1086768906603085936/GOS.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1086768917114007682/GOS_exp.png'],
-    'Last Wish': [886917303604740157, 1048985076345606315, 0x08fc76, r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769106734293092/LW.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769117081640960/LW_exp.png'],
-    'Vault of Glass': [847650324385759252, 1046139331938631780, 0x005939, r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769696134660106/VOG.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769702442893322/VOG_exp.png'],
-    'Vow of the Disciple': [956203182697099344, 1048950466807070783, 0x470902, r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769776791138355/VOW.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769782935781457/VOW_exp.png'],
-    'Root Of Nightmares': [1086603792130265109, 1086338007763783740, 0x7e0599, r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769471777144842/RON.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769479008133222/RON_exp.png'],
-    'Spire of the Watcher': [1057020005407014942, 1051035874193842206, 0xb86a04, r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769561363300402/SOTW.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769583622463548/SOTW_exp.png'],
-    'Duality': [1019178581265489940, 1049227955227873291, 0x8a002c, r'https://cdn.discordapp.com/attachments/1086761501852958820/1086768698578190336/DUAL.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1086768698578190336/DUAL.png'],
-    'Grasp of Averice': [1057707753105281114, 1049229682794569788, 0x00e66f, r'https://cdn.discordapp.com/attachments/1086761501852958820/1086768831755718676/GOA.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1086768835048255548/GOA_exp.png'],
-    'Pit': [1057706832627503245, 1086770866454540309, 0x692f0e, r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769206160261120/PIT.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769213286387802/PIT_exp.png'],
-    'Prophecy': [1057707344110301284, 1086770644982698024, 0x7200c9, r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769302222405832/PROPH.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769310778785852/PROPH_exp.png'],
-    'Shattered Throne': [1057706122787692544, 1086770644982698024, 0x113045, r'https://cdn.discordapp.com/attachments/1078798703902597252/1101179619379519538/ST.png', r'https://cdn.discordapp.com/attachments/1078798703902597252/1101179634973945907/ST_exp.png']
+    "King's fall": [1075455824748621840, 1048983462125768745, 0xff2f00, r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769004074512444/KF.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769009954918560/KF_exp.png'],
+    'Deep Stone Crypt': [1075455824765394986, 1049223783724109834, 0x0088ff, r'https://cdn.discordapp.com/attachments/1086761501852958820/1086768506252558416/DSC.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1086768517837234306/DSC_exp.png'],
+    'Garden of Salvation': [1075455824765394988, 1046140173102104639, 0x367800, r'https://cdn.discordapp.com/attachments/1086761501852958820/1086768906603085936/GOS.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1086768917114007682/GOS_exp.png'],
+    'Last Wish': [1075455824765394990, 1048985076345606315, 0x08fc76, r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769106734293092/LW.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769117081640960/LW_exp.png'],
+    'Vault of Glass': [1075455824765394984, 1046139331938631780, 0x005939, r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769696134660106/VOG.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769702442893322/VOG_exp.png'],
+    'Vow of the Disciple': [1075455824748621842, 1048950466807070783, 0x470902, r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769776791138355/VOW.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769782935781457/VOW_exp.png'],
+    'Root Of Nightmares': [1101410490363686952, 1086338007763783740, 0x7e0599, r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769471777144842/RON.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769479008133222/RON_exp.png'],
+    'Spire of the Watcher': [1075455824731852844, 1051035874193842206, 0xb86a04, r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769561363300402/SOTW.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769583622463548/SOTW_exp.png'],
+    'Duality': [1075455824731852846, 1049227955227873291, 0x8a002c, r'https://cdn.discordapp.com/attachments/1086761501852958820/1086768698578190336/DUAL.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1086768698578190336/DUAL.png'],
+    'Grasp of Averice': [1075455824731852848, 1049229682794569788, 0x00e66f, r'https://cdn.discordapp.com/attachments/1086761501852958820/1086768831755718676/GOA.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1086768835048255548/GOA_exp.png'],
+    'Pit': [1075455824748621836, 1086770866454540309, 0x692f0e, r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769206160261120/PIT.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769213286387802/PIT_exp.png'],
+    'Prophecy': [1075455824748621834, 1086770644982698024, 0x7200c9, r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769302222405832/PROPH.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769310778785852/PROPH_exp.png'],
+    'Shattered Throne': [1075455824748621838, 1086770644982698024, 0x113045, r'https://cdn.discordapp.com/attachments/1078798703902597252/1101179619379519538/ST.png', r'https://cdn.discordapp.com/attachments/1078798703902597252/1101179634973945907/ST_exp.png']
 }
 
-GUILD_ID = 710809754057834496
-org_id = 745904725983101017
+GUILD_ID = 1075455824643764314
+org_id = 1101037441999179827
 
 '''
 

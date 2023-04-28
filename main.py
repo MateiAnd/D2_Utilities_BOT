@@ -20,16 +20,15 @@ import openai
 from help.help_embed import init_help
 from audit_log import audit_builder
 
-sherpa_command = discord.app_commands.Group(name='sherpa', description='Optiuni pentru organizari de tip SHERPA')
 
 global GUILD_ID, PLAYER_UPDATES_CHANNEL, ORG_CHANNEL, REMINDER_CHANNEL, WELCOME_CHANNEL, org_channel
-GUILD_ID = 710809754057834496
-PLAYER_UPDATES_CHANNEL = 1086041802831843359
-ORG_CHANNEL = [745904725983101017, 1078798703902597252]
-REMINDER_CHANNEL = 760757069937639424
-WELCOME_CHANNEL = 954083245522313266
-CLAN_INVITE_CHANNEL = 938290015195238400
-AUDIT_CHANNEL = 1078798703902597252
+GUILD_ID = 1075455824643764314
+PLAYER_UPDATES_CHANNEL = 1100486602922397776
+ORG_CHANNEL = [1101037441999179827, 1100487208936423556]
+REMINDER_CHANNEL = 1075455825788809276
+WELCOME_CHANNEL = 1075455825205800974
+CLAN_INVITE_CHANNEL = 1075455825377763418
+AUDIT_CHANNEL = 1100487208936423556
 
 class UtilsBot(commands.Bot):
     def __init__(self):
@@ -328,7 +327,7 @@ async def lock_for_donator(interaction: discord.Interaction):
 
 '''
 
-
+sherpa_command = discord.app_commands.Group(name='sherpa', description='Optiuni pentru organizari de tip SHERPA')
 # @command_tree.command(name='sherpa_create', description='Creaza o noua organizare de Sherpa.',
 #                       guild=discord.Object(id=GUILD_ID))
 @sherpa_command.command(name='create', description='Creaza o noua organizare de Sherpa.')

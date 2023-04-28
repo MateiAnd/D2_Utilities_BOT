@@ -23,8 +23,8 @@ button_labels = {
     'Forth': ['Next', 'Edit', 'Cancel'],  # numar incepatori
     'Fifth': ['Add Info', 'Finish', 'Cancel']  # final
 }
-PVE_CATEGORY = 790187207985987595
-GUILD_ID = 710809754057834496
+PVE_CATEGORY = 1101037807671197706
+GUILD_ID = 1075455824643764314
 
 def rand_id():
     from random import randint
