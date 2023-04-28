@@ -548,9 +548,9 @@ async def test_gpt_2(interaction: discord.Interaction):
 @bot.event
 async def on_message(message: discord.Message):
     if isinstance(message.channel, discord.Thread):
-        if message.author.id == 1068908188520423486:  # or
+        if message.author.id == 1100486789673791558:  # or
             return
-        if message.author.id == 1069673606352744549:
+        if message.author.id == 1101506405942448170:
             return
 
         async with aiofiles.open('./chat_gpt/ignore_ids.txt', 'r') as f:
