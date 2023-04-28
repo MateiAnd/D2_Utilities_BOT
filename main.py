@@ -88,7 +88,8 @@ class UtilsBot(commands.Bot):
         print('------')
 
 
-sherpa_command = discord.app_commands.Group(name='sherpa', description='Optiuni pentru organizari de tip SHERPA')
+sherpa_command = discord.app_commands.Group(name='sherpa', description='Optiuni pentru organizari de tip SHERPA',
+                                            guild_ids=[GUILD_ID])
 bot = UtilsBot()
 command_tree = bot.tree  # discord.app_commands.CommandTree(bot)
 
