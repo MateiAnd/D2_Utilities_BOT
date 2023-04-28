@@ -59,12 +59,12 @@ class UtilsBot(commands.Bot):
         print('Starting tasks...')
 
         if not (test_bot):
+            org_channel = ORG_CHANNEL[0]
             do_refresh_embed.start()
             do_refresh_bot.start()
             do_refresh_donator.start()
             # do_refresh_leaderboard.start()
             post_refresher.start()
-            org_channel = ORG_CHANNEL[0]
         else:
             print('—— Bot de teste')
             org_channel = ORG_CHANNEL[1]
