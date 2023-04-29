@@ -84,6 +84,8 @@ def time_flagger(date_string, org_dict):
     if minute_difference < 15:
         org_dict['Org_info']['Reminder'] = 3
 
+    print(f"-- setup {org_dict['Org_info']['Reminder']}")
+
     return org_dict
 
 
@@ -393,7 +395,6 @@ class ThirdMsgButtons(discord.ui.Button):
             async def click(interaction: discord.Interaction):
                 if await compare_users(interaction, author, interaction.user):
                     await interaction.response.defer()
-                    print(org_dict)
                     if org_dict['Activity'] == 'PVE' or org_dict['Activity'] == 'PVP':
                         org_dict['Beginners'] = None
                         await fifth_message(org_dict, author)
