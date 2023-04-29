@@ -88,7 +88,7 @@ def time_flagger(date_string, org_dict):
 
 
 def get_org_by_id(org_id: str):
-    with open('./sherpa/org_sherpa.json', 'r') as f:
+    with open('./organizari_bot/organizari.json', 'r') as f:
         _temp = json.load(f)
 
     org_data = _temp['org']
@@ -119,7 +119,7 @@ async def create(interaction, bot, author):
 
     id_nr = rand_id()
     _temp_success = True
-    with open('./sherpa/org_sherpa.json', 'r') as f:
+    with open('./organizari_bot/organizari.json', 'r') as f:
         orgs = json.load(f)
         while True:
             for org in orgs['org']:
