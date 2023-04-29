@@ -274,7 +274,11 @@ class OrgEmbed(discord.Embed):
 
         # participants = org_dict['Participants']
         if org_dict['Activity'] == 'Raid' or org_dict['Activity'] == 'Dungeon':
-            beg_number = f"(max {org_dict['Beginners']} 🍼)" if org_dict['Beginners'] != 0 or org_dict['Beginners'] is not None else "Fara 🍼"
+            
+            if org_dict['Beginners'] != 0 or org_dict['Beginners'] is not None:
+                beg_number = f"(max {org_dict['Beginners']} 🍼)"
+            else:
+                beg_number = "Fara 🍼"
             self.add_field(name=f'Participanti - {beg_number}',
                            value=f'{expert_list} \n {beginner_list}',
                            inline=True)
