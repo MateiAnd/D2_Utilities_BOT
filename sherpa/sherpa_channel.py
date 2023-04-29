@@ -224,7 +224,7 @@ async def edit_mesaj(bot: commands.Bot, message, org_dict, block=False):
         print(org_dict['Datetime'])
     except:
         pass
-    if not block:
+    if org_dict['Org_info']['Active']:
         await message.edit(content='Organizare noua de sherpa!', embed=OrgEmbed(org_dict, attribute_list, sherpa_name, beginner_list, expert_list, reserve_list),
                            view=OrgView(org_dict, attribute_list, bot))
     else:
