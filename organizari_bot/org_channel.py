@@ -231,8 +231,7 @@ async def edit_mesaj(bot: commands.Bot, message, org_dict, block=False):
     except:
         pass
 
-    print(org_dict['Org_info']['Active'])
-    if not org_dict['Org_info']['Active']:
+    if org_dict['Org_info']['Active']:
         await message.edit(content='Organizare noua!', embed=OrgEmbed(org_dict, attribute_list, author_name, beginner_list, expert_list, reserve_list),
                            view=OrgView(org_dict, attribute_list, bot))
     else:
