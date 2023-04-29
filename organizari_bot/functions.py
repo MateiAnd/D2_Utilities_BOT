@@ -23,7 +23,7 @@ Rezerve: {rezerve}'''
     experimentati = ' '.join(['<@{}>'.format(exp[1]) for exp in participants['Experts']])
     rezerve = ' '.join(['<@{}>'.format(rez[1]) for rez in participants['Reserve']])
 
-    out_str = template_string.format(letter=letter, timp=time, sherpa=participants['Sherpa'][1], incepatori=incepatori,
+    out_str = template_string.format(letter=letter, timp=time, sherpa=participants['Author'][1], incepatori=incepatori,
                                      experimentati=experimentati, rezerve=rezerve)
     return out_str
 
