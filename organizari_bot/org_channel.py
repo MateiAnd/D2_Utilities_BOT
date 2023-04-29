@@ -273,8 +273,8 @@ class OrgEmbed(discord.Embed):
         '''
 
         # participants = org_dict['Participants']
-
-        self.add_field(name='Participanti',
+        beg_number = f"(max {org_dict['Beginners']} 🍼)" if org_dict['Beginners'] else "Fara 🍼"
+        self.add_field(name=f'Participanti- {beg_number}',
                        value=f'{expert_list} \n {beginner_list}',
                        inline=True)
 

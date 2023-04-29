@@ -476,17 +476,16 @@ class ThirdModal(discord.ui.Modal):  # , title='Adauga ora si data'
 class ForthEmbed(discord.Embed):
     def __init__(self, org_dict):
         super().__init__(title=f"Selecteaza numarul maxim de incepatori.",
-                         description=f'''Selecteaza cati incepatori se pot inscrie in organizarea ta
-                                     Numarul minim este {2 if org_dict['Activity'] == 'Raid' else 1}''',
+                         description=f'''Selecteaza cati incepatori se pot inscrie in organizarea ta''',
                          color=0xddff00)
 
 
 class ForthDropdown(discord.ui.Select):
     def __init__(self, author, org_dict):
         if org_dict['Activity'] == 'Dungeon':
-            elem_list = [1, 2]
+            elem_list = [0, 1, 2]
         else:
-            elem_list = [2, 3, 4, 5]
+            elem_list = [0, 1, 2, 3, 4, 5]
 
         self.selected = None
         self.author = author
