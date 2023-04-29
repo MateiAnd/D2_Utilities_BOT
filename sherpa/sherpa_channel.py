@@ -114,7 +114,7 @@ async def check_if_beginner(guild: discord.Guild, member_id, role_id) -> bool:
     return eval
 
 
-async def org_refresher(bot, org_channel_id):
+async def sherpa_refresher(bot, org_channel_id):
     with open('./sherpa/org_sherpa.json', 'r') as f:
         _temp = json.load(f)
 

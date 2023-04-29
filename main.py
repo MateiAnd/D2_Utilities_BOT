@@ -10,17 +10,19 @@ import clan_invite_embed
 import sys
 from os import environ
 
+import openai
 from chat_gpt.ask_gpt import init_gpt, hello_gpt
+from chat_gpt import ask_gpt
+
 from sherpa import functions_sherpa
-from organizari_bot import functions
-from sherpa.sherpa_channel import org_refresher
-# from organizari_bot.org_channel import org_refresher
-from utilities import donator_manage, donator_automod
+from sherpa.sherpa_channel import sherpa_refresher
 from sherpa import create_sherpa, sherpa_channel
+
+from organizari_bot import functions
+from organizari_bot.org_channel import org_refresher
 from organizari_bot import create_org, org_channel
 
-from chat_gpt import ask_gpt
-import openai
+from utilities import donator_manage, donator_automod
 from help.help_embed import init_help
 from audit_log import audit_builder
 
@@ -83,6 +85,7 @@ class UtilsBot(commands.Bot):
         discord.utils.setup_logging()
 
         async def main():
+            await sherpa_refresher(bot, G_ORG_CHANNEL)
             await org_refresher(bot, G_ORG_CHANNEL)
 
         if __name__ == "__main__":
