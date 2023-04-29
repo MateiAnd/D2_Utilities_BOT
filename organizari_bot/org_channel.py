@@ -274,7 +274,7 @@ class OrgEmbed(discord.Embed):
 
         # participants = org_dict['Participants']
         if org_dict['Activity'] == 'Raid' or org_dict['Activity'] == 'Dungeon':
-            
+
             if org_dict['Beginners'] != 0 or org_dict['Beginners'] is not None:
                 beg_number = f"(max {org_dict['Beginners']} 🍼)"
             else:
