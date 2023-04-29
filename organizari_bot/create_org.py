@@ -647,7 +647,7 @@ class FifthMsgButtons(discord.ui.Button):
                         }
 
                     await org_channel.initializare_mesaj(bot=_bot, org_dict=org_dict)
-                    await message.edit(content='Organizare creata cu succes!', embed=None, view=None)
+                    await message.edit(content=f'Organizare de {org_dict["Activity"]} cu ID {org_dict["ID"]} a fost creata cu succes!', embed=None, view=None)
 
         self.callback = click
 
