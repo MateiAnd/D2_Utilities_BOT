@@ -51,6 +51,7 @@ def time_flagger(date_string, org_dict):
     minute_difference = int(time_difference.total_seconds() / 60)
     print(f'-- setup {minute_difference}')
 
+    org_dict['Org_info']['Reminder'] = 0
     if 30 < minute_difference < 60:
         org_dict['Org_info']['Reminder'] = 1
     if 29 < minute_difference < 30:
