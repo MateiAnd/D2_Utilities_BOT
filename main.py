@@ -11,10 +11,14 @@ import sys
 from os import environ
 
 from chat_gpt.ask_gpt import init_gpt, hello_gpt
-from sherpa.functions import make_reminder_string, data_updater
-from sherpa.org_channel import org_refresher
+from sherpa import functions_sherpa
+from organizari_bot import functions
+from sherpa.sherpa_channel import org_refresher
+# from organizari_bot.org_channel import org_refresher
 from utilities import donator_manage, donator_automod
-from sherpa import create_org, org_channel
+from sherpa import create_sherpa, sherpa_channel
+from organizari_bot import create_org, org_channel
+
 from chat_gpt import ask_gpt
 import openai
 from help.help_embed import init_help
@@ -46,6 +50,8 @@ class UtilsBot(commands.Bot):
 
     async def on_ready(self):
         command_tree.add_command(sherpa_command)
+        command_tree.add_command(org_command)
+
         if not self.synced:
             await command_tree.sync(guild=discord.Object(id=GUILD_ID))
             self.synced = True
@@ -86,7 +92,9 @@ class UtilsBot(commands.Bot):
         print('------')
 
 
-sherpa_command = discord.app_commands.Group(name='sherpa', description='Optiuni pentru sherpa de tip SHERPA',
+sherpa_command = discord.app_commands.Group(name='sherpa', description='Optiuni organizari sherpa de tip SHERPA.',
+                                            guild_ids=[GUILD_ID])
+org_command = discord.app_commands.Group(name='organizare', description='Optiuni pentru organizari.',
                                             guild_ids=[GUILD_ID])
 bot = UtilsBot()
 command_tree = bot.tree  # discord.app_commands.CommandTree(bot)
@@ -293,17 +301,18 @@ async def lock_for_donator(interaction: discord.Interaction):
 '''
 
 —————————————————————————————————————————————————————————————————————————————————————————————————
-                    Organizari
+                    Organizari - Sherpa
 —————————————————————————————————————————————————————————————————————————————————————————————————
 
 '''
+
 
 # @command_tree.command(name='sherpa_create', description='Creaza o noua organizare de Sherpa.',
 #                       guild=discord.Object(id=GUILD_ID))
 @sherpa_command.command(name='create', description='Creaza o noua organizare de Sherpa.')
 async def create_rog(interaction: discord.Interaction):
     print(f'{"—" * 10} \nInitializare creare ')
-    await create_org.create(interaction, bot, interaction.user)
+    await create_sherpa.create(interaction, bot, interaction.user)
 
 
 # @command_tree.command(name='sherpa_edit', description='Editeaza o organizare de Sherpa existenta.',
@@ -311,7 +320,7 @@ async def create_rog(interaction: discord.Interaction):
 @sherpa_command.command(name='edit', description='Editeaza o organizare de Sherpa.')
 async def edit_rog(interaction: discord.Interaction, id: str):
     print(f'{"—" * 10} \nInitializare edit ')
-    await create_org.edit(interaction, bot, interaction.user, id)
+    await create_sherpa.edit(interaction, bot, interaction.user, id)
 
 
 @tasks.loop(minutes=1)
@@ -341,31 +350,31 @@ async def post_refresher():
 
         if minute_difference < 60 and org['Org_info']['Reminder'] == 0:
             reminder_channel = await bot.fetch_channel(reminder_id)
-            reminder_string = make_reminder_string(org, 'A', 'o ora')
+            reminder_string = functions_sherpa.make_reminder_string(org, 'A', 'o ora')
             await reminder_channel.send(content=reminder_string)
             org['Org_info']['Reminder'] = 1
-            data_updater(org_old=_org, org_new=org)
+            functions_sherpa.data_updater(org_old=_org, org_new=org)
 
         elif minute_difference < 30 and org['Org_info']['Reminder'] == 1:
             reminder_channel = await bot.fetch_channel(reminder_id)
-            reminder_string = make_reminder_string(org, 'Au', '30 min')
+            reminder_string = functions_sherpa.make_reminder_string(org, 'Au', '30 min')
             await reminder_channel.send(content=reminder_string)
             org['Org_info']['Reminder'] = 2
-            data_updater(org_old=_org, org_new=org)
+            functions_sherpa.data_updater(org_old=_org, org_new=org)
 
         elif minute_difference < 15 and org['Org_info']['Reminder'] == 2:
             reminder_channel = await bot.fetch_channel(reminder_id)
-            reminder_string = make_reminder_string(org, 'Au', '15 min')
+            reminder_string = functions_sherpa.make_reminder_string(org, 'Au', '15 min')
             await reminder_channel.send(content=reminder_string)
             org['Org_info']['Reminder'] = 3
-            data_updater(org_old=_org, org_new=org)
+            functions_sherpa.data_updater(org_old=_org, org_new=org)
 
         elif minute_difference < 0 and org['Org_info']['Reminder'] == 3 and org['Org_info']['Active'] == True:
             org['Org_info']['Active'] = False
-            data_updater(org_old=_org, org_new=org)
+            functions_sherpa.data_updater(org_old=_org, org_new=org)
             _org_channel = await bot.fetch_channel(G_ORG_CHANNEL)
             message = await _org_channel.fetch_message(org['Message_id'])
-            await org_channel.edit_mesaj(bot, message, org, True)
+            await sherpa_channel.edit_mesaj(bot, message, org, True)
 
         if minute_difference < -240 and org['Org_info']['Active'] is False:
             _org_channel = await bot.fetch_channel(G_ORG_CHANNEL)
@@ -381,8 +390,95 @@ async def post_refresher():
             await org_role.delete()
             await message.delete()
 
-            data_updater(org_old=_org, org_new={})
+            functions_sherpa.data_updater(org_old=_org, org_new={})
 
+
+
+'''
+
+—————————————————————————————————————————————————————————————————————————————————————————————————
+                    Organizari - Normal
+—————————————————————————————————————————————————————————————————————————————————————————————————
+
+'''
+
+
+@org_command.command(name='create', description='Creaza o noua organizare.')
+async def create_organizare(interaction: discord.Interaction):
+    print(f'{"—" * 10} \nInitializare creare ')
+    await create_org.create(interaction, bot, interaction.user)
+
+
+@org_command.command(name='edit', description='Editeaza o organizare.')
+async def edit_organizare(interaction: discord.Interaction, id: str):
+    print(f'{"—" * 10} \nInitializare edit ')
+    await create_org.edit(interaction, bot, interaction.user, id)
+
+
+@tasks.loop(minutes=1)
+async def organizare_refresher():
+    reminder_id = REMINDER_CHANNEL  # 1078798703902597252
+
+    with open('organizari_bot/organizari.json', 'r') as f:
+        org_dict = json.load(f)["org"]
+
+    if not org_dict:
+        return
+
+    for org in org_dict:
+        _org = copy.deepcopy(org)
+        from datetime import datetime
+
+        # Assuming your epoch time is stored in a variable named 'epoch_time'
+        epoch_time = int(org['Datetime'])
+
+        # Convert the epoch time to a datetime object and localize it to Bucharest timezone
+        user_datetime = datetime.fromtimestamp(epoch_time)
+
+        # Calculate the minute_difference between the current time and the event's server datetime
+        current_server_time = datetime.now()
+        time_difference = user_datetime - current_server_time
+        minute_difference = int(time_difference.total_seconds() / 60)
+
+        if minute_difference < 60 and org['Org_info']['Reminder'] == 0:
+            reminder_channel = await bot.fetch_channel(reminder_id)
+            reminder_string = functions.make_reminder_string(org, 'A', 'o ora')
+            await reminder_channel.send(content=reminder_string)
+            org['Org_info']['Reminder'] = 1
+            functions.data_updater(org_old=_org, org_new=org)
+
+        elif minute_difference < 30 and org['Org_info']['Reminder'] == 1:
+            reminder_channel = await bot.fetch_channel(reminder_id)
+            reminder_string = functions.make_reminder_string(org, 'Au', '30 min')
+            await reminder_channel.send(content=reminder_string)
+            org['Org_info']['Reminder'] = 2
+            functions.data_updater(org_old=_org, org_new=org)
+
+        elif minute_difference < 15 and org['Org_info']['Reminder'] == 2:
+            reminder_channel = await bot.fetch_channel(reminder_id)
+            reminder_string = functions.make_reminder_string(org, 'Au', '15 min')
+            await reminder_channel.send(content=reminder_string)
+            org['Org_info']['Reminder'] = 3
+            functions.data_updater(org_old=_org, org_new=org)
+
+        elif minute_difference < 0 and org['Org_info']['Reminder'] == 3 and org['Org_info']['Active'] == True:
+            org['Org_info']['Active'] = False
+            functions.data_updater(org_old=_org, org_new=org)
+            _org_channel = await bot.fetch_channel(G_ORG_CHANNEL)
+            message = await _org_channel.fetch_message(org['Message_id'])
+            await org_channel.edit_mesaj(bot, message, org, True)
+
+        if minute_difference < -60 and org['Org_info']['Active'] is False:
+            _org_channel = await bot.fetch_channel(G_ORG_CHANNEL)
+            message = await _org_channel.fetch_message(org['Message_id'])
+
+            guild = await bot.fetch_guild(GUILD_ID)
+            org_role = guild.get_role(org['Org_utils']['Part'])
+
+            await org_role.delete()
+            await message.delete()
+
+            functions.data_updater(org_old=_org, org_new={})
 
 
 '''

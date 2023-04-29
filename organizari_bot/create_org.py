@@ -1,7 +1,7 @@
 import json
 
 import discord
-from sherpa import org_channel
+from organizari_bot import org_channel
 
 '''
 
@@ -13,16 +13,42 @@ from sherpa import org_channel
 
 global button_labels, PVE_CATEGORY, GUILD_ID
 button_labels = {
-    'First': ['Raid', 'Dungeon', 'Cancel'],  # tipul de activitate ; de pus pve inapoi
+    'First': ['Raid', 'Dungeon', 'PVP', 'PVE', 'Cancel'],  # tipul de activitate ; de pus pve inapoi
     'Second': {
         'Raid': ["King's fall", 'Deep Stone Crypt', 'Garden of Salvation', 'Last Wish', 'Vault of Glass',
                  'Vow of the Disciple', 'Root Of Nightmares'],
         'Dungeon': ['Spire of the Watcher', 'Duality', 'Grasp of Averice', 'Pit', 'Prophecy', 'Shattered Throne'],
+        'PVP': ['Crucible 6v6', 'Comp 3v3', 'Trials 3v3'],
+        'PVE': ['Gambit', 'Nightfall', 'GM', 'Defiant Battlegrounds']
     },  # optiuni pe baza tipului de activitate
     'Third': ['Next', 'Edit', 'Cancel'],  # timp
     'Forth': ['Next', 'Edit', 'Cancel'],  # numar incepatori
     'Fifth': ['Add Info', 'Finish', 'Cancel']  # final
 }
+
+player_numbers = {
+    "King's fall": 6,
+    'Deep Stone Crypt': 6,
+    'Garden of Salvation':  6,
+    'Last Wish':  6,
+    'Vault of Glass':  6,
+    'Vow of the Disciple':  6,
+    'Root Of Nightmares':  6,
+    'Spire of the Watcher':  3,
+    'Duality': 3,
+    'Grasp of Averice': 3,
+    'Pit': 3,
+    'Prophecy': 3,
+    'Shattered Throne': 3,
+    'Crucible 6v6': 6,
+    'Comp 3v3': 3,
+    'Trials 3v3': 3,
+    'Gambit': 4,
+    'Nightfall': 3,
+    'GM': 3,
+    'Defiant Battlegrounds': 3,
+}
+
 PVE_CATEGORY = 1101037807671197706
 GUILD_ID = 1075455824643764314
 
@@ -89,7 +115,7 @@ async def create(interaction, bot, author):
     _author = author
     _bot = bot
 
-    sherpa_details = [''.join([author.nick if author.nick else author.name]), author.id]
+    author_details = [''.join([author.nick if author.nick else author.name]), author.id]
 
     id_nr = rand_id()
     _temp_success = True
@@ -110,8 +136,9 @@ async def create(interaction, bot, author):
         'Datetime': '',
         'Info': '',
         'Beginners': '',
+        'Max Number': '',
         'Message_id': '',
-        'Participants': {'Sherpa': sherpa_details, 'Beginners': [], 'Experts': [], 'Reserve': []},
+        'Participants': {'Author': author_details, 'Beginners': [], 'Experts': [author_details], 'Reserve': []},
         'Org_info': {'Active': True, 'Reminder': 0},  # reminder: (0, 1, 2, 3, 4) = (none, 1h, 30m, 15m, dat tot)
         'Org_utils': '',
         'Editing': False
@@ -134,7 +161,7 @@ async def edit(interaction, bot, author, org_id):
         await interaction.followup.send(content='Nu exita aceasta organizare!', ephemeral=True)
         return
 
-    if org_dict['Participants']['Sherpa'] != author_details:
+    if org_dict['Participants']['Author'] != author_details:
         await interaction.followup.send(content='Nu esti autorul organizarii!', ephemeral=True)
         return
 
@@ -155,7 +182,7 @@ async def edit(interaction, bot, author, org_id):
 
 class FirstEmbed(discord.Embed):
     def __init__(self):
-        super().__init__(title="Selecteaza tipul de organizare SHERPA.",
+        super().__init__(title="Selecteaza tipul de organizare.",
                          description="Alege activitatea pe care vrei sa o faci",
                          color=0xFF2D00)
 
@@ -192,6 +219,7 @@ class FirstMsgButtons(discord.ui.Button):
                     await interaction.response.defer()
 
                     org_dict['Activity'] = button_label
+
                     await message.edit(content='', embed=SecondEmbed(org_dict),
                                        view=SecondView(author=author, org_dict=org_dict))
 
@@ -209,7 +237,7 @@ class FirstMsgButtons(discord.ui.Button):
 
 class SecondEmbed(discord.Embed):
     def __init__(self, org_dict):
-        super().__init__(title=f"Selecteaza tipul de sherpa {org_dict['Activity']} .",
+        super().__init__(title=f"Selecteaza tipul de {org_dict['Activity']} dorit.",
                          description="Selecteaza din lista ce activitate doresti sa creezi",
                          color=0xff5e00)
 
@@ -279,14 +307,13 @@ class SecondMsgButtons(discord.ui.Button):
                         pass
                     elif dropdown.call():
                         org_dict['Type'] = dropdown.call()
+                        org_dict['Max Number'] = player_numbers.get(org_dict['Type'])
                     else:
                         await interaction.followup.send(content='Trebuie sa selectezi ceva!', ephemeral=True)
                         return
                     await third_message(org_dict=org_dict, author=author)
-                    # await interaction.edit_original_response(embed=Embed02(), view=ButoaneEmbed02())
 
         self.callback = click
-
 
 '''
 
@@ -323,12 +350,11 @@ async def third_message(org_dict, author, string=None):
 
 class ThirdEmbed(discord.Embed):
     def __init__(self, org_dict):
-        super().__init__(title=f"Seteaza timpul pentru organizarea sherpa {org_dict['Type']} .",
+        super().__init__(title=f"Seteaza timpul pentru organizarea {org_dict['Type']} .",
                          description=f"Selecteaza din lista ce activitate doresti sa creezi\n"
                                      f"Selectat actual: <t:{int(round(float(org_dict['Datetime']),0))}:f>",
                          color=0xffa600)
-        # self.add_field(name='',
-        #                value=f"")
+
 
 class ThirdView(discord.ui.View):
     def __init__(self, author, org_dict):
@@ -367,9 +393,13 @@ class ThirdMsgButtons(discord.ui.Button):
             async def click(interaction: discord.Interaction):
                 if await compare_users(interaction, author, interaction.user):
                     await interaction.response.defer()
-
-                    await message.edit(content='', embed=ForthEmbed(org_dict),
-                                       view=ForthView(author=author, org_dict=org_dict))
+                    print(org_dict)
+                    if org_dict['Activity'] == 'PVE' or org_dict['Activity'] == 'PVP':
+                        org_dict['Beginners'] = None
+                        await fifth_message(org_dict, author)
+                    else:
+                        await message.edit(content='', embed=ForthEmbed(org_dict),
+                                           view=ForthView(author=author, org_dict=org_dict))
 
         self.callback = click
 
@@ -550,13 +580,13 @@ async def fifth_message(org_dict, author, string=None):
 
 class FifthEmbed(discord.Embed):
     def __init__(self, org_dict):
-        super().__init__(title=f"Setari finale organizare sherpa.",
+        super().__init__(title=f"Setari finale organizare.",
                          description=f'''ID: {org_dict["ID"]}
                          Activitate: {org_dict["Activity"]}
                          Locatie: {org_dict["Type"]}
                          Data si ora: <t:{org_dict["Datetime"]}:f>
                          Info: {org_dict["Info"]}
-                         Numar incepatori: {org_dict["Beginners"]}''',
+                         {f'Numar incepatori: {org_dict["Beginners"]}' if org_dict["Beginners"] else ''}''',
                          color=0x48ff00)
 
 
@@ -606,24 +636,13 @@ class FifthMsgButtons(discord.ui.Button):
 
                     if not org_dict['Org_utils']:
                         guild = await _bot.fetch_guild(GUILD_ID)
-                        sherpa_role = await guild.create_role(name=f'Sherpa_{org_dict["ID"]}', mentionable=True,
-                                                           reason=f'Rol creat pentru org sherpa {org_dict["ID"]}')
                         org_role = await guild.create_role(name=f'Part_{org_dict["ID"]}', mentionable=True,
                                                               reason=f'Rol creat pentru org sherpa {org_dict["ID"]}')
-                        await author.add_roles(sherpa_role, org_role,
-                                               reason=f'Adaugat roluri pentru creatorul org sherpa {org_dict["ID"]}')
 
-                        category = await guild.fetch_channel(PVE_CATEGORY)
-                        sherpa_voice = await guild.create_voice_channel(name=f'Sherpa_{org_dict["ID"]}',
-                                                                        category=category, position=5)
-                        overwrite = discord.PermissionOverwrite()
-                        overwrite.move_members = True
-                        await sherpa_voice.set_permissions(sherpa_role, overwrite=overwrite)
+                        await author.add_roles(org_role, reason=f'Adaugat roluri pentru creatorul org {org_dict["ID"]}')
 
                         org_dict['Org_utils'] = {
-                            'Sherpa': sherpa_role.id,
-                            'Part': org_role.id,
-                            'Voice': sherpa_voice.id
+                            'Part': org_role.id
                         }
 
                     await org_channel.initializare_mesaj(bot=_bot, org_dict=org_dict)

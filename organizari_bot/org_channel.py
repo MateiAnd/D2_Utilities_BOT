@@ -2,26 +2,33 @@ import copy
 import json
 
 import discord
-from discord.ext import commands, tasks
+from discord.ext import commands
 
-from sherpa.functions import get_org_by_msg_id, data_updater
+from organizari_bot.functions import get_org_by_msg_id, data_updater
 
 global activity_details, GUILD_ID, org_id
 activity_details = {
     # attribute_list  =      role_id, guide_id, hex_color, active_img, expired_img
-    "King's fall": [1075455824748621840, 1048983462125768745, 0xff2f00, r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769004074512444/KF.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769009954918560/KF_exp.png'],
-    'Deep Stone Crypt': [1075455824765394986, 1049223783724109834, 0x0088ff, r'https://cdn.discordapp.com/attachments/1086761501852958820/1086768506252558416/DSC.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1086768517837234306/DSC_exp.png'],
-    'Garden of Salvation': [1075455824765394988, 1046140173102104639, 0x367800, r'https://cdn.discordapp.com/attachments/1086761501852958820/1086768906603085936/GOS.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1086768917114007682/GOS_exp.png'],
-    'Last Wish': [1075455824765394990, 1048985076345606315, 0x08fc76, r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769106734293092/LW.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769117081640960/LW_exp.png'],
-    'Vault of Glass': [1075455824765394984, 1046139331938631780, 0x005939, r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769696134660106/VOG.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769702442893322/VOG_exp.png'],
-    'Vow of the Disciple': [1075455824748621842, 1048950466807070783, 0x470902, r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769776791138355/VOW.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769782935781457/VOW_exp.png'],
-    'Root Of Nightmares': [1101410490363686952, 1086338007763783740, 0x7e0599, r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769471777144842/RON.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769479008133222/RON_exp.png'],
-    'Spire of the Watcher': [1075455824731852844, 1051035874193842206, 0xb86a04, r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769561363300402/SOTW.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769583622463548/SOTW_exp.png'],
-    'Duality': [1075455824731852846, 1049227955227873291, 0x8a002c, r'https://cdn.discordapp.com/attachments/1086761501852958820/1086768698578190336/DUAL.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1086768698578190336/DUAL.png'],
-    'Grasp of Averice': [1075455824731852848, 1049229682794569788, 0x00e66f, r'https://cdn.discordapp.com/attachments/1086761501852958820/1086768831755718676/GOA.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1086768835048255548/GOA_exp.png'],
-    'Pit': [1075455824748621836, 1086770866454540309, 0x692f0e, r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769206160261120/PIT.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769213286387802/PIT_exp.png'],
-    'Prophecy': [1075455824748621834, 1086770644982698024, 0x7200c9, r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769302222405832/PROPH.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1086769310778785852/PROPH_exp.png'],
-    'Shattered Throne': [1075455824748621838, 1086770644982698024, 0x113045, r'https://cdn.discordapp.com/attachments/1078798703902597252/1101179619379519538/ST.png', r'https://cdn.discordapp.com/attachments/1078798703902597252/1101179634973945907/ST_exp.png']
+    "King's fall": [1075455824748621840, 1048983462125768745, 0xff2f00, r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830182496632912/KF.png', r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830186653196388/KF_exp.png'],
+    'Deep Stone Crypt': [1075455824765394986, 1049223783724109834, 0x0088ff, r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830142550102126/DSC.png', r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830143070187560/DSC_exp.png'],
+    'Garden of Salvation': [1075455824765394988, 1046140173102104639, 0x367800, r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830189773758524/GOS.png', r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830181800390657/GOS_exp.png'],
+    'Last Wish': [1075455824765394990, 1048985076345606315, 0x08fc76, r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830187278151690/LW.png', r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830187966005318/LW_exp.png'],
+    'Vault of Glass': [1075455824765394984, 1046139331938631780, 0x005939, r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830247806156830/VOG.png', r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830248712122499/VOG_exp.png'],
+    'Vow of the Disciple': [1075455824748621842, 1048950466807070783, 0x470902, r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830249429352529/VOW.png', r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830249974607914/VOW_exp.png'],
+    'Root Of Nightmares': [1101410490363686952, 1086338007763783740, 0x7e0599, r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830224104140861/RON.png', r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830224653586562/RON_exp.png'],
+    'Spire of the Watcher': [1075455824731852844, 1051035874193842206, 0xb86a04, r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830225177882634/SOTW.png', r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830225739907092/SOTW_exp.png'],
+    'Duality': [1075455824731852846, 1049227955227873291, 0x8a002c, r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830144034885742/DUAL.png', r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830144374607922/DUAL_exp.png'],
+    'Grasp of Averice': [1075455824731852848, 1049229682794569788, 0x00e66f, r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830188431581315/GOA.png', r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830189165576292/GOA_exp.png'],
+    'Pit': [1075455824748621836, 1086770866454540309, 0x692f0e, r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830206274158633/PIT.png', r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830206773264465/PIT_exp.png'],
+    'Prophecy': [1075455824748621834, 1086770644982698024, 0x7200c9, r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830202381828096/PROPH.png', r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830202776109116/PROPH_exp.png'],
+    'Shattered Throne': [1075455824748621838, 1086770644982698024, 0x113045, r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830247328002098/ST.png', r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830246992461844/ST_exp.png'],
+    'Crucible 6v6': [1075455824782184523, None, 0x9e0b1b, r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830203451375747/PVP_6v6.png', r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830204722262046/PVP_6v6_exp.png'],
+    'Comp 3v3': [1075455824782184523, None,0x51050d, r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830226478116894/PVP_comp.png', r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830226935283753/PVP_comp_exp.png'],
+    'Trials 3v3': [1075455824782184523, None, 0xe6b905, r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830227296006296/PVP_trials.png', r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830223739224105/PVP_trials_exp.png'],
+    'Gambit': [1075455824782184523, None, 0x107b10, r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830141052727316/GAMBIT.png', r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830141455388743/GAMBIT_EXP.png'],
+    'Nightfall': [1075455824782184523, None, 0x122258, r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830205699522560/NF.png', r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830205976358952/NF_exp.png'],
+    'GM': [1075455824782184523, None, 0xb09b64, r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830141811888148/GM.png', r'https://cdn.discordapp.com/attachments/1100487208936423556/1101830142185189376/GM_exp.png'],
+    'Defiant Battlegrounds': [1075455824782184523, None, 0x9f8ddf, r'https://cdn.discordapp.com/attachments/1100487208936423556/1101833349712068668/DBG.png', r'https://cdn.discordapp.com/attachments/1100487208936423556/1101833349032575087/DBG_exp.png']
 }
 
 GUILD_ID = 1075455824643764314
@@ -37,13 +44,13 @@ org_id = 1101037441999179827
 
 
 def data_reader():
-    with open('./sherpa/org_sherpa.json', 'r') as f:
+    with open('./organizari_bot/organizari.json', 'r') as f:
         _temp = json.load(f)
         return _temp
 
 
 def data_logger(org_dict):
-    with open('./sherpa/org_sherpa.json', 'w') as f:
+    with open('./organizari_bot/organizari.json', 'w') as f:
         json.dump(org_dict, f)
 
 
@@ -94,11 +101,11 @@ def random_int():
     return int(''.join([str(randint(0, 9)) for i in range(10)]))
 
 
-def time_flagger(date_string):
-    from datetime import datetime
-    date_object = datetime.strptime(date_string, "%d/%m/%Y %H:%M")
-    time_difference = datetime.now() - date_object
-    return int(time_difference.total_seconds() / 60)
+# def time_flagger(date_string):
+#     from datetime import datetime
+#     date_object = datetime.strptime(date_string, "%d/%m/%Y %H:%M")
+#     time_difference = datetime.now() - date_object
+#     return int(time_difference.total_seconds() / 60)
 
 
 def check_role(guild: discord.Guild, role_id, author):
@@ -115,7 +122,7 @@ async def check_if_beginner(guild: discord.Guild, member_id, role_id) -> bool:
 
 
 async def org_refresher(bot, org_channel_id):
-    with open('./sherpa/org_sherpa.json', 'r') as f:
+    with open('./organizari_bot/organizari.json', 'r') as f:
         _temp = json.load(f)
 
     orgs = _temp['org']
@@ -148,14 +155,14 @@ async def initializare_mesaj(bot: commands.Bot, org_dict):
     guild = await bot.fetch_guild(GUILD_ID)
 
     participants = org_dict['Participants']
-    sherpa_name = participants['Sherpa'][0]
+    author_name = participants['Author'][0]
     if participants['Beginners']:
         beginner_list = '\n'.join([f'{beg[0]}🍼' for beg in participants['Beginners']])
     else:
         beginner_list = '-'
 
     if participants['Experts']:
-        expert_list = '\n'.join([exp[0] for exp in participants['Experts']])
+        expert_list = '\n'.join([f'{exp[0]} 👑' if exp[1] == participants['Author'][1] else exp[0] for exp in participants['Experts']])
     else:
         expert_list = '-'
 
@@ -163,12 +170,11 @@ async def initializare_mesaj(bot: commands.Bot, org_dict):
         reserve_list = '\n'.join(
             [rez[0] if not await check_if_beginner(guild, rez[1], role_id) else f'{rez[0]}🍼' for rez in
              participants['Reserve']])
-        # reserve_list = '\n'.join([rez[0] for rez in participants['Reserve']])
     else:
         reserve_list = '-'
 
 
-    await message.edit(content='Organizare noua de sherpa!', embed=OrgEmbed(org_dict, attribute_list, sherpa_name, beginner_list, expert_list, reserve_list),
+    await message.edit(content='Organizare noua!', embed=OrgEmbed(org_dict, attribute_list, author_name, beginner_list, expert_list, reserve_list),
                        view=OrgView(org_dict, attribute_list, bot))
 
 
@@ -188,14 +194,15 @@ async def edit_mesaj(bot: commands.Bot, message, org_dict, block=False):
     guild = await bot.fetch_guild(GUILD_ID)
 
     participants = org_dict['Participants']
-    sherpa_name = participants['Sherpa'][0]
+    author_name = participants['Author'][0]
     if participants['Beginners']:
         beginner_list = '\n'.join([f'{beg[0]}🍼' for beg in participants['Beginners']])
     else:
         beginner_list = '-'
 
     if participants['Experts']:
-        expert_list = '\n'.join([exp[0] for exp in participants['Experts']])
+        expert_list = '\n'.join(
+            [f'{exp[0]} 👑' if exp[1] == participants['Author'][1] else exp[0] for exp in participants['Experts']])
     else:
         expert_list = '-'
 
@@ -203,7 +210,6 @@ async def edit_mesaj(bot: commands.Bot, message, org_dict, block=False):
         reserve_list = '\n'.join(
             [rez[0] if await check_if_beginner(guild, rez[1], role_id) else f'{rez[0]}🍼' for rez in
              participants['Reserve']])
-        # reserve_list = '\n'.join([rez[0] for rez in participants['Reserve']])
     else:
         reserve_list = '-'
 
@@ -225,20 +231,20 @@ async def edit_mesaj(bot: commands.Bot, message, org_dict, block=False):
     except:
         pass
     if not block:
-        await message.edit(content='Organizare noua de sherpa!', embed=OrgEmbed(org_dict, attribute_list, sherpa_name, beginner_list, expert_list, reserve_list),
+        await message.edit(content='Organizare noua!', embed=OrgEmbed(org_dict, attribute_list, author_name, beginner_list, expert_list, reserve_list),
                            view=OrgView(org_dict, attribute_list, bot))
     else:
-        await message.edit(content='Organizare de sherpa a inceput!', embed=OrgEmbed(org_dict, attribute_list, sherpa_name, beginner_list, expert_list, reserve_list),
+        await message.edit(content='Organizare a inceput!', embed=OrgEmbed(org_dict, attribute_list, author_name, beginner_list, expert_list, reserve_list),
                            view=None)
 
 
 class OrgEmbed(discord.Embed):
-    def __init__(self, org_dict, attribute_list, sherpa_name, beginner_list, expert_list, reserve_list):
+    def __init__(self, org_dict, attribute_list, author_name, beginner_list, expert_list, reserve_list):
         role_id, guide_id, hex_color, active_img, expired_img = attribute_list
-        super().__init__(title=f"{org_dict['Type']} — SHERPA",
-                         description=f'Canal ghid: <#{1046138519506137208}>',
+        super().__init__(title=f"Organizare — {org_dict['Type']}",
+                         description=f'',
                          color=hex_color)
-        self.set_author(name='D2-RO Sherpa',
+        self.set_author(name='D2-RO Scheduler',
                         url=r'https://destiny2.ro/',
                         icon_url='https://cdn.discordapp.com/attachments/1101368918318260274/1101498772560806001/logo_mic.png')
 
@@ -268,43 +274,28 @@ class OrgEmbed(discord.Embed):
 
         # participants = org_dict['Participants']
 
-        self.add_field(name='Sherpa',
-                       value=sherpa_name,  # participants['Sherpa'][0]
+        self.add_field(name='Participanti',
+                       value=f'{expert_list} \n {beginner_list}',
                        inline=True)
 
         self.add_field(name='‎',
                        value='‎',
                        inline=True)
 
-        # if participants['Beginners']:
-        #     beginner_list = '\n'.join([f'{beg[0]}🍼' for beg in participants['Beginners']])
-        # else:
-        #     beginner_list = '-'
 
-        self.add_field(name=f'Incepatori (max {org_dict["Beginners"]})',
-                       value=beginner_list,
-                       inline=True)
+        # self.add_field(name=f'Incepatori (max {org_dict["Beginners"]})',
+        #                value=beginner_list,
+        #                inline=True)
 
-        # if participants['Experts']:
-        #     expert_list = '\n'.join([exp[0] for exp in participants['Experts']])
-        # else:
-        #     expert_list = '-'
 
-        self.add_field(name=f'Experimentati',
-                       value=expert_list,
-                       inline=True)
+        # self.add_field(name=f'Experimentati',
+        #                value=expert_list,
+        #                inline=True)
 
-        self.add_field(name='‎',
-                       value='‎',
-                       inline=True)
+        # self.add_field(name='‎',
+        #                value='‎',
+        #                inline=True)
 
-        # if participants['Reserve']:
-        #     # reserve_list = '\n'.join(
-        #     #     [rez[0] if not check_if_beginner(guild, rez[1], role_id) else f'{rez[0]}🍼' for rez in
-        #     #      participants['Reserve']])
-        #     reserve_list = '\n'.join([rez[0] for rez in participants['Reserve']])
-        # else:
-        #     reserve_list = '-'
 
         self.add_field(name=f'Rezerve',
                        value=reserve_list,
@@ -336,15 +327,6 @@ class OrgButtons(discord.ui.Button):
     def __init__(self, bot, button_label, role_id):
         self.button_lable = button_label
         self.role_id = str(role_id)
-
-        '''
-        De pus:
-        write dict to json la init 
-        read json la fiecare callback buton
-        fetch message la fiecare callback 
-        orice modificare dict duce la write json
-        '''
-        # org_channel = await _bot.fetch_channel(1078798703902597252)
 
         if self.button_lable == 'Delete':
             super().__init__(label=self.button_lable, style=discord.ButtonStyle.danger, custom_id="delete")
@@ -381,52 +363,36 @@ class OrgButtons(discord.ui.Button):
 
 
 async def button_functions(interaction: discord.Interaction, label, org_dict, message, guild: discord.Guild):
-    print(f'{interaction.user.nick if interaction.user.nick else interaction.user.name} a incercat sa dea {label}')
+    print(f'{interaction.user.nick if interaction.user.nick else interaction.user.name} a incercat sa dea {label} la org {org_dict["ID"]}')
     await interaction.response.defer()
     button_label = label
     org_old = copy.deepcopy(org_dict)
-    sherpa_role = guild.get_role(org_dict['Org_utils']['Sherpa'])
     org_role = guild.get_role(org_dict['Org_utils']['Part'])
-    sherpa_voice = await _bot.fetch_channel(org_dict['Org_utils']['Voice'])
 
     attribute_list = activity_details[org_dict['Type']]
     role_id, _, _, _, _ = attribute_list
 
     if button_label == 'delete':
-        if org_dict['Participants']['Sherpa'][1] == interaction.user.id:
+        if org_dict['Participants']['Author'][1] == interaction.user.id:
             _, message = await get_message(_bot=_bot, org_dict=org_dict)
 
-            await sherpa_voice.delete()
-            await sherpa_role.delete()
             await org_role.delete()
             await message.delete()
 
             data_updater(org_old=org_dict, org_new={})
 
-            # with open('./sherpa/org_sherpa.json', 'r') as f:
-            #     _temp = json.load(f)
-            # _temp = _temp['org']
-            # for _org in _temp:
-            #     if _org == org_dict:
-            #         _temp.remove(_org)
-            # new_dump = {'org': _temp}
-            # with open('./sherpa/org_sherpa.json', 'w') as f:
-            #     json.dump(new_dump, f)
-
     if button_label == 'join':
         author = interaction.user
         player_data = [''.join([author.nick if author.nick else author.name]), author.id]
 
+        max_players = org_dict['Max Number']
         beginner_len = len(org_dict['Participants']['Beginners'])
         exp_len = len(org_dict['Participants']['Experts'])
 
         if player_data in org_dict['Participants']['Reserve']:
             org_dict['Participants']['Reserve'].remove(player_data)
 
-        if org_dict['Participants']['Sherpa'][1] == interaction.user.id:
-            return
-
-        if (beginner_len + exp_len) >= 5:
+        if (beginner_len + exp_len) >= max_players:
             if player_data not in org_dict['Participants']['Reserve']:
                 org_dict['Participants']['Reserve'].append(player_data)
                 await edit_mesaj(_bot, message, org_dict=org_dict)
@@ -459,10 +425,6 @@ async def button_functions(interaction: discord.Interaction, label, org_dict, me
         author = interaction.user
         player_data = [''.join([author.nick if author.nick else author.name]), author.id]
 
-        if org_dict['Participants']['Sherpa'][1] == interaction.user.id:
-            await interaction.followup.send(content="Nu poti sa iti schimbi rolul ca Sherpa!", ephemeral=True)
-            return
-
         if player_data in org_dict['Participants']['Experts']:
             org_dict['Participants']['Experts'].remove(player_data)
 
@@ -477,11 +439,6 @@ async def button_functions(interaction: discord.Interaction, label, org_dict, me
     if button_label == 'leave':
         author = interaction.user
         player_data = [''.join([author.nick if author.nick else author.name]), author.id]
-
-        if org_dict['Participants']['Sherpa'][1] == interaction.user.id:
-            await interaction.followup.send(content="Nu poti sa parasesti organizarea ca Sherpa!",
-                                            ephemeral=True)
-            return
 
         if player_data in org_dict['Participants']['Experts']:
             org_dict['Participants']['Experts'].remove(player_data)
