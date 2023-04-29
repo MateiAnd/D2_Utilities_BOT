@@ -70,6 +70,7 @@ class UtilsBot(commands.Bot):
             do_refresh_donator.start()
             # do_refresh_leaderboard.start()
             post_refresher.start()
+            organizare_refresher.start()
         else:
             print('—— Bot de teste')
 
