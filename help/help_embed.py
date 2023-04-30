@@ -37,19 +37,21 @@ Aceasta comanda se poate apela numai pe <#1101408260642320428>:
 `/support_gpt` — Comanda va crea un thread unde ai acces la ChatBro. El este antrenat sa raspunda la intrebarile desrpe serverul de discord si Destiny pana la data de 21 Septembie 2021.
 '''
 
+global GUILD_ID, PLAYER_UPDATES_CHANNEL, SERVER_BOOSTER, DONATOR_ROLE
+GUILD_ID = 1075455824643764314
+PLAYER_UPDATES_CHANNEL = 1100486602922397776
+SERVER_BOOSTER = 1101409180440592430
+DONATOR_ROLE = 1075455824811532323
+ADMIN_ROLE = 1075455824811532324
 
 async def init_help(interaction: discord.Interaction, bot: discord.ext.commands.Bot):
     await interaction.response.defer()
 
     # setup bot
-    guilds = bot.guilds
-    for serv in guilds:
-        if serv.name == 'Karpathian Horsemen':
-            server = serv
-            break
-    server_booster = server.get_role(728638426672529510)
-    donator_role = server.get_role(790921054419681280)
-    admin_role = server.get_role(797400468044644374)
+    server = await bot.fetch_guild(GUILD_ID)
+    server_booster = server.get_role(SERVER_BOOSTER)
+    donator_role = server.get_role(DONATOR_ROLE)
+    admin_role = server.get_role(ADMIN_ROLE)
 
     admin_class, donator_class = False, False
 
@@ -78,18 +80,18 @@ class HelpMessage(discord.Embed):
                            value=admin_cmd,
                            inline=False)
 
-        self.add_field(name='‎',
-                       value='‎',
-                       inline=False)
+            self.add_field(name='‎',
+                           value='‎',
+                           inline=False)
 
         if donator_class:
             self.add_field(name='Esti donator, multumim!',
                            value=donator_cmd,
                            inline=False)
 
-        self.add_field(name='‎',
-                       value='‎',
-                       inline=False)
+            self.add_field(name='‎',
+                           value='‎',
+                           inline=False)
 
         self.add_field(name='Comenzi sherpa',
                        value=user_cmd,

@@ -16,8 +16,8 @@ async def init(bot, interaction):
     members = bot.get_all_members()
 
     server = await bot.fetch_guild(GUILD_ID)
-    server_booster = server.get_role(728638426672529510)
-    donator_role = server.get_role(790921054419681280)
+    server_booster = server.get_role(SERVER_BOOSTER)
+    donator_role = server.get_role(DONATOR_ROLE)
 
     update_channel = await bot.fetch_channel(PLAYER_UPDATES_CHANNEL)
 
@@ -92,7 +92,7 @@ async def add_donator(interaction, bot, member, time):
     await interaction.response.defer()
 
     server = await bot.fetch_guild(GUILD_ID)
-    donator_role = server.get_role(790921054419681280)
+    donator_role = server.get_role(DONATOR_ROLE)
 
     new_donator_dict = {'name': member.display_name,
                         'id': member.id,
