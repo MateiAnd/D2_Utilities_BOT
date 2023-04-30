@@ -13,20 +13,21 @@ admin_cmd=''' Aceste comenzi se vor da numai pe <#1075455825205800971>
 
 donator_cmd='''Aceste comenzi se for apela numai pe <#1075455825549742158>
 
-`/trasnfer #voice_channel` — Aceasta comanda te va transfera pe un canal voce indiferent de numarul de membri activi in canal. Exemplu utilizare: Vrei sa intri pe PVE-3 dar sunt deja 3 persoane, intra pe orice canal voce si apeleaza `/transfer PVE-3`.
+`/trasnfer #voice_channel` — Aceasta comanda te va transfera pe un canal voce indiferent de numarul de membri activi in canal. Exemplu utilizare: Vrei sa intri pe ROOM (3)-3 dar sunt deja 3 persoane, intra pe orice canal voce si apeleaza `/transfer ROOM (3)-3`.
 
 `/lock_channel` — Comanda va restrange user limit-ul pentru canalele de activitati la numarul actual de membri din canal, ca sa nu fiti deranjati cat timp faceti activitati. Restrangerea se reseteaza la inchiderea canalului.
 '''
 
 user_cmd = '''Aceste comenzi se for apela numai pe <#1075455825549742158>
 
-`/organizare create` — Programeaza o organizare de Raid / Dungeon / Nightfall / PVP / Gambit / Sezonal care va fi postata pe <#745904725983101017>. Orice membru al serverului se paote alatura organizarii.
+`/organizare create` — Programeaza o organizare de Raid / Dungeon / Nightfall / PVP / Gambit / Sezonal care va fi postata pe <#1101037441999179827>. Orice membru al serverului se paote alatura organizarii.
 
 `/organizare edit id:int` — Modifica o organizare creata de tine 
 '''
+
 exp_cmd = '''Aceste comenzi se for apela numai pe <#1075455825549742158>
 
-`/sherpa create` — Programeaza o organizare de SHERPA Raid / Dungeon care va fi postata pe <#745904725983101017>. Orice membru al serverului se paote alatura organizarii. Vei primit un rol temporar cu care ai posibilitati de administrare a canalului special creat pentru activitate
+`/sherpa create` — Programeaza o organizare de SHERPA Raid / Dungeon care va fi postata pe <#1101037441999179827>. Orice membru al serverului se paote alatura organizarii. Vei primit un rol temporar cu care ai posibilitati de administrare a canalului special creat pentru activitate
 
 `/sherpa edit id:int` — Modifica o organizare SHERPA creata de tine 
 

@@ -146,7 +146,7 @@ async def privat_69(interaction: discord.Interaction):
     await interaction.followup.send(content='Fixed Uhenp')
 
 
-@command_tree.command(name='help_kh', description='Meniu help KH', guild=discord.Object(id=GUILD_ID))
+@command_tree.command(name='help_d2ro', description='Meniu help D2 RO', guild=discord.Object(id=GUILD_ID))
 async def privat_70(interaction: discord.Interaction):
     await init_help(interaction, bot)
 
@@ -532,7 +532,7 @@ Dacă întâmpini greutăți pe parcursul procesului, îți recomandăm să vorb
             json.dump(message_history, f)
 
     except:
-        admin_list = ['<@&729027061322350762>', '<@&790256564110884864>', '<@&710818161867620412>']
+        admin_list = ['<@&1075455824824127520>', '<@&1075469551996768357>', '<@&1075455824824127519>']
         await new_thread.send(
             content=f'Dacă întâmpini probleme, te rog să ne lași un mesaj aici și te vom asista în cel mai scurt timp posibil. {member.mention} {" ".join(admin_list)}')
 
