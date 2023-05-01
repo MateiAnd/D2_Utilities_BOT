@@ -591,16 +591,12 @@ async def on_member_remove(member):
     text = ''
     member_name = f'{member.nick if member.nick else member.name}'
     for role in member.roles:
-        if '797081984584253512' in str(role.id):
-            text = f'Membrul __**{member_name}**__ a iesit si facea parte din <@&797081984584253512>'
-        elif '797388341989474314' in str(role.id):
-            text = f'Membrul __**{member_name}**__ a iesit si facea parte din <@&797081984584253512>'
-        elif '797388345633406976' in str(role.id):
-            text = f'Membrul __**{member_name}**__ a iesit si facea parte din <@&797388345633406976>'
-        elif '797115294983258183' in str(role.id):
-            text = f'Membrul __**{member_name}**__ a iesit si facea parte din <@&797115294983258183>'
-        elif '836934071224762419' in str(role.id):
-            text = f'Membrul __**{member_name}**__ a iesit si facea parte din <@&836934071224762419>'
+        if '1102244192043942059' in str(role.id):
+            text = f'Membrul __**{member_name}**__ a iesit si facea parte din <@&1102244192043942059>'
+        elif '1102244836872032256' in str(role.id):
+            text = f'Membrul __**{member_name}**__ a iesit si facea parte din <@&1102244836872032256>'
+        elif '1102244973363081286' in str(role.id):
+            text = f'Membrul __**{member_name}**__ a iesit si facea parte din <@&1102244973363081286>'
     if not text:
         text = f'Membrul __**{member_name}**__ a iesit'
 
