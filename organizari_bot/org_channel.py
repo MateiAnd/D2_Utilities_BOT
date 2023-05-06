@@ -198,7 +198,7 @@ async def initializare_mesaj(bot: commands.Bot, org_dict):
         reserve_list = '-'
 
 
-    await message.edit(content='Organizare noua!', embed=OrgEmbed(org_dict, attribute_list, author_name, beginner_list, expert_list, reserve_list),
+    await message.edit(content='<@&1075455824782184523> Organizare noua!', embed=OrgEmbed(org_dict, attribute_list, author_name, beginner_list, expert_list, reserve_list),
                        view=OrgView(org_dict, attribute_list, bot))
 
 
@@ -269,9 +269,9 @@ class OrgEmbed(discord.Embed):
         super().__init__(title=f"Organizare — {org_dict['Type']}",
                          description=f'',
                          color=hex_color)
-        self.set_author(name='D2-RO Scheduler',
-                        url=r'https://destiny2.ro/',
-                        icon_url='https://cdn.discordapp.com/attachments/1101368918318260274/1101498772560806001/logo_mic.png')
+        # self.set_author(name='D2-RO Scheduler',
+        #                 url=r'https://destiny2.ro/',
+        #                 icon_url='https://cdn.discordapp.com/attachments/1101368918318260274/1101498772560806001/logo_mic.png')
 
         self.add_field(name='ID',
                        value=org_dict['ID'],
