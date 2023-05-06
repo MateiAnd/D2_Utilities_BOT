@@ -573,11 +573,12 @@ class ForthMsgButtons(discord.ui.Button):
 
 
 async def fifth_message(org_dict, author, string=None):
-    # if org_dict['Info'] != '-':
-    if org_dict['Editing']:
-        string = org_dict['Info']
+    # if org_dict['Editing']:
+    #     string = org_dict['Info']
     if not string:
         string = '-'
+        if org_dict['Info'] != '-':
+            string = org_dict['Info']
     org_dict['Info'] = string
     await message.edit(content='', embed=FifthEmbed(org_dict),
                        view=FifthView(author=author, org_dict=org_dict))
