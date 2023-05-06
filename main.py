@@ -443,7 +443,6 @@ async def organizare_refresher():
         current_server_time = datetime.now()
         time_difference = user_datetime - current_server_time
         minute_difference = int(time_difference.total_seconds() / 60)
-        print(minute_difference)
 
         if minute_difference < 60 and org['Org_info']['Reminder'] == 0:
             reminder_channel = await bot.fetch_channel(reminder_id)
