@@ -46,10 +46,10 @@ async def init(bot):
                 await update_channel.send(content=f'Adaugat donator lui {member.mention} din Server Boost')
                 await member.add_roles(donator_role)
 
-        elif donator_role in member.roles:
-            print(f'{"—" * 3} Scos donator lui {member.nick if member.nick else member.display_name}')
-            await update_channel.send(content=f'Scos rol donator lui {member.mention}.')
-            await member.remove_roles(donator_role)
+        # elif donator_role in member.roles:
+        #     print(f'{"—" * 3} Scos donator lui {member.nick if member.nick else member.display_name}')
+        #     await update_channel.send(content=f'Scos rol donator lui {member.mention}.')
+        #     await member.remove_roles(donator_role)
 
     # executare pentru donatori manual
     for don in donator_list:
