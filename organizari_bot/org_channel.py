@@ -87,6 +87,7 @@ def data_manager(org_dict, mode='a'):
     elif mode == 'u':
         for org in _temp["org"]:
             if org['ID'] == org_dict['ID']:
+                print(f'--- Updated org {org["ID"]}')
                 _temp["org"].remove(org)
                 _temp["org"].append(org_dict)
     data_logger(_temp)
