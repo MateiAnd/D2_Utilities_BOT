@@ -38,10 +38,8 @@ def get_clan_data(clan_id):
 
 def get_destiny_clan_memebrs_by_letter(letter='A'):
     grou_id_dict = {
-        'A': 4066018,
-        'B': 4231275,
-        'C': 4397838,
-        'F': 4422836,
+        'A': 5071579,
+        'B': 4397838,
         'X': 4613286
     }
     group_id = grou_id_dict[letter]

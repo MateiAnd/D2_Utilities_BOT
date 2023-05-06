@@ -8,13 +8,13 @@ class ClanEmbed(discord.Embed):
         super().__init__(title="CLAN LINKS", color=0xc75450)
 
         self.url_dict = {
-            'A': 'http://destiny2.ro/clana',  # 'https://cdn.discordapp.com/attachments/752509452279742545/1092133330285244497/360_F_315942126_eVHcsAL0e2z9OW3yNLBJ8JpeQorDFlQj.png',
-            'B': 'http://destiny2.ro/clanc',
-            'X': 'http://destiny2.ro/clanx'
+            'A': 'https://www.bungie.net/en/ClanV2?groupid=5071579',  # 'https://cdn.discordapp.com/attachments/752509452279742545/1092133330285244497/360_F_315942126_eVHcsAL0e2z9OW3yNLBJ8JpeQorDFlQj.png',
+            'B': 'https://www.bungie.net/en/ClanV2?groupid=4397838',
+            'X': 'https://www.bungie.net/en/ClanV2/Index?groupId=4613286'
         }
 
         self.clan_admin = {
-            'A': [160472069606342656, 489214493503520778],
+            'A': [160472069606342656, 489214493503520778, 268303925839396866],
             'B': [527863507270631445],
             'X': [740857014439247902]
         }
