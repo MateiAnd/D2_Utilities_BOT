@@ -489,7 +489,10 @@ class ForthDropdown(discord.ui.Select):
         else:
             elem_list = [0, 1, 2, 3, 4, 5]
 
-        self.selected = None
+        if org_dict['Editing']:
+            self.selected = org_dict['Beginners']
+        else:
+            self.selected = None
         self.author = author
 
         options = list()
@@ -546,9 +549,9 @@ class ForthMsgButtons(discord.ui.Button):
                 if await compare_users(interaction, author, interaction.user):
                     await interaction.response.defer()
 
-                    if org_dict['Beginners']:
-                        pass
-                    elif dropdown.call():
+                    # if org_dict['Beginners']:
+                    #     pass
+                    if dropdown.call():
                         org_dict['Beginners'] = dropdown.call()
                     elif org_dict['Activity'] == 'Raid':
                         org_dict['Beginners'] = 2
@@ -570,7 +573,8 @@ class ForthMsgButtons(discord.ui.Button):
 
 
 async def fifth_message(org_dict, author, string=None):
-    if org_dict['Info'] != '-':
+    # if org_dict['Info'] != '-':
+    if org_dict['Editing']:
         string = org_dict['Info']
     if not string:
         string = '-'
