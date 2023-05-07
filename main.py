@@ -236,9 +236,9 @@ async def transfer_to_channel(interaction: discord.Interaction, canal_voce: disc
     print(
         f'{"—" * 10} Initializare transfer {interaction.user.nick if interaction.user.nick else interaction.user.name}')
 
-    SERVER_BOOSTER = 1101409180440592430
-    DONATOR_ROLE = 1075455824811532323
-    VIP_ROLE = 1101631680982306987
+    SERVER_BOOSTER = '1101409180440592430'
+    DONATOR_ROLE = '1075455824811532323'
+    VIP_ROLE = '1101631680982306987'
 
     try:
         voice_channel = canal_voce
