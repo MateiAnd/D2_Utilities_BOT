@@ -34,7 +34,7 @@ async def init(bot, _role_call, interaction):
 
 
 def compare_dicts(member_dict, _role_call_name):
-    letter = str(_role_call_name.split(' ')[-1])
+    letter = str(_role_call_name.split(' ')[-1].replace('#', ''))
     overdue_list = []
     not_found_list = []
 

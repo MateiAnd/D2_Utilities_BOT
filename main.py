@@ -236,19 +236,21 @@ async def transfer_to_channel(interaction: discord.Interaction, canal_voce: disc
     print(
         f'{"—" * 10} Initializare transfer {interaction.user.nick if interaction.user.nick else interaction.user.name}')
 
+    SERVER_BOOSTER = 1101409180440592430
+    DONATOR_ROLE = 1075455824811532323
+    VIP_ROLE = 1101631680982306987
+
     try:
         voice_channel = canal_voce
         author = interaction.user
         updates_channel = await bot.fetch_channel(PLAYER_UPDATES_CHANNEL)
 
-        # print(f'{"790921054419681280" in str(author.roles)}')
-
-        if "790921054419681280" in str(author.roles):
-            transfer_str = f'Transfer donator {author.mention} pe canalul voce **{voice_channel.name}**'
-        elif "1045767889472462858" in str(author.roles):
-            transfer_str = f'Transfer KH Veteran {author.mention} pe canalul voce **{voice_channel.name}**'
-        else:
-            transfer_str = f'Transfer {author.mention} pe canalul voce **{voice_channel.name}**'
+        if VIP_ROLE in str(author.roles):
+            transfer_str = f'Transfer VIP {author.mention} pe canalul voce **{voice_channel.name}**'
+        elif DONATOR_ROLE in str(author.roles):
+            transfer_str = f'Transfer Donator {author.mention} pe canalul voce **{voice_channel.name}**'
+        elif SERVER_BOOSTER in str(author.roles):
+            transfer_str = f'Transfer Booster {author.mention} pe canalul voce **{voice_channel.name}**'
 
         await author.move_to(voice_channel)
         await updates_channel.send(content=transfer_str)
@@ -538,6 +540,11 @@ Dacă întâmpini greutăți pe parcursul procesului, îți recomandăm să vorb
 
 @tasks.loop(minutes=60)
 async def do_refresh_embed():
+    """
+    Refresh automat la embed odata la 30 min
+    Se reapeleaza Bungie API si se reconstruieste embedul principal
+    Se editeaza mesajul original daca mai este activ
+    """
     from datetime import datetime
     now = datetime.now()
     date_time_string = now.strftime("%d/%m/%Y %H:%M:%S")
