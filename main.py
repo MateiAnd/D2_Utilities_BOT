@@ -282,9 +282,14 @@ async def add_new_ddonator(interaction: discord.Interaction, membru: discord.Mem
 
 @command_tree.command(name='lock_channel', description='Limitare acces canal voce actual',
                       guild=discord.Object(id=GUILD_ID))
-async def lock_for_donator(interaction: discord.Interaction):
+async def lock_for_donator(interaction: discord.Interaction, limita_user:int = 0):
     updates_channel = await bot.fetch_channel(PLAYER_UPDATES_CHANNEL)
     author = interaction.user
+
+    if limita_user > 10:
+        await interaction.response.send_message(content='Limita maxima este 10!', ephemeral=True)
+        return
+
     try:
         voice_channel = author.voice.channel
     except:
@@ -298,7 +303,11 @@ async def lock_for_donator(interaction: discord.Interaction):
     print(f'{"—" * 10} Inchidere canal {voice_channel.name} de catre {author.nick if author.nick else author.name}')
 
     try:
-        await voice_channel.edit(user_limit=len(voice_channel.members))
+        if limita_user:
+            new_limit = limita_user
+        else:
+            new_limit = len(voice_channel.members)
+        await voice_channel.edit(user_limit=new_limit)
 
         await interaction.response.send_message(content=f'Restrangere canal voce __**{voice_channel.name}**__ de catre {author.mention}')
         await updates_channel.send(content=f'Restrangere canal voce __**{voice_channel.name}**__ de catre {author.mention}')
