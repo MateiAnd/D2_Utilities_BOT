@@ -251,6 +251,8 @@ async def transfer_to_channel(interaction: discord.Interaction, canal_voce: disc
             transfer_str = f'Transfer Donator {author.mention} pe canalul voce **{voice_channel.name}**'
         elif SERVER_BOOSTER in str(author.roles):
             transfer_str = f'Transfer Booster {author.mention} pe canalul voce **{voice_channel.name}**'
+        else:
+            transfer_str = f'Transfer {author.mention} pe canalul voce **{voice_channel.name}**'
 
         await author.move_to(voice_channel)
         await updates_channel.send(content=transfer_str)
