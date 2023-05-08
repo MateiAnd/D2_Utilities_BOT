@@ -284,9 +284,9 @@ class OrgEmbed(discord.Embed):
 
         from datetime import datetime
         if int(org_dict['Datetime']) - datetime.now().timestamp() < 3600 * 5:
-            date_str = f"<t:{org_dict['Datetime']}:f>"
-        else:
             date_str = f"<t:{org_dict['Datetime']}:R>"
+        else:
+            date_str = f"<t:{org_dict['Datetime']}:f>"
 
         self.add_field(name='Data si ora',
                        value=date_str,
