@@ -283,7 +283,7 @@ class OrgEmbed(discord.Embed):
                        inline=True)
 
         from datetime import datetime
-        if org_dict['Datetime'] - datetime.now().timestamp() < 3600 * 5:
+        if int(org_dict['Datetime']) - datetime.now().timestamp() < 3600 * 5:
             date_str = f"<t:{org_dict['Datetime']}:f>"
         else:
             date_str = f"<t:{org_dict['Datetime']}:R>"
