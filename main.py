@@ -778,6 +778,13 @@ async def on_message(message: discord.Message):
 async def test_voice(interaction: discord.Interaction):
     await audit_builder.prepare_audit(bot, GUILD_ID, AUDIT_CHANNEL)
 
+
+@command_tree.command(name='test_locale', description='Creaza o noua organizare de Sherpa.',
+                      guild=discord.Object(id=GUILD_ID))
+async def test_locale(interaction: discord.Interaction):
+    await interaction.response.send_message(content=f'<@489214493503520778> {interaction.locale}')
+
+
 #
 # @command_tree.command(name='test_embed', description='Creaza o noua organizare de Sherpa.',
 #                       guild=discord.Object(id=GUILD_ID))
