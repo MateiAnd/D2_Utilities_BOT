@@ -257,10 +257,10 @@ async def edit_mesaj(bot: commands.Bot, message, org_dict, block=False):
         pass
 
     if org_dict['Org_info']['Active']:
-        await message.edit(content='Organizare noua!', embed=OrgEmbed(org_dict, attribute_list, author_name, beginner_list, expert_list, reserve_list),
+        await message.edit(content='<@&1075455824782184523> Organizare noua!', embed=OrgEmbed(org_dict, attribute_list, author_name, beginner_list, expert_list, reserve_list),
                            view=OrgView(org_dict, attribute_list, bot))
     else:
-        await message.edit(content='Organizare a inceput!', embed=OrgEmbed(org_dict, attribute_list, author_name, beginner_list, expert_list, reserve_list),
+        await message.edit(content='Organizarea a inceput!', embed=OrgEmbed(org_dict, attribute_list, author_name, beginner_list, expert_list, reserve_list),
                            view=None)
 
 
