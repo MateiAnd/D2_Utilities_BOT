@@ -184,19 +184,19 @@ async def initializare_mesaj(bot: commands.Bot, org_dict):
     if participants['Beginners']:
         beginner_list = '\n'.join([f'{beg[0]}🍼' for beg in participants['Beginners']])
     else:
-        beginner_list = '-'
+        beginner_list = ''
 
     if participants['Experts']:
         expert_list = '\n'.join([f'{exp[0]} 👑' if exp[1] == participants['Author'][1] else exp[0] for exp in participants['Experts']])
     else:
-        expert_list = '-'
+        expert_list = ''
 
     if participants['Reserve']:
         reserve_list = '\n'.join(
             [rez[0] if not await check_if_beginner(guild, rez[1], role_id) else f'{rez[0]}🍼' for rez in
              participants['Reserve']])
     else:
-        reserve_list = '-'
+        reserve_list = ''
 
 
     await message.edit(content='<@&1075455824782184523> Organizare noua!', embed=OrgEmbed(org_dict, attribute_list, author_name, beginner_list, expert_list, reserve_list),
@@ -223,38 +223,41 @@ async def edit_mesaj(bot: commands.Bot, message, org_dict, block=False):
     if participants['Beginners']:
         beginner_list = '\n'.join([f'{beg[0]}🍼' for beg in participants['Beginners']])
     else:
-        beginner_list = '-'
+        beginner_list = ''
 
     if participants['Experts']:
         expert_list = '\n'.join(
             [f'{exp[0]} 👑' if exp[1] == participants['Author'][1] else exp[0] for exp in participants['Experts']])
     else:
-        expert_list = '-'
+        expert_list = ''
 
     if participants['Reserve']:
         reserve_list = '\n'.join(
             [rez[0] if await check_if_beginner(guild, rez[1], role_id) else f'{rez[0]}🍼' for rez in
              participants['Reserve']])
     else:
-        reserve_list = '-'
+        reserve_list = ''
+
+    if not beginner_list and not expert_list and not reserve_list:
+        expert_list = '-'
 
     # Problema la convert in cazul in care nu e epoch
-    try:
-        from datetime import datetime
-        import pytz
-
-        dt = datetime.strptime(org_dict['Datetime'], "%d/%m/%Y %H:%M")
-
-        # Assume the datetime object is in Bucharest timezone
-        bucharest_timezone = pytz.timezone("Europe/Bucharest")
-        localized_datetime = bucharest_timezone.localize(dt)
-
-        # Convert the localized datetime object to epoch time
-        epoch_time = int(localized_datetime.timestamp())
-        org_dict['Datetime'] = epoch_time
-        print(org_dict['Datetime'])
-    except:
-        pass
+    # try:
+    #     from datetime import datetime
+    #     import pytz
+    #
+    #     dt = datetime.strptime(org_dict['Datetime'], "%d/%m/%Y %H:%M")
+    #
+    #     # Assume the datetime object is in Bucharest timezone
+    #     bucharest_timezone = pytz.timezone("Europe/Bucharest")
+    #     localized_datetime = bucharest_timezone.localize(dt)
+    #
+    #     # Convert the localized datetime object to epoch time
+    #     epoch_time = int(localized_datetime.timestamp())
+    #     org_dict['Datetime'] = epoch_time
+    #     print(org_dict['Datetime'])
+    # except:
+    #     pass
 
     if org_dict['Org_info']['Active']:
         await message.edit(content='<@&1075455824782184523> Organizare noua!', embed=OrgEmbed(org_dict, attribute_list, author_name, beginner_list, expert_list, reserve_list),
