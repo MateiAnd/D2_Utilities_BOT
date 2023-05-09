@@ -457,7 +457,10 @@ async def organizare_refresher():
         time_difference = user_datetime - current_server_time
         minute_difference = int(time_difference.total_seconds() / 60)
 
-        if minute_difference < 60 and org['Org_info']['Reminder'] == 0:
+        if 299 < minute_difference < 301:
+            await org_channel.edit_mesaj(bot, message, org)
+
+        elif minute_difference < 60 and org['Org_info']['Reminder'] == 0:
             reminder_channel = await bot.fetch_channel(reminder_id)
             reminder_string = functions.make_reminder_string(org, 'A', 'o ora')
             await reminder_channel.send(content=reminder_string)
@@ -779,11 +782,48 @@ async def test_voice(interaction: discord.Interaction):
     await audit_builder.prepare_audit(bot, GUILD_ID, AUDIT_CHANNEL)
 
 
-@command_tree.command(name='test_locale', description='Creaza o noua organizare de Sherpa.',
-                      guild=discord.Object(id=GUILD_ID))
-async def test_locale(interaction: discord.Interaction):
-    await interaction.response.send_message(content=f'<@489214493503520778> {interaction.locale}')
-
+# @command_tree.command(name='test_locale', description='Creaza o noua organizare de Sherpa.',
+#                       guild=discord.Object(id=GUILD_ID))
+# async def test_locale(interaction: discord.Interaction):
+#     view = discord.ui.View()
+#     view.add_item(TimezoneSelect())
+#     await interaction.response.send_message(content="Please select your timezone from the dropdown menu.", view=view)
+#
+#
+# class TimezoneSelect(discord.ui.Select):
+#     def __init__(self):
+#         MAIN_EUROPEAN_TIMEZONES = [
+#             "Europe/London",
+#             "Europe/Dublin",
+#             "Europe/Lisbon",
+#             "Europe/Madrid",
+#             "Europe/Paris",
+#             "Europe/Amsterdam",
+#             "Europe/Berlin",
+#             "Europe/Rome",
+#             "Europe/Copenhagen",
+#             "Europe/Stockholm",
+#             "Europe/Oslo",
+#             "Europe/Helsinki",
+#             "Europe/Athens",
+#             "Europe/Istanbul",
+#             "Europe/Moscow",
+#         ]
+#
+#         options = [
+#             discord.SelectOption(label=timezone, value=timezone)
+#             for timezone in MAIN_EUROPEAN_TIMEZONES
+#         ]
+#         print(len(options))
+#
+#         super().__init__(placeholder="Select your timezone", min_values=1, max_values=1, options=options)
+#
+#     async def callback(self, interaction: discord.Interaction):
+#         selected_timezone = self.values[0]
+#         # Save the timezone for the user, e.g., in a database or a file
+#         # For this example, we'll just print it
+#         print(f"{interaction.user}: {selected_timezone}")
+#         await interaction.response.send_message(f"Your timezone has been set to {selected_timezone}.", ephemeral=True)
 
 #
 # @command_tree.command(name='test_embed', description='Creaza o noua organizare de Sherpa.',
