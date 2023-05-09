@@ -684,6 +684,8 @@ async def on_message(message: discord.Message):
             except:
                 async with aiofiles.open('./chat_gpt/init_chat.json', 'r') as f:
                     message_history = json.loads(await f.read())
+                    format_content = message_history["msg"][0]["content"].format(nume=message.author.mention)
+                    message_history["msg"][0]["content"] = format_content
 
             message_history["msg"].append({'role': 'user', 'content': message.content})
 
