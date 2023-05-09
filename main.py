@@ -547,9 +547,8 @@ Dacă întâmpini greutăți pe parcursul procesului, îți recomandăm să vorb
             json.dump(message_history, f)
 
     except:
-        admin_list = ['<@&1075455824824127520>', '<@&1075469551996768357>', '<@&1075455824824127519>']
         await new_thread.send(
-            content=f'Dacă întâmpini probleme, te rog să ne lași un mesaj aici și te vom asista în cel mai scurt timp posibil. {member.mention} {" ".join(admin_list)}')
+            content=f'Dacă întâmpini probleme, te rog să ne lași un mesaj aici și te vom asista în cel mai scurt timp posibil. {member.mention} <@&1104377935009419385>')
 
 
 @tasks.loop(minutes=60)
@@ -709,7 +708,7 @@ async def on_message(message: discord.Message):
                     f.write(thread_ids)
                 os.remove(rf'./chat_gpt/threads/{message.channel.id}.json')
                 await message.reply(
-                    content="ChatBro a fost a intrat in concediu medical, problema ta va fi preluata de catre un admin <@&729027061322350762> <@&790256564110884864> <@&710818161867620412>")
+                    content="ChatBro a fost a intrat in concediu medical, problema ta va fi preluata de catre un admin <@&1104377935009419385>")
                 # await message.channel.edit(archived=True, locked=True)
                 return
 
