@@ -38,7 +38,7 @@ activity_details = {
     'Garden of Salvation': [1075455824765394988, 1046140173102104639, 0x367800, r'http://buzea.pro/buzea.pro/d2ro/Assets/GOS.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/GOS_exp.png'],
     'Last Wish': [1075455824765394990, 1048985076345606315, 0x08fc76, r'http://buzea.pro/buzea.pro/d2ro/Assets/LW.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/LW_exp.png'],
     'Vault of Glass': [1075455824765394984, 1046139331938631780, 0x005939, r'http://buzea.pro/buzea.pro/d2ro/Assets/VOG.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/VOG_exp.png'],
-    'Vow of the Disciple': [1075455824748621842, 1048950466807070783, 0x470902, r'http://buzea.pro/buzea.pro/d2ro/Assets/VOW.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/VOG_exp.png'],
+    'Vow of the Disciple': [1075455824748621842, 1048950466807070783, 0x470902, r'http://buzea.pro/buzea.pro/d2ro/Assets/VOW.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/VOW_exp.png'],
     'Root Of Nightmares': [1101410490363686952, 1086338007763783740, 0x7e0599, r'http://buzea.pro/buzea.pro/d2ro/Assets/RON.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/RON_exp.png'],
     'Spire of the Watcher': [1075455824731852844, 1051035874193842206, 0xb86a04, r'http://buzea.pro/buzea.pro/d2ro/Assets/SOTW.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/SOTW_exp.png'],
     'Duality': [1075455824731852846, 1049227955227873291, 0x8a002c, r'http://buzea.pro/buzea.pro/d2ro/Assets/DUAL.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/DUAL_exp.png'],
