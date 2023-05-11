@@ -458,9 +458,11 @@ async def organizare_refresher():
         minute_difference = int(time_difference.total_seconds() / 60)
 
         if 299 < minute_difference < 301:
+            print(f'--- Schimb format org {org["ID"]}')
             await org_channel.edit_mesaj(bot, message, org)
 
-        elif minute_difference < 60 and org['Org_info']['Reminder'] == 0:
+        if minute_difference < 60 and org['Org_info']['Reminder'] == 0:
+            print(f'--- reminder 1h org {org["ID"]}')
             reminder_channel = await bot.fetch_channel(reminder_id)
             reminder_string = functions.make_reminder_string(org, 'A', 'o ora')
             await reminder_channel.send(content=reminder_string)
@@ -468,6 +470,7 @@ async def organizare_refresher():
             functions.data_updater(org_old=_org, org_new=org)
 
         elif minute_difference < 30 and org['Org_info']['Reminder'] == 1:
+            print(f'--- reminder 30min org {org["ID"]}')
             reminder_channel = await bot.fetch_channel(reminder_id)
             reminder_string = functions.make_reminder_string(org, 'Au', '30 min')
             await reminder_channel.send(content=reminder_string)
@@ -475,6 +478,7 @@ async def organizare_refresher():
             functions.data_updater(org_old=_org, org_new=org)
 
         elif minute_difference < 15 and org['Org_info']['Reminder'] == 2:
+            print(f'--- reminder 15min org {org["ID"]}')
             reminder_channel = await bot.fetch_channel(reminder_id)
             reminder_string = functions.make_reminder_string(org, 'Au', '15 min')
             await reminder_channel.send(content=reminder_string)
@@ -482,6 +486,7 @@ async def organizare_refresher():
             functions.data_updater(org_old=_org, org_new=org)
 
         elif minute_difference < 0 and org['Org_info']['Reminder'] == 3 and org['Org_info']['Active'] == True:
+            print(f'--- activare org {org["ID"]}')
             org['Org_info']['Active'] = False
             functions.data_updater(org_old=_org, org_new=org)
             _org_channel = await bot.fetch_channel(G_ORG_CHANNEL)
@@ -489,6 +494,7 @@ async def organizare_refresher():
             await org_channel.edit_mesaj(bot, message, org, True)
 
         if minute_difference < -60 and org['Org_info']['Active'] is False:
+            print(f'--- stergere org {org["ID"]}')
             _org_channel = await bot.fetch_channel(G_ORG_CHANNEL)
             message = await _org_channel.fetch_message(org['Message_id'])
 
