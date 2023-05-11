@@ -184,7 +184,7 @@ async def create_part_stings(org_dict: dict, guild, role_id):
 
     if participants['Reserve']:
         reserve_list = '\n'.join(
-            [rez[0] if not await check_if_beginner(guild, rez[1], role_id) else f'{rez[0]}🍼' for rez in
+            [rez[0] if await check_if_beginner(guild, rez[1], role_id) else f'{rez[0]}🍼' for rez in
              participants['Reserve']])
     else:
         reserve_list = ''
