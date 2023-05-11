@@ -26,6 +26,30 @@ button_labels = {
     'Fifth': ['Add Info', 'Finish', 'Cancel']  # final
 }
 
+# activity_details = {
+#     # attribute_list  =      role_id, guide_id, hex_color, active_img, expired_img
+#     "King's fall": 1075455824748621840,
+#     'Deep Stone Crypt': 1075455824765394986,
+#     'Garden of Salvation': 1075455824765394988,
+#     'Last Wish': 1075455824765394990,
+#     'Vault of Glass': 1075455824765394984,
+#     'Vow of the Disciple': 1075455824748621842,
+#     'Root Of Nightmares': 1101410490363686952,
+#     'Spire of the Watcher': 1075455824731852844,
+#     'Duality': 1075455824731852846,
+#     'Grasp of Averice': 1075455824731852848,
+#     'Pit': 1075455824748621836,
+#     'Prophecy': 1075455824748621834,
+#     'Shattered Throne': 1075455824748621838, 1086770644982698024, 0x113045, r'http://buzea.pro/buzea.pro/d2ro/Assets/ST.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/ST_exp.png'],
+#     'Crucible 6v6': [1075455824782184523, None, 0x9e0b1b, r'http://buzea.pro/buzea.pro/d2ro/Assets/PVP_6v6.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/PVP_6v6_exp.png'],
+#     'Comp 3v3': [1075455824782184523, None,0x51050d, r'http://buzea.pro/buzea.pro/d2ro/Assets/PVP_comp.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/PVP_comp_exp.png'],
+#     'Trials 3v3': [1075455824782184523, None, 0xe6b905, r'http://buzea.pro/buzea.pro/d2ro/Assets/PVP_trials.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/PVP_trials_exp.png'],
+#     'Gambit': [1075455824782184523, None, 0x107b10, r'http://buzea.pro/buzea.pro/d2ro/Assets/GAMBIT.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/GAMBIT_EXP.png'],
+#     'Nightfall': [1075455824782184523, None, 0x122258, r'http://buzea.pro/buzea.pro/d2ro/Assets/NF.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/NF_exp.png'],
+#     'GM': [1075455824782184523, None, 0xb09b64, r'http://buzea.pro/buzea.pro/d2ro/Assets/GM.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/GM_exp.png'],
+#     'Defiant Battlegrounds': [1075455824782184523, None, 0x9f8ddf, r'http://buzea.pro/buzea.pro/d2ro/Assets/DBG.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/DBG_exp.png']
+# }
+
 player_numbers = {
     "King's fall": 6,
     'Deep Stone Crypt': 6,

@@ -3,7 +3,7 @@ import json
 
 import discord
 from discord.ext import commands
-
+from copy import deepcopy
 from organizari_bot.functions import get_org_by_msg_id, data_updater
 
 global activity_details, GUILD_ID, org_id
@@ -159,6 +159,38 @@ async def org_refresher(bot, org_channel_id):
         message = await _org_channel.fetch_message(org['Message_id'])
         await edit_mesaj(bot, message, org)
 
+
+async def create_part_stings(org_dict: dict, guild, role_id):
+    _org = deepcopy(org_dict)
+    participants = _org['Participants']
+    author = participants['Author']
+    if participants['Beginners']:
+        beginner_list = '\n'.join([f'{beg[0]}🍼' for beg in participants['Beginners']])
+    else:
+        beginner_list = ''
+
+    if participants['Experts']:
+        temp_exp_list = []
+        for exp in participants['Experts']:
+            if not await check_if_beginner(guild, exp[1], role_id):
+                exp[0] = f"{exp[0]}🍼"
+            if exp[1] == author[1]:
+                exp[0] = f"{exp[0]}👑"
+            temp_exp_list.append(exp[0])
+
+        expert_list = '\n'.join(temp_exp_list)
+    else:
+        expert_list = ''
+
+    if participants['Reserve']:
+        reserve_list = '\n'.join(
+            [rez[0] if not await check_if_beginner(guild, rez[1], role_id) else f'{rez[0]}🍼' for rez in
+             participants['Reserve']])
+    else:
+        reserve_list = ''
+
+    return beginner_list, expert_list, reserve_list
+
 '''
 
 —————————————————————————————————————————————————————————————————————————————————————————————————
@@ -179,25 +211,30 @@ async def initializare_mesaj(bot: commands.Bot, org_dict):
     data_manager(org_dict=org_dict, mode='a')
     guild = await bot.fetch_guild(GUILD_ID)
 
-    participants = org_dict['Participants']
-    author_name = participants['Author'][0]
-    if participants['Beginners']:
-        beginner_list = '\n'.join([f'{beg[0]}🍼' for beg in participants['Beginners']])
-    else:
-        beginner_list = ''
+    beginner_list, expert_list, reserve_list = await create_part_stings(org_dict, guild, role_id)
+    author_name = org_dict['Participants']['Author'][0]
 
-    if participants['Experts']:
-        expert_list = '\n'.join([f'{exp[0]} 👑' if exp[1] == participants['Author'][1] else exp[0] for exp in participants['Experts']])
-    else:
-        expert_list = ''
+    # participants = org_dict['Participants']
+    # author_name = participants['Author'][0]
+    # if participants['Beginners']:
+    #     beginner_list = '\n'.join([f'{beg[0]}🍼' for beg in participants['Beginners']])
+    # else:
+    #     beginner_list = ''
+    #
+    # if participants['Experts']:
+    #     expert_list = '\n'.join([f'{exp[0]} 👑' if exp[1] == participants['Author'][1] else exp[0] for exp in participants['Experts']])
+    # else:
+    #     expert_list = ''
+    #
+    # if participants['Reserve']:
+    #     reserve_list = '\n'.join(
+    #         [rez[0] if not await check_if_beginner(guild, rez[1], role_id) else f'{rez[0]}🍼' for rez in
+    #          participants['Reserve']])
+    # else:
+    #     reserve_list = ''
 
-    if participants['Reserve']:
-        reserve_list = '\n'.join(
-            [rez[0] if not await check_if_beginner(guild, rez[1], role_id) else f'{rez[0]}🍼' for rez in
-             participants['Reserve']])
-    else:
-        reserve_list = ''
-
+    if not beginner_list and not expert_list and not reserve_list:
+        expert_list = '-'
 
     await message.edit(content='<@&1075455824782184523> Organizare noua!', embed=OrgEmbed(org_dict, attribute_list, author_name, beginner_list, expert_list, reserve_list),
                        view=OrgView(org_dict, attribute_list, bot))
@@ -218,25 +255,28 @@ async def edit_mesaj(bot: commands.Bot, message, org_dict, block=False):
     role_id, _, _, _, _ = attribute_list
     guild = await bot.fetch_guild(GUILD_ID)
 
-    participants = org_dict['Participants']
-    author_name = participants['Author'][0]
-    if participants['Beginners']:
-        beginner_list = '\n'.join([f'{beg[0]}🍼' for beg in participants['Beginners']])
-    else:
-        beginner_list = ''
+    beginner_list, expert_list, reserve_list = await create_part_stings(org_dict, guild, role_id)
+    author_name = org_dict['Participants']['Author'][0]
 
-    if participants['Experts']:
-        expert_list = '\n'.join(
-            [f'{exp[0]} 👑' if exp[1] == participants['Author'][1] else exp[0] for exp in participants['Experts']])
-    else:
-        expert_list = ''
-
-    if participants['Reserve']:
-        reserve_list = '\n'.join(
-            [rez[0] if await check_if_beginner(guild, rez[1], role_id) else f'{rez[0]}🍼' for rez in
-             participants['Reserve']])
-    else:
-        reserve_list = ''
+    # participants = org_dict['Participants']
+    # author_name = participants['Author'][0]
+    # if participants['Beginners']:
+    #     beginner_list = '\n'.join([f'{beg[0]}🍼' for beg in participants['Beginners']])
+    # else:
+    #     beginner_list = ''
+    #
+    # if participants['Experts']:
+    #     expert_list = '\n'.join(
+    #         [f'{exp[0]} 👑' if exp[1] == participants['Author'][1] else exp[0] for exp in participants['Experts']])
+    # else:
+    #     expert_list = ''
+    #
+    # if participants['Reserve']:
+    #     reserve_list = '\n'.join(
+    #         [rez[0] if await check_if_beginner(guild, rez[1], role_id) else f'{rez[0]}🍼' for rez in
+    #          participants['Reserve']])
+    # else:
+    #     reserve_list = ''
 
     if not beginner_list and not expert_list and not reserve_list:
         expert_list = '-'
@@ -273,9 +313,6 @@ class OrgEmbed(discord.Embed):
         super().__init__(title=f"Organizare — {org_dict['Type']}",
                          description=f'',
                          color=hex_color)
-        # self.set_author(name='D2-RO Scheduler',
-        #                 url=r'https://destiny2.ro/',
-        #                 icon_url='https://cdn.discordapp.com/attachments/1101368918318260274/1101498772560806001/logo_mic.png')
 
         self.add_field(name='ID',
                        value=org_dict['ID'],
@@ -307,11 +344,11 @@ class OrgEmbed(discord.Embed):
         Tratare participanti
         '''
 
-        # participants = org_dict['Participants']
         if org_dict['Activity'] == 'Raid' or org_dict['Activity'] == 'Dungeon':
 
-            if org_dict['Beginners'] != 0 or org_dict['Beginners'] is not None:
-                beg_number = f"(max {org_dict['Beginners']} 🍼)"
+            if org_dict['Beginners']:  # != 0 or org_dict['Beginners'] is not None
+                print(org_dict['Beginners'])
+                beg_number = f"max {org_dict['Beginners']} 🍼"
             else:
                 beg_number = "Fara 🍼"
             self.add_field(name=f'Participanti - {beg_number}',
@@ -331,20 +368,6 @@ class OrgEmbed(discord.Embed):
                            inline=True)
 
 
-        # self.add_field(name=f'Incepatori (max {org_dict["Beginners"]})',
-        #                value=beginner_list,
-        #                inline=True)
-
-
-        # self.add_field(name=f'Experimentati',
-        #                value=expert_list,
-        #                inline=True)
-
-        # self.add_field(name='‎',
-        #                value='‎',
-        #                inline=True)
-
-
         self.add_field(name=f'Rezerve',
                        value=reserve_list,
                        inline=True)
@@ -355,6 +378,8 @@ class OrgEmbed(discord.Embed):
             image_url = active_img
 
         self.set_image(url=image_url)
+
+        self.set_footer(text=f"Creat de {org_dict['Participants']['Author'][0]}")
 
 
 class OrgView(discord.ui.View):
