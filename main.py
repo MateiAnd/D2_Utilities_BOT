@@ -459,6 +459,8 @@ async def organizare_refresher():
 
         if 299 < minute_difference < 301:
             print(f'--- Schimb format org {org["ID"]}')
+            _org_channel = await bot.fetch_channel(G_ORG_CHANNEL)
+            message = await _org_channel.fetch_message(org['Message_id'])
             await org_channel.edit_mesaj(bot, message, org)
 
         if minute_difference < 60 and org['Org_info']['Reminder'] == 0:
