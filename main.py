@@ -443,7 +443,6 @@ async def organizare_refresher():
         return
 
     for org in org_dict:
-        print(org['ID'])
         _org = copy.deepcopy(org)
         from datetime import datetime
 
