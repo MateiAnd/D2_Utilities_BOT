@@ -25,9 +25,10 @@ from organizari_bot import create_org, org_channel
 from utilities import donator_manage, donator_automod
 from help.help_embed import init_help
 from audit_log import audit_builder
+from utilities.donator_automod import booster_manage
 
 
-global GUILD_ID, PLAYER_UPDATES_CHANNEL, ORG_CHANNEL, REMINDER_CHANNEL, WELCOME_CHANNEL, G_ORG_CHANNEL
+global GUILD_ID, PLAYER_UPDATES_CHANNEL, ORG_CHANNEL, REMINDER_CHANNEL, WELCOME_CHANNEL, G_ORG_CHANNEL, SERVER_BOOSTER, DONATOR_ROLE, VIP_ROLE
 GUILD_ID = 1075455824643764314
 PLAYER_UPDATES_CHANNEL = 1100486602922397776
 ORG_CHANNEL = [1101037441999179827, 1100487208936423556]
@@ -35,6 +36,10 @@ REMINDER_CHANNEL = 1075455825788809276
 WELCOME_CHANNEL = 1075455825205800974
 CLAN_INVITE_CHANNEL = 1075455825377763418
 AUDIT_CHANNEL = 1100487208936423556
+SERVER_BOOSTER = 1101409180440592430
+DONATOR_ROLE = 1075455824811532323
+VIP_ROLE = 1101631680982306987
+
 
 class UtilsBot(commands.Bot):
     def __init__(self):
@@ -236,10 +241,6 @@ async def transfer_to_channel(interaction: discord.Interaction, canal_voce: disc
     print(
         f'{"—" * 10} Initializare transfer {interaction.user.nick if interaction.user.nick else interaction.user.name}')
 
-    SERVER_BOOSTER = '1101409180440592430'
-    DONATOR_ROLE = '1075455824811532323'
-    VIP_ROLE = '1101631680982306987'
-
     try:
         voice_channel = canal_voce
         author = interaction.user
@@ -314,6 +315,19 @@ async def lock_for_donator(interaction: discord.Interaction, limita_user:int = 0
     except:
         await interaction.response.send_message(content='Trebuie sa intri intr-un canal voce.', ephemeral=True)
 
+
+@tasks.loop(minutes=30)
+async def do_refresh_donator():
+    from datetime import datetime
+    now = datetime.now()
+    date_time_string = now.strftime("%d/%m/%Y %H:%M:%S")
+    print(f'[{date_time_string}] {"—" * 2} Refresh lista donatori {"—" * 5}')
+    await donator_automod.init(bot)
+
+
+@bot.event
+async def on_member_update(before:discord.Member, after:discord.Member):
+    await booster_manage(before, after, bot)
 
 '''
 
@@ -597,15 +611,6 @@ async def do_refresh_bot():
     now = datetime.datetime.now()
     log_time = now.strftime("%m/%d/%Y %H:%M:%S")
     # print(f'[{log_time}] Refresh BOT')
-
-
-@tasks.loop(minutes=30)
-async def do_refresh_donator():
-    from datetime import datetime
-    now = datetime.now()
-    date_time_string = now.strftime("%d/%m/%Y %H:%M:%S")
-    print(f'[{date_time_string}] {"—" * 2} Refresh lista donatori {"—" * 5}')
-    await donator_automod.init(bot)
 
 
 @bot.event

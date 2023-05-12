@@ -1,4 +1,6 @@
 import json
+
+import aiofiles
 import discord
 from discord.utils import get
 
@@ -18,7 +20,7 @@ async def init(bot):
     # setup bot
     members = bot.get_all_members()
     server = await bot.fetch_guild(GUILD_ID)
-    server_booster = server.get_role(SERVER_BOOSTER)
+    # server_booster = server.get_role(SERVER_BOOSTER)
     donator_role = server.get_role(DONATOR_ROLE)
 
     # citire donatori manual
@@ -40,11 +42,11 @@ async def init(bot):
                 except:
                     await update_channel.send(content=f'Pula mea nu a mers')
 
-        elif server_booster in member.roles:
-            if donator_role not in member.roles:
-                print(f'{"—" * 3} Adaugat donator lui {member.nick if member.nick else member.display_name} din server boost')
-                await update_channel.send(content=f'Adaugat donator lui {member.mention} din Server Boost')
-                await member.add_roles(donator_role)
+        # elif server_booster in member.roles:
+        #     if donator_role not in member.roles:
+        #         print(f'{"—" * 3} Adaugat donator lui {member.nick if member.nick else member.display_name} din server boost')
+        #         await update_channel.send(content=f'Adaugat donator lui {member.mention} din Server Boost')
+        #         await member.add_roles(donator_role)
 
         # elif donator_role in member.roles:
         #     print(f'{"—" * 3} Scos donator lui {member.nick if member.nick else member.display_name}')
@@ -67,3 +69,44 @@ async def init(bot):
     with open('./utilities/donator_db.json', 'w') as f:
         _temp['data'] = donator_list
         json.dump(_temp, f, indent=4)
+
+
+async def booster_manage(before:discord.Member, after:discord.Member, bot):
+    update_channel = await bot.fetch_channel(PLAYER_UPDATES_CHANNEL)
+
+    if len(before.roles) < len(after.roles):
+        # The user has gained a new role
+        newRole = next(role for role in after.roles if role not in before.roles)
+
+        if newRole.id == SERVER_BOOSTER:
+            server = await bot.fetch_guild(GUILD_ID)
+            donator_role = server.get_role(DONATOR_ROLE)
+            print(f'{"—" * 3} Adaugat donator lui {after.nick if after.nick else after.display_name} din server boost')
+            await after.add_roles(donator_role)
+            await update_channel.send(
+                content=f'Adaugat donator lui {after.mention} din Server Boost')
+
+    elif len(before.roles) > len(after.roles):
+        # The user has lost a role
+        lostRole = next(role for role in before.roles if role not in after.roles)
+
+        manual_donator = []
+
+        if lostRole.id == SERVER_BOOSTER:
+
+            # citire donatori manual
+            with aiofiles.open('./utilities/donator_db.json') as f:
+                _temp = json.loads(await f.read())
+                donator_list = _temp['data']
+            manual_donator.append(don["id"] for don in donator_list)
+
+            if after.id in manual_donator:
+                return
+
+            server = await bot.fetch_guild(GUILD_ID)
+            donator_role = server.get_role(DONATOR_ROLE)
+            print(
+                f'{"—" * 3} Scos donator lui {after.nick if after.nick else after.display_name} din expirare server boost')
+            await after.remove_roles(donator_role)
+            await update_channel.send(
+                content=f'Scos donator lui {after.mention} din expirare Server Boost')
