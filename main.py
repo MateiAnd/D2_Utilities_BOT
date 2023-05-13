@@ -368,6 +368,8 @@ async def post_refresher():
         _org = copy.deepcopy(org)
         from datetime import datetime
 
+        print(org['ID'])
+
         # Assuming your epoch time is stored in a variable named 'epoch_time'
         epoch_time = int(org['Datetime'])
 
