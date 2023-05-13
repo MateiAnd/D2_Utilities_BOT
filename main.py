@@ -246,11 +246,11 @@ async def transfer_to_channel(interaction: discord.Interaction, canal_voce: disc
         author = interaction.user
         updates_channel = await bot.fetch_channel(PLAYER_UPDATES_CHANNEL)
 
-        if VIP_ROLE in str(author.roles):
+        if str(VIP_ROLE) in str(author.roles):
             transfer_str = f'Transfer VIP {author.mention} pe canalul voce **{voice_channel.name}**'
-        elif DONATOR_ROLE in str(author.roles):
+        elif str(DONATOR_ROLE) in str(author.roles):
             transfer_str = f'Transfer Donator {author.mention} pe canalul voce **{voice_channel.name}**'
-        elif SERVER_BOOSTER in str(author.roles):
+        elif str(SERVER_BOOSTER) in str(author.roles):
             transfer_str = f'Transfer Booster {author.mention} pe canalul voce **{voice_channel.name}**'
         else:
             transfer_str = f'Transfer {author.mention} pe canalul voce **{voice_channel.name}**'
