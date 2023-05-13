@@ -156,6 +156,7 @@ async def org_refresher(bot, org_channel_id):
 
     _org_channel = await bot.fetch_channel(org_channel_id)
     for org in orgs:
+        print(org['ID'])
         message = await _org_channel.fetch_message(org['Message_id'])
         await edit_mesaj(bot, message, org)
 
