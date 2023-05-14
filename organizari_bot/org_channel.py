@@ -79,6 +79,7 @@ def data_logger(org_dict):
 
 
 def data_manager(org_dict, mode='a'):
+    changes = None
     _temp = data_reader()
     if mode == 'a':
         _temp["org"].append(org_dict)
@@ -87,10 +88,23 @@ def data_manager(org_dict, mode='a'):
     elif mode == 'u':
         for org in _temp["org"]:
             if org['ID'] == org_dict['ID']:
+                changes = get_changes(org, org_dict)
                 print(f'--- Updated org {org["ID"]}')
                 _temp["org"].remove(org)
                 _temp["org"].append(org_dict)
     data_logger(_temp)
+    if changes:
+        return changes
+
+
+def get_changes(org_old, org_new):
+    changes = {}
+    for key in org_old:
+        if key == 'Org_info' or key == 'Editing' or key == 'Participants':
+            continue
+        if org_new[key] != org_old[key]:
+            changes[key] = [org_new[key] , org_old[key]]
+    return changes
 
 
 def get_org_by_id(_org_id: str):
@@ -243,8 +257,9 @@ async def initializare_mesaj(bot: commands.Bot, org_dict):
 
 async def init_edit(bot: commands.Bot, org_dict,):
     _, message = await get_message(bot, org_dict)
-    data_manager(org_dict=org_dict, mode='u')
+    changes = data_manager(org_dict=org_dict, mode='u')
     await edit_mesaj(_bot, message, org_dict=org_dict)
+    await spam_on_edit(bot, org_dict, changes, message.jump_url)
 
 
 async def edit_mesaj(bot: commands.Bot, message, org_dict, block=False):
@@ -451,6 +466,7 @@ async def button_functions(interaction: discord.Interaction, label, org_dict, me
             _, message = await get_message(_bot=_bot, org_dict=org_dict)
 
             await org_role.delete()
+            await spam_on_edit(interaction.client, org_dict, changes=[], deleted=True)
             await message.delete()
 
             data_updater(org_old=org_dict, org_new={})
@@ -526,3 +542,94 @@ async def button_functions(interaction: discord.Interaction, label, org_dict, me
         await edit_mesaj(_bot, message, org_dict=org_dict)
 
     data_updater(org_old=org_old, org_new=org_dict)
+
+
+'''
+
+—————————————————————————————————————————————————————————————————————————————————————————————————
+                    Notify Edit
+—————————————————————————————————————————————————————————————————————————————————————————————————
+
+'''
+
+
+async def spam_on_edit(bot: commands.Bot, org_dict, changes, jump_url='', deleted=False):
+
+    org_id = org_dict['ID']
+
+    for member in org_dict['Participants']['Experts']:
+        if member[1] == org_dict['Participants']['Author'][1]:
+            continue
+        member_obj = await bot.fetch_user(member[1])
+        if deleted:
+            await member_obj.send(content='', embed=DeleteEmbed(org_dict))
+            continue
+        await member_obj.send(content='', embed=EditEmbed(org_id, changes, jump_url))
+
+    for member in org_dict['Participants']['Beginners']:
+        member_obj = await bot.fetch_user(member[1])
+        if deleted:
+            await member_obj.send(content='', embed=DeleteEmbed(org_dict))
+            continue
+        await member_obj.send(content='', embed=EditEmbed(org_id, changes, jump_url))
+
+    for member in org_dict['Participants']['Reserve']:
+        member_obj = await bot.fetch_user(member[1])
+        if deleted:
+            await member_obj.send(content='', embed=DeleteEmbed(org_dict))
+            continue
+        await member_obj.send(content='', embed=EditEmbed(org_id, changes, jump_url))
+
+
+class EditEmbed(discord.Embed):
+    def __init__(self, id, changes, jump_url):
+        super().__init__(title=f"Organizare modificata!",
+                         description=f'Salut, autorul organizarii {id} la care esti inscris a facut o modificare. {jump_url}',
+                         color=0x1d3fa5)
+
+        for key in changes:
+            if key == 'Datetime':
+                self.add_field(name='Data si ora',
+                               value=f"<t:{changes[key][1]}:f>",
+                               inline=True)
+                self.add_field(name='',
+                               value=f"——>",
+                               inline=True)
+                self.add_field(name='Data si ora noua',
+                               value=f"<t:{changes[key][0]}:f>",
+                               inline=True)
+            else:
+                self.add_field(name=key,
+                               value=f"{changes[key][1]}",
+                               inline=True)
+                self.add_field(name='',
+                               value=f"——>",
+                               inline=True)
+                self.add_field(name=f'{key} modificat',
+                               value=f"{changes[key][0]}",
+                               inline=True)
+
+
+class DeleteEmbed(discord.Embed):
+    def __init__(self, org_dict):
+        super().__init__(title=f"Organizare anulata!",
+                         description=f'Salut, autorul organizarii la care esti inscris a fost stearsa!',
+                         color=0xff2506)
+
+        org_id = org_dict['ID']
+
+        self.add_field(name=f'Activitate - ID {org_id}',
+                       value=f"{org_dict['Type']}",
+                       inline=False)
+
+        self.add_field(name='Info',
+                       value=f"{org_dict['Info'] if org_dict['Info'] else '-'}",
+                       inline=False)
+
+        self.add_field(name='Data si ora',
+                       value=f"<t:{org_dict['Datetime']}:f>",
+                       inline=False)
+
+        self.add_field(name='Autor',
+                       value=f"{org_dict['Participants']['Author'][0]}",
+                       inline=False)
