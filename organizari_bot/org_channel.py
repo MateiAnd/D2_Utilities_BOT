@@ -348,15 +348,14 @@ class OrgEmbed(discord.Embed):
                        value=date_str,
                        inline=True)
 
-        if org_dict['Beginners']:  # != 0 or org_dict['Beginners'] is not None
-            print(org_dict['Beginners'])
-            beg_number = f"max {org_dict['Beginners']} 🍼"
+        if org_dict['Beginners'] != '0':  # != 0 or org_dict['Beginners'] is not None
+            beg_number = f"Maxim {org_dict['Beginners']} incepatori 🍼"
         else:
-            beg_number = "Fara 🍼"
+            beg_number = "Fara incepatori 🍼"
 
         if org_dict['Activity'] == 'Raid' or org_dict['Activity'] == 'Dungeon':
             self.add_field(name='Info',
-                           value=f"{org_dict['Info']} \n**{beg_number}**",
+                           value=f"{org_dict['Info']} \n\n**{beg_number}**",
                            inline=False)
 
             self.add_field(name='‎',
