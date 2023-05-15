@@ -348,47 +348,47 @@ class OrgEmbed(discord.Embed):
                        value=date_str,
                        inline=True)
 
-        self.add_field(name='Info',
-                       value=org_dict['Info'],
-                       inline=False)
+        if org_dict['Beginners']:  # != 0 or org_dict['Beginners'] is not None
+            print(org_dict['Beginners'])
+            beg_number = f"max {org_dict['Beginners']} 🍼"
+        else:
+            beg_number = "Fara 🍼"
 
-        self.add_field(name='‎',
-                       value='‎',
-                       inline=False)
+        if org_dict['Activity'] == 'Raid' or org_dict['Activity'] == 'Dungeon':
+            self.add_field(name='Info',
+                           value=f"{org_dict['Info']} \n**{beg_number}**",
+                           inline=False)
+
+            self.add_field(name='‎',
+                           value='‎',
+                           inline=False)
+        else:
+
+            self.add_field(name='Info',
+                           value=org_dict['Info'],
+                           inline=False)
+
+            self.add_field(name='‎',
+                           value='‎',
+                           inline=False)
 
         '''
         Tratare participanti
         '''
 
-        if org_dict['Activity'] == 'Raid' or org_dict['Activity'] == 'Dungeon':
+        self.add_field(name=f'Participanti',
+                       value=f'{expert_list} \n {beginner_list}',
+                       inline=True)
 
-            if org_dict['Beginners']:  # != 0 or org_dict['Beginners'] is not None
-                print(org_dict['Beginners'])
-                beg_number = f"max {org_dict['Beginners']} 🍼"
-            else:
-                beg_number = "Fara 🍼"
-            self.add_field(name=f'Participanti - {beg_number}',
-                           value=f'{expert_list} \n {beginner_list}',
-                           inline=True)
-
-            self.add_field(name='‎',
-                           value='‎',
-                           inline=True)
-        else:
-            self.add_field(name=f'Participanti',
-                           value=f'{expert_list} \n {beginner_list}',
-                           inline=True)
-
-            self.add_field(name='‎',
-                           value='‎',
-                           inline=True)
-
+        self.add_field(name='‎',
+                       value='‎',
+                       inline=True)
 
         self.add_field(name=f'Rezerve',
                        value=reserve_list,
                        inline=True)
 
-        if org_dict['Org_info']['Active'] == False:
+        if not org_dict['Org_info']['Active']:
             image_url = expired_img
         else:
             image_url = active_img
