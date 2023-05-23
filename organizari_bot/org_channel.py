@@ -177,63 +177,101 @@ async def org_refresher(bot, org_channel_id):
 
 async def create_part_stings(org_dict: dict, guild, role_id):
     temp_part_list = []
-    temp_rez_list = []
     queue_rez_list = []
     max_number = int(org_dict['Max Number'])
-    beg_counter = int(org_dict['Beginner_Counter'])
-    max_beg = int(org_dict['Beginners'])
 
-    print(max_beg, beg_counter, max_beg < beg_counter)
+    if org_dict['Activity'] == 'Raid' or org_dict['Activity'] == 'Dungeon':
+        beg_counter = int(org_dict['Beginner_Counter'])
+        max_beg = int(org_dict['Beginners'])
 
-    if org_dict['Participants']['Queue']:
-        for exp in org_dict['Participants']['Queue']:
-            if len(org_dict['Participants']['Participants']) < max_number:
-                org_dict['Participants']['Participants'].append(exp)
-                org_dict['Participants']['Queue'].remove(exp)
-            else:
-                pass
-    #             ["Sypha#5874", 496053061962170380], ["Albert#7319", 441305325719650304], ["cj_quest#7710", 534063567943499776], ["Just_FrnX#0507", 683070954603151462], ["Tala420#6469", 740857014439247902], ["Lorin Ioan Fortuna", 489214493503520778]
+        print(max_beg, beg_counter, max_beg < beg_counter)
 
-    _org = deepcopy(org_dict)
-    participants = _org['Participants']
-    author = participants['Author']
-
-    if participants['Participants']:
-        for exp in participants['Participants']:
-            if not await check_if_beginner(guild, exp[1], role_id):
-                if max_beg >= beg_counter:
-                    exp[0] = f"{exp[0]}🍼"
-                    beg_counter += 1
+        if org_dict['Participants']['Queue']:
+            for exp in org_dict['Participants']['Queue']:
+                if len(org_dict['Participants']['Participants']) < max_number:
+                    org_dict['Participants']['Participants'].append(exp)
+                    org_dict['Participants']['Queue'].remove(exp)
                 else:
-                    print(2)
-                    org_dict['Participants']['Participants'].remove(exp)
-                    org_dict['Participants']['Queue'].append(deepcopy(exp))
-                    continue
-            if exp[1] == author[1]:
-                exp[0] = f"{exp[0]}👑"
-            temp_part_list.append(exp[0])
+                    pass
+        #             ["Sypha#5874", 496053061962170380], ["Albert#7319", 441305325719650304], ["cj_quest#7710", 534063567943499776], ["Just_FrnX#0507", 683070954603151462], ["Tala420#6469", 740857014439247902], ["Lorin Ioan Fortuna", 489214493503520778]
 
-        part_list = '\n'.join(temp_part_list)
+        _org = deepcopy(org_dict)
+        participants = _org['Participants']
+        author = participants['Author']
+
+        if participants['Participants']:
+            for exp in participants['Participants']:
+                if not await check_if_beginner(guild, exp[1], role_id):
+                    if max_beg >= beg_counter:
+                        exp[0] = f"{exp[0]}🍼"
+                        beg_counter += 1
+                    else:
+                        print(2)
+                        org_dict['Participants']['Participants'].remove(exp)
+                        org_dict['Participants']['Queue'].append(deepcopy(exp))
+                        continue
+                if exp[1] == author[1]:
+                    exp[0] = f"{exp[0]}👑"
+                temp_part_list.append(exp[0])
+
+            part_list = '\n'.join(temp_part_list)
+        else:
+            part_list = '-'
+
+        temp_rez_list = deepcopy(org_dict['Participants']['Queue'])
+
+        if temp_rez_list:
+            for rez in temp_rez_list:
+                if not await check_if_beginner(guild, rez[1], role_id):
+                    rez[0] = f"{rez[0]}🍼"
+                if rez[1] == author[1]:
+                    rez[0] = f"{rez[0]}👑"
+                queue_rez_list.append(rez[0])
+
+        if participants['Reserve'] or queue_rez_list:
+            reserve_queue = '\n'.join(queue_rez_list)
+            reserve_list = reserve_queue + '\n' + '\n'.join(
+                [rez[0] if await check_if_beginner(guild, rez[1], role_id) else f'{rez[0]}🍼' for rez in
+                 participants['Reserve']])
+        else:
+            reserve_list = '-'
+
     else:
-        part_list = '-'
+        if org_dict['Participants']['Queue']:
+            for exp in org_dict['Participants']['Queue']:
+                if len(org_dict['Participants']['Participants']) < max_number:
+                    org_dict['Participants']['Participants'].append(exp)
+                    org_dict['Participants']['Queue'].remove(exp)
+                else:
+                    pass
+        _org = deepcopy(org_dict)
+        participants = _org['Participants']
+        author = participants['Author']
 
-    temp_rez_list = deepcopy(org_dict['Participants']['Queue'])
+        if participants['Participants']:
+            for exp in participants['Participants']:
+                if exp[1] == author[1]:
+                    exp[0] = f"{exp[0]}👑"
+                temp_part_list.append(exp[0])
+            part_list = '\n'.join(temp_part_list)
+        else:
+            part_list = '-'
 
-    if temp_rez_list:
-        for rez in temp_rez_list:
-            if not await check_if_beginner(guild, rez[1], role_id):
-                rez[0] = f"{rez[0]}🍼"
-            if rez[1] == author[1]:
-                rez[0] = f"{rez[0]}👑"
-            queue_rez_list.append(rez[0])
+        temp_rez_list = deepcopy(org_dict['Participants']['Queue'])
 
-    if participants['Reserve'] or queue_rez_list:
-        reserve_queue = '\n'.join(queue_rez_list)
-        reserve_list = reserve_queue + '\n' + '\n'.join(
-            [rez[0] if await check_if_beginner(guild, rez[1], role_id) else f'{rez[0]}🍼' for rez in
-             participants['Reserve']])
-    else:
-        reserve_list = '-'
+        if temp_rez_list:
+            for rez in temp_rez_list:
+                if rez[1] == author[1]:
+                    rez[0] = f"{rez[0]}👑"
+                queue_rez_list.append(rez[0])
+
+        if participants['Reserve'] or queue_rez_list:
+            reserve_queue = '\n'.join(queue_rez_list)
+            reserve_list = reserve_queue + '\n' + '\n'.join(
+                [rez[0] if await check_if_beginner(guild, rez[1], role_id) else f'{rez[0]}🍼' for rez in
+                 participants['Reserve']])
+        else:
+            reserve_list = '-'
 
     return part_list, reserve_list, org_dict
 
