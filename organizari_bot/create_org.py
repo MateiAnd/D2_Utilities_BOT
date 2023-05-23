@@ -163,9 +163,10 @@ async def create(interaction, bot, author):
         'Datetime': '',
         'Info': '',
         'Beginners': '',
+        'Beginner_Counter': 0,
         'Max Number': '',
         'Message_id': '',
-        'Participants': {'Author': author_details, 'Beginners': [], 'Experts': [author_details], 'Reserve': []},
+        'Participants': {'Author': author_details, 'Participants': [], 'Queue': [author_details], 'Reserve': []},
         'Org_info': {'Active': True, 'Reminder': 0},  # reminder: (0, 1, 2, 3, 4) = (none, 1h, 30m, 15m, dat tot)
         'Org_utils': '',
         'Editing': False
