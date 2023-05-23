@@ -103,7 +103,7 @@ def get_changes(org_old, org_new):
         if key == 'Org_info' or key == 'Editing' or key == 'Participants':
             continue
         if org_new[key] != org_old[key]:
-            changes[key] = [org_new[key] , org_old[key]]
+            changes[key] = [org_new[key], org_old[key]]
     return changes
 
 
@@ -176,35 +176,66 @@ async def org_refresher(bot, org_channel_id):
 
 
 async def create_part_stings(org_dict: dict, guild, role_id):
+    temp_part_list = []
+    temp_rez_list = []
+    queue_rez_list = []
+    max_number = int(org_dict['Max Number'])
+    beg_counter = int(org_dict['Beginner_Counter'])
+    max_beg = int(org_dict['Beginners'])
+
+    print(max_beg, beg_counter, max_beg < beg_counter)
+
+    if org_dict['Participants']['Queue']:
+        for exp in org_dict['Participants']['Queue']:
+            if len(org_dict['Participants']['Participants']) < max_number:
+                org_dict['Participants']['Participants'].append(exp)
+                org_dict['Participants']['Queue'].remove(exp)
+            else:
+                pass
+    #             ["Sypha#5874", 496053061962170380], ["Albert#7319", 441305325719650304], ["cj_quest#7710", 534063567943499776], ["Just_FrnX#0507", 683070954603151462], ["Tala420#6469", 740857014439247902], ["Lorin Ioan Fortuna", 489214493503520778]
+
     _org = deepcopy(org_dict)
     participants = _org['Participants']
     author = participants['Author']
-    if participants['Beginners']:
-        beginner_list = '\n'.join([f'{beg[0]}🍼' for beg in participants['Beginners']])
-    else:
-        beginner_list = ''
 
-    if participants['Experts']:
-        temp_exp_list = []
-        for exp in participants['Experts']:
+    if participants['Participants']:
+        for exp in participants['Participants']:
             if not await check_if_beginner(guild, exp[1], role_id):
-                exp[0] = f"{exp[0]}🍼"
+                if max_beg >= beg_counter:
+                    exp[0] = f"{exp[0]}🍼"
+                    beg_counter += 1
+                else:
+                    print(2)
+                    org_dict['Participants']['Participants'].remove(exp)
+                    org_dict['Participants']['Queue'].append(deepcopy(exp))
+                    continue
             if exp[1] == author[1]:
                 exp[0] = f"{exp[0]}👑"
-            temp_exp_list.append(exp[0])
+            temp_part_list.append(exp[0])
 
-        expert_list = '\n'.join(temp_exp_list)
+        part_list = '\n'.join(temp_part_list)
     else:
-        expert_list = ''
+        part_list = '-'
 
-    if participants['Reserve']:
-        reserve_list = '\n'.join(
+    temp_rez_list = deepcopy(org_dict['Participants']['Queue'])
+
+    if temp_rez_list:
+        for rez in temp_rez_list:
+            if not await check_if_beginner(guild, rez[1], role_id):
+                rez[0] = f"{rez[0]}🍼"
+            if rez[1] == author[1]:
+                rez[0] = f"{rez[0]}👑"
+            queue_rez_list.append(rez[0])
+
+    if participants['Reserve'] or queue_rez_list:
+        reserve_queue = '\n'.join(queue_rez_list)
+        reserve_list = reserve_queue + '\n' + '\n'.join(
             [rez[0] if await check_if_beginner(guild, rez[1], role_id) else f'{rez[0]}🍼' for rez in
              participants['Reserve']])
     else:
-        reserve_list = ''
+        reserve_list = '-'
 
-    return beginner_list, expert_list, reserve_list
+    return part_list, reserve_list, org_dict
 
 '''
 
@@ -223,35 +254,15 @@ async def initializare_mesaj(bot: commands.Bot, org_dict):
     role_id, _, _, _, _ = attribute_list
 
     org_dict, message = await get_message(_bot, org_dict)
-    data_manager(org_dict=org_dict, mode='a')
     guild = await bot.fetch_guild(GUILD_ID)
 
-    beginner_list, expert_list, reserve_list = await create_part_stings(org_dict, guild, role_id)
+    part_list, reserve_list, org_dict = await create_part_stings(org_dict, guild, role_id)
+    data_manager(org_dict=org_dict, mode='a')
+
+
     author_name = org_dict['Participants']['Author'][0]
 
-    # participants = org_dict['Participants']
-    # author_name = participants['Author'][0]
-    # if participants['Beginners']:
-    #     beginner_list = '\n'.join([f'{beg[0]}🍼' for beg in participants['Beginners']])
-    # else:
-    #     beginner_list = ''
-    #
-    # if participants['Experts']:
-    #     expert_list = '\n'.join([f'{exp[0]} 👑' if exp[1] == participants['Author'][1] else exp[0] for exp in participants['Experts']])
-    # else:
-    #     expert_list = ''
-    #
-    # if participants['Reserve']:
-    #     reserve_list = '\n'.join(
-    #         [rez[0] if not await check_if_beginner(guild, rez[1], role_id) else f'{rez[0]}🍼' for rez in
-    #          participants['Reserve']])
-    # else:
-    #     reserve_list = ''
-
-    if not beginner_list and not expert_list and not reserve_list:
-        expert_list = '-'
-
-    await message.edit(content='<@&1075455824782184523> Organizare noua!', embed=OrgEmbed(org_dict, attribute_list, author_name, beginner_list, expert_list, reserve_list),
+    await message.edit(content='<@&1075455824782184523> Organizare noua!', embed=OrgEmbed(org_dict, attribute_list, author_name, part_list, reserve_list),
                        view=OrgView(org_dict, attribute_list, bot))
 
 
@@ -271,60 +282,20 @@ async def edit_mesaj(bot: commands.Bot, message, org_dict, block=False):
     role_id, _, _, _, _ = attribute_list
     guild = await bot.fetch_guild(GUILD_ID)
 
-    beginner_list, expert_list, reserve_list = await create_part_stings(org_dict, guild, role_id)
+    part_list, reserve_list, org_dict = await create_part_stings(org_dict, guild, role_id)
     author_name = org_dict['Participants']['Author'][0]
-
-    # participants = org_dict['Participants']
-    # author_name = participants['Author'][0]
-    # if participants['Beginners']:
-    #     beginner_list = '\n'.join([f'{beg[0]}🍼' for beg in participants['Beginners']])
-    # else:
-    #     beginner_list = ''
-    #
-    # if participants['Experts']:
-    #     expert_list = '\n'.join(
-    #         [f'{exp[0]} 👑' if exp[1] == participants['Author'][1] else exp[0] for exp in participants['Experts']])
-    # else:
-    #     expert_list = ''
-    #
-    # if participants['Reserve']:
-    #     reserve_list = '\n'.join(
-    #         [rez[0] if await check_if_beginner(guild, rez[1], role_id) else f'{rez[0]}🍼' for rez in
-    #          participants['Reserve']])
-    # else:
-    #     reserve_list = ''
-
-    if not beginner_list and not expert_list and not reserve_list:
-        expert_list = '-'
-
-    # Problema la convert in cazul in care nu e epoch
-    # try:
-    #     from datetime import datetime
-    #     import pytz
-    #
-    #     dt = datetime.strptime(org_dict['Datetime'], "%d/%m/%Y %H:%M")
-    #
-    #     # Assume the datetime object is in Bucharest timezone
-    #     bucharest_timezone = pytz.timezone("Europe/Bucharest")
-    #     localized_datetime = bucharest_timezone.localize(dt)
-    #
-    #     # Convert the localized datetime object to epoch time
-    #     epoch_time = int(localized_datetime.timestamp())
-    #     org_dict['Datetime'] = epoch_time
-    #     print(org_dict['Datetime'])
-    # except:
-    #     pass
+    data_manager(org_dict=org_dict, mode='u')
 
     if org_dict['Org_info']['Active']:
-        await message.edit(content='<@&1075455824782184523> Organizare noua!', embed=OrgEmbed(org_dict, attribute_list, author_name, beginner_list, expert_list, reserve_list),
+        await message.edit(content='<@&1075455824782184523> Organizare noua!', embed=OrgEmbed(org_dict, attribute_list, author_name, part_list, reserve_list),
                            view=OrgView(org_dict, attribute_list, bot))
     else:
-        await message.edit(content='Organizarea a inceput!', embed=OrgEmbed(org_dict, attribute_list, author_name, beginner_list, expert_list, reserve_list),
+        await message.edit(content='Organizarea a inceput!', embed=OrgEmbed(org_dict, attribute_list, author_name, part_list, reserve_list),
                            view=None)
 
 
 class OrgEmbed(discord.Embed):
-    def __init__(self, org_dict, attribute_list, author_name, beginner_list, expert_list, reserve_list):
+    def __init__(self, org_dict, attribute_list, author_name, part_list, reserve_list):
         role_id, guide_id, hex_color, active_img, expired_img = attribute_list
         super().__init__(title=f"Organizare — {org_dict['Type']}",
                          description=f'',
@@ -376,7 +347,7 @@ class OrgEmbed(discord.Embed):
         '''
 
         self.add_field(name=f'Participanti',
-                       value=f'{expert_list} \n {beginner_list}',
+                       value=f'{part_list}',
                        inline=True)
 
         self.add_field(name='‎',
@@ -474,73 +445,51 @@ async def button_functions(interaction: discord.Interaction, label, org_dict, me
         author = interaction.user
         player_data = [''.join([author.nick if author.nick else author.name]), author.id]
 
-        max_players = org_dict['Max Number']
-        beginner_len = len(org_dict['Participants']['Beginners'])
-        exp_len = len(org_dict['Participants']['Experts'])
+        if player_data in org_dict['Participants']['Participants']:
+            return
+
+        if player_data in org_dict['Participants']['Queue']:
+            return
 
         if player_data in org_dict['Participants']['Reserve']:
             org_dict['Participants']['Reserve'].remove(player_data)
 
-        if (beginner_len + exp_len) >= max_players:
-            if player_data not in org_dict['Participants']['Reserve']:
-                org_dict['Participants']['Reserve'].append(player_data)
-                await edit_mesaj(_bot, message, org_dict=org_dict)
-                await author.add_roles(org_role)
-            return
-
-        if check_role(guild, role_id, author):
-            if player_data not in org_dict['Participants']['Experts']:
-                org_dict['Participants']['Experts'].append(player_data)
-            else:
-                return
-            await author.add_roles(org_role)
-            await edit_mesaj(_bot, message, org_dict=org_dict)
-        else:
-            if int(org_dict['Beginners']) <= beginner_len:
-                await interaction.followup.send(content='Numarul maxim de inceptatori a fost atins!', ephemeral=True)
-                if player_data not in org_dict['Participants']['Reserve']:
-                    org_dict['Participants']['Reserve'].append(player_data)
-                    await author.add_roles(org_role)
-                    await edit_mesaj(_bot, message, org_dict=org_dict)
-                return
-            if player_data not in org_dict['Participants']['Beginners']:
-                org_dict['Participants']['Beginners'].append(player_data)
-                await author.add_roles(org_role)
-                await edit_mesaj(_bot, message, org_dict=org_dict)
-            else:
-                return
+        org_dict['Participants']['Queue'].append(player_data)
+        await edit_mesaj(_bot, message, org_dict=org_dict)
+        return
 
     if button_label == 'reserve':
         author = interaction.user
         player_data = [''.join([author.nick if author.nick else author.name]), author.id]
 
-        if player_data in org_dict['Participants']['Experts']:
-            org_dict['Participants']['Experts'].remove(player_data)
+        if player_data in org_dict['Participants']['Participants']:
+            org_dict['Participants']['Participants'].remove(player_data)
 
-        if player_data in org_dict['Participants']['Beginners']:
-            org_dict['Participants']['Beginners'].remove(player_data)
+        if player_data in org_dict['Participants']['Queue']:
+            org_dict['Participants']['Queue'].remove(player_data)
 
         if player_data not in org_dict['Participants']['Reserve']:
             org_dict['Participants']['Reserve'].append(player_data)
-        await author.add_roles(org_role)
-        await edit_mesaj(_bot, message, org_dict=org_dict)
+            await author.add_roles(org_role)
+            await edit_mesaj(_bot, message, org_dict=org_dict)
 
     if button_label == 'leave':
         author = interaction.user
         player_data = [''.join([author.nick if author.nick else author.name]), author.id]
 
-        if player_data in org_dict['Participants']['Experts']:
-            org_dict['Participants']['Experts'].remove(player_data)
+        if player_data in org_dict['Participants']['Participants']:
+            org_dict['Participants']['Participants'].remove(player_data)
 
-        if player_data in org_dict['Participants']['Beginners']:
-            org_dict['Participants']['Beginners'].remove(player_data)
+        if player_data in org_dict['Participants']['Queue']:
+            org_dict['Participants']['Queue'].remove(player_data)
 
         if player_data in org_dict['Participants']['Reserve']:
             org_dict['Participants']['Reserve'].remove(player_data)
+
         await author.remove_roles(org_role)
         await edit_mesaj(_bot, message, org_dict=org_dict)
 
-    data_updater(org_old=org_old, org_new=org_dict)
+    # data_updater(org_old=org_old, org_new=org_dict)
 
 
 '''
@@ -556,7 +505,7 @@ async def spam_on_edit(bot: commands.Bot, org_dict, changes, jump_url='', delete
 
     org_id = org_dict['ID']
 
-    for member in org_dict['Participants']['Experts']:
+    for member in org_dict['Participants']['Participants']:
         if member[1] == org_dict['Participants']['Author'][1]:
             continue
         member_obj = await bot.fetch_user(member[1])
@@ -565,7 +514,7 @@ async def spam_on_edit(bot: commands.Bot, org_dict, changes, jump_url='', delete
             continue
         await member_obj.send(content='', embed=EditEmbed(org_id, changes, jump_url))
 
-    for member in org_dict['Participants']['Beginners']:
+    for member in org_dict['Participants']['Queue']:
         member_obj = await bot.fetch_user(member[1])
         if deleted:
             await member_obj.send(content='', embed=DeleteEmbed(org_dict))
@@ -612,7 +561,7 @@ class EditEmbed(discord.Embed):
 class DeleteEmbed(discord.Embed):
     def __init__(self, org_dict):
         super().__init__(title=f"Organizare anulata!",
-                         description=f'Salut, autorul organizarii la care esti inscris a fost stearsa!',
+                         description=f'Salut, organizarea la care erai inscris a stearsa de catre autor!',
                          color=0xff2506)
 
         org_id = org_dict['ID']

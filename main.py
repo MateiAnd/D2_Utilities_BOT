@@ -80,6 +80,7 @@ class UtilsBot(commands.Bot):
             organizare_refresher.start()
         else:
             print('—— Bot de teste')
+            organizare_refresher.start()
 
 
         print('Done!')
@@ -794,6 +795,28 @@ async def on_message(message: discord.Message):
 
 '''
 
+# @bot.event
+# async def on_interaction(interaction:discord.Interaction):
+#     from organizari_bot.functions import get_org_by_msg_id
+#     from organizari_bot.org_channel import button_functions
+#
+#     print(interaction.type)
+#     if interaction.type != 'component':
+#         return
+#
+#     message = await interaction.message.fetch()
+#     if message.channel.id != 1101037441999179827:
+#         return
+#
+#     try:
+#         org_dict = get_org_by_msg_id(int(message.id))
+#     except:
+#         raise ValueError('Nu exista log pentru aceasta org')
+#
+#     await button_functions(interaction=interaction, label=interaction.data['custom_id'], org_dict=org_dict,
+#                            guild=await bot.fetch_guild(GUILD_ID), message=message)
+
+
 @command_tree.command(name='test_event', description='Creaza o noua organizare de Sherpa.',
                       guild=discord.Object(id=GUILD_ID))
 async def test_voice(interaction: discord.Interaction):
@@ -848,8 +871,35 @@ async def test_voice(interaction: discord.Interaction):
 #                       guild=discord.Object(id=GUILD_ID))
 # async def test_embed(interaction: discord.Interaction):
 #     print(f'{"—" * 10} \nInitializare creare ')
-#     channel = await bot.fetch_channel(1093813324598231071)
-#     await channel.send(embed=TestEmbed())
+#     channel = await bot.fetch_channel(1100487208936423556)
+#     await channel.send(embed=TestEmbed(), view=TestView())
+#
+# class TestEmbed(discord.Embed):
+#     def __init__(self):
+#         super().__init__(title=f"test",
+#                          description=f'test',
+#                          color=0x3d3223)
+#
+# class TestView(discord.ui.View):
+#     def __init__(self):
+#         super().__init__(timeout=None)
+#
+#         button = TestButtons()
+#         self.add_item(button)
+#
+#
+# class TestButtons(discord.ui.Button):
+#     def __init__(self):
+#         super().__init__(label='Test', style=discord.ButtonStyle.danger)
+#
+#         async def click(interaction: discord.Interaction):
+#             await interaction.response.defer()
+#
+#             channel = interaction.channel
+#
+#             await channel.send('Test')
+#
+#         self.callback = click
 #
 #
 # class TestEmbed(discord.Embed):
@@ -971,7 +1021,7 @@ if len(sys.argv) > 1:
     TOKEN = sys.argv[1]
     bot.run(TOKEN)
 else:
-    G_ORG_CHANNEL = ORG_CHANNEL[1]
+    G_ORG_CHANNEL = ORG_CHANNEL[0]
     test_bot = True
     TOKEN = str(environ.get('TOKEN_TEST'))
     bot.run(TOKEN)

@@ -16,15 +16,15 @@ def make_reminder_string(org_dict, letter: str, time: str):
     participants = org_dict['Participants']
 
     template_string = '''{letter} mai ramas __**{timp}**__ pana la organizarea a lui <@{sherpa}>.
-Participanti: {incepatori} {experimentati}
-Rezerve: {rezerve}'''
+Participanti: {participanti}
+Rezerve: {queue} {rezerve}'''
 
-    incepatori = ' '.join(['<@{}>'.format(incep[1]) for incep in participants['Beginners']])
-    experimentati = ' '.join(['<@{}>'.format(exp[1]) for exp in participants['Experts']])
+    participanti = ' '.join(['<@{}>'.format(exp[1]) for exp in participants['Participants']])
+    queue = ' '.join(['<@{}>'.format(que[1]) for que in participants['Queue']])
     rezerve = ' '.join(['<@{}>'.format(rez[1]) for rez in participants['Reserve']])
 
-    out_str = template_string.format(letter=letter, timp=time, sherpa=participants['Author'][1], incepatori=incepatori,
-                                     experimentati=experimentati, rezerve=rezerve)
+    out_str = template_string.format(letter=letter, timp=time, sherpa=participants['Author'][1],
+                                     participanti=participanti, rezerve=rezerve)
     return out_str
 
 
