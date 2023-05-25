@@ -24,7 +24,7 @@ Rezerve: {queue} {rezerve}'''
     rezerve = ' '.join(['<@{}>'.format(rez[1]) for rez in participants['Reserve']])
 
     out_str = template_string.format(letter=letter, timp=time, sherpa=participants['Author'][1],
-                                     participanti=participanti, rezerve=rezerve)
+                                     participanti=participanti, queue=queue, rezerve=rezerve)
     return out_str
 
 
