@@ -17,9 +17,10 @@ button_labels = {
     'Second': {
         'Raid': ["King's fall", 'Deep Stone Crypt', 'Garden of Salvation', 'Last Wish', 'Vault of Glass',
                  'Vow of the Disciple', 'Root Of Nightmares'],
-        'Dungeon': ['Spire of the Watcher', 'Duality', 'Grasp of Averice', 'Pit', 'Prophecy', 'Shattered Throne'],
+        'Dungeon': ['Spire of the Watcher', 'Duality', 'Grasp of Averice', 'Pit', 'Prophecy', 'Shattered Throne',
+                    'Ghosts of the Deep'],
         'PVP': ['Crucible 6v6', 'Comp 3v3', 'Trials 3v3'],
-        'PVE': ['Gambit', 'Nightfall', 'GM', 'Defiant Battlegrounds']
+        'PVE': ['Gambit', 'Nightfall', 'GM', 'Defiant Battlegrounds', 'Peste']
     },  # optiuni pe baza tipului de activitate
     'Third': ['Next', 'Edit', 'Cancel'],  # timp
     'Forth': ['Next', 'Edit', 'Cancel'],  # numar incepatori
@@ -71,6 +72,8 @@ player_numbers = {
     'Nightfall': 3,
     'GM': 3,
     'Defiant Battlegrounds': 3,
+    'Ghosts of the Deep': 3,
+    'Peste': 6,
 }
 
 PVE_CATEGORY = 1101037807671197706

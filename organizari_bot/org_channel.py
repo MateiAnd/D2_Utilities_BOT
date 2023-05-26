@@ -52,7 +52,9 @@ activity_details = {
     'Gambit': [1075455824782184523, None, 0x107b10, r'http://buzea.pro/buzea.pro/d2ro/Assets/GAMBIT.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/GAMBIT_EXP.png'],
     'Nightfall': [1075455824782184523, None, 0x122258, r'http://buzea.pro/buzea.pro/d2ro/Assets/NF.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/NF_exp.png'],
     'GM': [1075455824782184523, None, 0xb09b64, r'http://buzea.pro/buzea.pro/d2ro/Assets/GM.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/GM_exp.png'],
-    'Defiant Battlegrounds': [1075455824782184523, None, 0x9f8ddf, r'http://buzea.pro/buzea.pro/d2ro/Assets/DBG.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/DBG_exp.png']
+    'Defiant Battlegrounds': [1075455824782184523, None, 0x9f8ddf, r'http://buzea.pro/buzea.pro/d2ro/Assets/DBG.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/DBG_exp.png'],
+    'Ghosts of the Deep': [1075455824782184523, None, 0x01003d, r'http://buzea.pro/buzea.pro/d2ro/Assets/GOTD.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/GOTD_exp.png'],
+    'Peste': [1075455824782184523, None, 0x00a2ff, r'http://buzea.pro/buzea.pro/d2ro/Assets/PESTE.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/PESTE_exp.png']
 }
 
 GUILD_ID = 1075455824643764314
