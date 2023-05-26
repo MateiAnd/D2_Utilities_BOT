@@ -186,8 +186,6 @@ async def create_part_stings(org_dict: dict, guild, role_id):
         beg_counter = int(org_dict['Beginner_Counter'])
         max_beg = int(org_dict['Beginners'])
 
-        print(max_beg, beg_counter, max_beg < beg_counter)
-
         if org_dict['Participants']['Queue']:
             for exp in org_dict['Participants']['Queue']:
                 if len(org_dict['Participants']['Participants']) < max_number:
