@@ -545,8 +545,8 @@ async def on_member_join(member):
     print(f"[{date_time_string}] {'—' * 2} Generare mesaj membru nou - {member.name} {'—' * 5}")
     welcome_channel = await bot.fetch_channel(WELCOME_CHANNEL)
     welcome_txt = '''Salut {name} ! Daca joci Destiny 2, o sa fie nevoie sa-ti dai register pentru a vedea canalele aferente jocului.
-Pentru a-ti da register te rog sa mergi pe <#{CLAN_INVITE_CHANNEL}>, si sa urmezi pasul 1 din primul mesaj.
-Daca vrei sa te alturi unuia din clanurile noastre, tot pe acel canal gasesti informatiile necesare.
+Pentru a-ti da register te rog sa mergi pe <#1101677816577273856> si sa apelezi comanda `/register` si sa urmezi pasii din mesajul primit.
+Daca vrei sa te alturi unuia din clanurile noastre, pe <#{CLAN_INVITE_CHANNEL}> gasesti informatiile necesare.
 Dacă întâmpini greutăți pe parcursul procesului, îți recomandăm să vorbești cu ChatBro, un bot de discuții inteligent, în thread-ul de mai jos. Mulțumim! '''
 
     new_message = await welcome_channel.send(content=welcome_txt.format(name=member.mention,
