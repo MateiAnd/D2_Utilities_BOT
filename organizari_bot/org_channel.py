@@ -4,6 +4,8 @@ import json
 import discord
 from discord.ext import commands
 from copy import deepcopy
+
+from evidenta_populatiei.beginner_db import get_beginner_status
 from organizari_bot.functions import get_org_by_msg_id, data_updater
 
 global activity_details, GUILD_ID, org_id
@@ -53,7 +55,7 @@ activity_details = {
     'Nightfall': [1075455824782184523, None, 0x122258, r'http://buzea.pro/buzea.pro/d2ro/Assets/NF.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/NF_exp.png'],
     'GM': [1075455824782184523, None, 0xb09b64, r'http://buzea.pro/buzea.pro/d2ro/Assets/GM.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/GM_exp.png'],
     'Defiant Battlegrounds': [1075455824782184523, None, 0x9f8ddf, r'http://buzea.pro/buzea.pro/d2ro/Assets/DBG.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/DBG_exp.png'],
-    'Ghosts of the Deep': [1075455824782184523, None, 0x01003d, r'http://buzea.pro/buzea.pro/d2ro/Assets/GOTD.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/GOTD_exp.png'],
+    'Ghosts of the Deep': [1111895978350497882, None, 0x01003d, r'http://buzea.pro/buzea.pro/d2ro/Assets/GOTD.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/GOTD_exp.png'],
     'Peste': [1075455824782184523, None, 0x00a2ff, r'http://buzea.pro/buzea.pro/d2ro/Assets/PESTE.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/PESTE_exp.png']
 }
 
@@ -137,11 +139,6 @@ async def get_message(_bot, org_dict):
     return org_dict, message
 
 
-def random_int():
-    from random import randint
-    return int(''.join([str(randint(0, 9)) for i in range(10)]))
-
-
 # def time_flagger(date_string):
 #     from datetime import datetime
 #     date_object = datetime.strptime(date_string, "%d/%m/%Y %H:%M")
@@ -149,16 +146,22 @@ def random_int():
 #     return int(time_difference.total_seconds() / 60)
 
 
-def check_role(guild: discord.Guild, role_id, author):
-    exp_role = guild.get_role(role_id)
-    if exp_role in author.roles:
+# def check_role(guild: discord.Guild, role_id, author):
+#     exp_role = guild.get_role(role_id)
+#     if exp_role in author.roles:
+#         return True
+#     return False
+
+
+def check_role(role_id, author):
+    if int(role_id) in [role.id for role in author.roles]:
         return True
     return False
 
 
 async def check_if_beginner(guild: discord.Guild, member_id, role_id) -> bool:
     member = await guild.fetch_member(int(member_id))
-    eval = check_role(guild, role_id, member)
+    eval = check_role(role_id, member)
     return eval
 
 
@@ -183,8 +186,8 @@ async def create_part_stings(org_dict: dict, guild, role_id):
     max_number = int(org_dict['Max Number'])
 
     if org_dict['Activity'] == 'Raid' or org_dict['Activity'] == 'Dungeon':
-        beg_counter = int(org_dict['Beginner_Counter'])
         max_beg = int(org_dict['Beginners'])
+        print(max_beg, org_dict['Beginner_Counter'], max_beg >= org_dict['Beginner_Counter'])
 
         if org_dict['Participants']['Queue']:
             for exp in org_dict['Participants']['Queue']:
@@ -200,11 +203,12 @@ async def create_part_stings(org_dict: dict, guild, role_id):
         author = participants['Author']
 
         if participants['Participants']:
+            beginner_status = await get_beginner_status(participants['Participants'], role_id)
             for exp in participants['Participants']:
-                if not await check_if_beginner(guild, exp[1], role_id):
-                    if max_beg >= beg_counter:
+                if not beginner_status[exp[1]]:
+                    if max_beg >= org_dict['Beginner_Counter']:
                         exp[0] = f"{exp[0]}🍼"
-                        beg_counter += 1
+                        org_dict['Beginner_Counter'] += 1
                     else:
                         print(2)
                         org_dict['Participants']['Participants'].remove(exp)
@@ -221,17 +225,19 @@ async def create_part_stings(org_dict: dict, guild, role_id):
         temp_rez_list = deepcopy(org_dict['Participants']['Queue'])
 
         if temp_rez_list:
+            beginner_status = await get_beginner_status(temp_rez_list, role_id)
             for rez in temp_rez_list:
-                if not await check_if_beginner(guild, rez[1], role_id):
+                if not beginner_status[rez[1]]:
                     rez[0] = f"{rez[0]}🍼"
                 if rez[1] == author[1]:
                     rez[0] = f"{rez[0]}👑"
                 queue_rez_list.append(rez[0])
 
         if participants['Reserve'] or queue_rez_list:
+            beginner_status = await get_beginner_status(participants['Reserve'], role_id)
             reserve_queue = '\n'.join(queue_rez_list)
             reserve_list = reserve_queue + '\n' + '\n'.join(
-                [rez[0] if await check_if_beginner(guild, rez[1], role_id) else f'{rez[0]}🍼' for rez in
+                [rez[0] if beginner_status[rez[1]] else f'{rez[0]}🍼' for rez in
                  participants['Reserve']])
         else:
             reserve_list = '-'
@@ -267,9 +273,7 @@ async def create_part_stings(org_dict: dict, guild, role_id):
 
         if participants['Reserve'] or queue_rez_list:
             reserve_queue = '\n'.join(queue_rez_list)
-            reserve_list = reserve_queue + '\n' + '\n'.join(
-                [rez[0] if await check_if_beginner(guild, rez[1], role_id) else f'{rez[0]}🍼' for rez in
-                 participants['Reserve']])
+            reserve_list = reserve_queue + '\n' + '\n'.join([rez[0] for rez in participants['Reserve']])
         else:
             reserve_list = '-'
 
