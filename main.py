@@ -13,6 +13,7 @@ from os import environ
 import openai
 from chat_gpt.ask_gpt import init_gpt, hello_gpt
 from chat_gpt import ask_gpt
+from evidenta_populatiei.beginner_db import populate_db
 
 from sherpa import functions_sherpa
 from sherpa.sherpa_channel import sherpa_refresher
@@ -72,6 +73,7 @@ class UtilsBot(commands.Bot):
         print('Starting tasks...')
 
         if not (test_bot):
+            do_refresh_db.start()
             do_refresh_embed.start()
             do_refresh_bot.start()
             do_refresh_donator.start()
@@ -80,6 +82,7 @@ class UtilsBot(commands.Bot):
             organizare_refresher.start()
         else:
             print('—— Bot de teste')
+            do_refresh_db.start()
             organizare_refresher.start()
 
 
@@ -616,6 +619,13 @@ async def do_refresh_bot():
     # print(f'[{log_time}] Refresh BOT')
 
 
+@tasks.loop(minutes=60)
+async def do_refresh_db():
+    print(f'{"—" * 5} Refresh DataBase')
+    await populate_db(bot, GUILD_ID)
+
+
+
 @bot.event
 async def on_member_remove(member):
     from datetime import datetime
@@ -815,6 +825,12 @@ async def on_message(message: discord.Message):
 #
 #     await button_functions(interaction=interaction, label=interaction.data['custom_id'], org_dict=org_dict,
 #                            guild=await bot.fetch_guild(GUILD_ID), message=message)
+
+
+@command_tree.command(name='test_db', description='Creaza o noua organizare de Sherpa.',
+                      guild=discord.Object(id=GUILD_ID))
+async def test_db(interaction: discord.Interaction):
+    await populate_db(bot, GUILD_ID)
 
 
 @command_tree.command(name='test_event', description='Creaza o noua organizare de Sherpa.',
