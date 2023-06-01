@@ -1,3 +1,4 @@
+import SETUP
 import copy
 import json
 
@@ -6,7 +7,7 @@ from discord.ext import commands, tasks
 
 from sherpa.functions_sherpa import get_org_by_msg_id, data_updater
 
-global activity_details, GUILD_ID, org_id
+global activity_details
 
 activity_details= {
     "King's fall": [1075455824748621840, 1048983462125768745, 0xff2f00, r'http://buzea.pro/buzea.pro/d2ro/Assets/KF.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/KF_exp.png'],
@@ -41,8 +42,6 @@ activity_details= {
 #     'Shattered Throne': [1075455824748621838, 1086770644982698024, 0x113045, r'https://cdn.discordapp.com/attachments/1086761501852958820/1102644025950994613/ST.png', r'https://cdn.discordapp.com/attachments/1086761501852958820/1102644025665794098/ST_exp.png'],
 #     }
 
-GUILD_ID = 1075455824643764314
-org_id = 1101037441999179827
 
 '''
 
@@ -96,7 +95,7 @@ async def compare_users(interaction, author, user):
 
 
 async def get_message(_bot, org_dict):
-    org_channel = await _bot.fetch_channel(org_id)
+    org_channel = await _bot.fetch_channel(SETUP.ORG_CHANNEL)
     if not org_dict['Message_id']:
         message = await org_channel.send(content='temp')
         org_dict['Message_id'] = message.id
@@ -162,7 +161,7 @@ async def initializare_mesaj(bot: commands.Bot, org_dict):
 
     org_dict, message = await get_message(_bot, org_dict)
     data_manager(org_dict=org_dict, mode='a')
-    guild = await bot.fetch_guild(GUILD_ID)
+    guild = await bot.fetch_guild(SETUP.GUILD_ID)
 
     participants = org_dict['Participants']
     sherpa_name = participants['Sherpa'][0]
@@ -202,7 +201,7 @@ async def edit_mesaj(bot: commands.Bot, message, org_dict, block=False):
     print('Initializare edit mesaj')
     attribute_list = activity_details[org_dict['Type']]
     role_id, _, _, _, _ = attribute_list
-    guild = await bot.fetch_guild(GUILD_ID)
+    guild = await bot.fetch_guild(SETUP.GUILD_ID)
 
     participants = org_dict['Participants']
     sherpa_name = participants['Sherpa'][0]
@@ -383,7 +382,7 @@ class OrgButtons(discord.ui.Button):
                 raise ValueError('Nu exista log pentru aceasta org')
 
             await button_functions(interaction=interaction, label=interaction.data['custom_id'], org_dict=org_dict,
-                                   guild=await bot.fetch_guild(GUILD_ID), message=message)
+                                   guild=await bot.fetch_guild(SETUP.GUILD_ID), message=message)
 
         self.callback = click
 

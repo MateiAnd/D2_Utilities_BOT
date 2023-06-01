@@ -1,11 +1,7 @@
+import SETUP
 import discord
 import contact_destiny_api
 from datetime import datetime
-
-
-global GUILD_ID, PLAYER_UPDATES_CHANNEL, SERVER_BOOSTER, DONATOR_ROLE
-GUILD_ID = 1075455824643764314
-PLAYER_UPDATES_CHANNEL = 1100486602922397776
 
 
 async def init(bot, _role_call, interaction):
@@ -13,7 +9,7 @@ async def init(bot, _role_call, interaction):
     member_dict = {}
     members = bot.get_all_members()
 
-    server = await bot.fetch_guild(GUILD_ID)
+    server = await bot.fetch_guild(SETUP.GUILD_ID)
     if server:
         role_call = _role_call
         for role in server.roles:

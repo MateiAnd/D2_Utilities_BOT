@@ -1,13 +1,7 @@
+import SETUP
 import json
 import discord
-from discord.utils import get
 
-
-global GUILD_ID, PLAYER_UPDATES_CHANNEL, SERVER_BOOSTER, DONATOR_ROLE
-GUILD_ID = 1075455824643764314
-PLAYER_UPDATES_CHANNEL = 1100486602922397776
-SERVER_BOOSTER = 1101409180440592430
-DONATOR_ROLE = 1075455824811532323
 
 async def init(bot, interaction):
     await interaction.response.defer()
@@ -15,11 +9,11 @@ async def init(bot, interaction):
     delete_donator = {}
     members = bot.get_all_members()
 
-    server = await bot.fetch_guild(GUILD_ID)
-    server_booster = server.get_role(SERVER_BOOSTER)
-    donator_role = server.get_role(DONATOR_ROLE)
+    server = await bot.fetch_guild(SETUP.GUILD_ID)
+    server_booster = server.get_role(SETUP.SERVER_BOOSTER)
+    donator_role = server.get_role(SETUP.DONATOR_ROLE)
 
-    update_channel = await bot.fetch_channel(PLAYER_UPDATES_CHANNEL)
+    update_channel = await bot.fetch_channel(SETUP.PLAYER_UPDATES_CHANNEL)
 
     for member in members:
         if server_booster in member.roles:
@@ -91,8 +85,8 @@ class CustomEmbed_3(discord.Embed):
 async def add_donator(interaction, bot, member, time):
     await interaction.response.defer()
 
-    server = await bot.fetch_guild(GUILD_ID)
-    donator_role = server.get_role(DONATOR_ROLE)
+    server = await bot.fetch_guild(SETUP.GUILD_ID)
+    donator_role = server.get_role(SETUP.DONATOR_ROLE)
 
     new_donator_dict = {'name': member.display_name,
                         'id': member.id,

@@ -1,3 +1,4 @@
+import SETUP
 import json
 
 import discord
@@ -11,7 +12,7 @@ from organizari_bot import org_channel
 
 '''
 
-global button_labels, PVE_CATEGORY, GUILD_ID
+global button_labels
 button_labels = {
     'First': ['Raid', 'Dungeon', 'PVP', 'PVE', 'Cancel'],  # tipul de activitate ; de pus pve inapoi
     'Second': {
@@ -75,9 +76,6 @@ player_numbers = {
     'Ghosts of the Deep': 3,
     'Peste': 6,
 }
-
-PVE_CATEGORY = 1101037807671197706
-GUILD_ID = 1075455824643764314
 
 def rand_id():
     from random import randint
@@ -669,7 +667,7 @@ class FifthMsgButtons(discord.ui.Button):
                         return
 
                     if not org_dict['Org_utils']:
-                        guild = await _bot.fetch_guild(GUILD_ID)
+                        guild = await _bot.fetch_guild(SETUP.GUILD_ID)
                         org_role = await guild.create_role(name=f'Part_{org_dict["ID"]}', mentionable=True,
                                                               reason=f'Rol creat pentru org sherpa {org_dict["ID"]}')
 

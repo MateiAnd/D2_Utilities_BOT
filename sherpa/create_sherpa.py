@@ -1,3 +1,4 @@
+import SETUP
 import json
 
 import discord
@@ -11,7 +12,7 @@ from sherpa import sherpa_channel
 
 '''
 
-global button_labels, PVE_CATEGORY, GUILD_ID
+global button_labels
 button_labels = {
     'First': ['Raid', 'Dungeon', 'Cancel'],  # tipul de activitate ; de pus pve inapoi
     'Second': {
@@ -23,8 +24,6 @@ button_labels = {
     'Forth': ['Next', 'Edit', 'Cancel'],  # numar incepatori
     'Fifth': ['Add Info', 'Finish', 'Cancel']  # final
 }
-PVE_CATEGORY = 1101037807671197706
-GUILD_ID = 1075455824643764314
 
 def rand_id():
     from random import randint
@@ -611,7 +610,7 @@ class FifthMsgButtons(discord.ui.Button):
                         return
 
                     if not org_dict['Org_utils']:
-                        guild = await _bot.fetch_guild(GUILD_ID)
+                        guild = await _bot.fetch_guild(SETUP.GUILD_ID)
                         sherpa_role = await guild.create_role(name=f'Sherpa_{org_dict["ID"]}', mentionable=True,
                                                            reason=f'Rol creat pentru org sherpa {org_dict["ID"]}')
                         org_role = await guild.create_role(name=f'Part_{org_dict["ID"]}', mentionable=True,
@@ -619,7 +618,7 @@ class FifthMsgButtons(discord.ui.Button):
                         await author.add_roles(sherpa_role, org_role,
                                                reason=f'Adaugat roluri pentru creatorul org sherpa {org_dict["ID"]}')
 
-                        category = await guild.fetch_channel(PVE_CATEGORY)
+                        category = await guild.fetch_channel(SETUP.PVE_CATEGORY)
                         sherpa_voice = await guild.create_voice_channel(name=f'Sherpa_{org_dict["ID"]}',
                                                                         category=category, position=5)
                         overwrite = discord.PermissionOverwrite()

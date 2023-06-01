@@ -1,8 +1,6 @@
 import openai
 
 
-
-
 async def ask_gpt(message_history) -> str:
     with open("./chat_gpt/api_key.txt", "r") as f:
         openai.api_key = f.read().strip('\n')

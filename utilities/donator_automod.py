@@ -1,27 +1,20 @@
+import SETUP
 import json
-
 import aiofiles
 import discord
 from discord.utils import get
 
 
-global GUILD_ID, PLAYER_UPDATES_CHANNEL, SERVER_BOOSTER, DONATOR_ROLE
-GUILD_ID = 1075455824643764314
-PLAYER_UPDATES_CHANNEL = 1100486602922397776
-SERVER_BOOSTER = 1101409180440592430
-DONATOR_ROLE = 1075455824811532323
-
-
 async def init(bot):
     # variabile locale
     manual_donator = []
-    update_channel = await bot.fetch_channel(PLAYER_UPDATES_CHANNEL)
+    update_channel = await bot.fetch_channel(SETUP.PLAYER_UPDATES_CHANNEL)
 
     # setup bot
     members = bot.get_all_members()
-    server = await bot.fetch_guild(GUILD_ID)
-    # server_booster = server.get_role(SERVER_BOOSTER)
-    donator_role = server.get_role(DONATOR_ROLE)
+    server = await bot.fetch_guild(SETUP.GUILD_ID)
+    # server_booster = server.get_role(SETUP.SERVER_BOOSTER)
+    donator_role = server.get_role(SETUP.DONATOR_ROLE)
 
     # citire donatori manual
     with open('./utilities/donator_db.json') as f:
@@ -72,15 +65,15 @@ async def init(bot):
 
 
 async def booster_manage(before:discord.Member, after:discord.Member, bot):
-    update_channel = await bot.fetch_channel(PLAYER_UPDATES_CHANNEL)
+    update_channel = await bot.fetch_channel(SETUP.PLAYER_UPDATES_CHANNEL)
 
     if len(before.roles) < len(after.roles):
         # The user has gained a new role
         newRole = next(role for role in after.roles if role not in before.roles)
 
-        if newRole.id == SERVER_BOOSTER:
-            server = await bot.fetch_guild(GUILD_ID)
-            donator_role = server.get_role(DONATOR_ROLE)
+        if newRole.id == SETUP.SERVER_BOOSTER:
+            server = await bot.fetch_guild(SETUP.GUILD_ID)
+            donator_role = server.get_role(SETUP.DONATOR_ROLE)
             print(f'{"—" * 3} Adaugat donator lui {after.nick if after.nick else after.display_name} din server boost')
             await after.add_roles(donator_role)
             await update_channel.send(
@@ -92,7 +85,7 @@ async def booster_manage(before:discord.Member, after:discord.Member, bot):
 
         manual_donator = []
 
-        if lostRole.id == SERVER_BOOSTER:
+        if lostRole.id == SETUP.SERVER_BOOSTER:
 
             # citire donatori manual
             with aiofiles.open('./utilities/donator_db.json') as f:
@@ -103,8 +96,8 @@ async def booster_manage(before:discord.Member, after:discord.Member, bot):
             if after.id in manual_donator:
                 return
 
-            server = await bot.fetch_guild(GUILD_ID)
-            donator_role = server.get_role(DONATOR_ROLE)
+            server = await bot.fetch_guild(SETUP.GUILD_ID)
+            donator_role = server.get_role(SETUP.DONATOR_ROLE)
             print(
                 f'{"—" * 3} Scos donator lui {after.nick if after.nick else after.display_name} din expirare server boost')
             await after.remove_roles(donator_role)
