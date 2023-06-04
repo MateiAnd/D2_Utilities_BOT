@@ -89,6 +89,10 @@ async def populate_db(bot:commands.Bot, GUILD_ID):
 
 
 async def get_beginner_status(part_list, role_id):
+
+    if role_id == 77777777777:
+        return await session_beginner(part_list)
+
     activity_key = None
     for key, value in binding_dict.items():
         if value == role_id:
@@ -124,6 +128,8 @@ async def session_beginner(part_list):
     async with aiosqlite.connect('./evidenta_populatiei/user_role.db') as connection:
         cursor = await connection.cursor()
 
+        results = dict()
+
         for user_id in part_list:
             # Prepare the query
             query = f'SELECT KF, DSC, GOS, LW, VOG, VOD, RON FROM UserRoles WHERE user_id = {user_id[1]}'
@@ -137,7 +143,10 @@ async def session_beginner(part_list):
             # If a result is found, store it in the dictionary
             for status in result:
                 if not bool(status):
-                    return False
-            return True
+                    results[user_id[1]] = False
+                    break
+            else:
+                results[user_id[1]] = True
 
+        return results
 

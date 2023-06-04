@@ -133,8 +133,7 @@ async def create_part_stings(org_dict: dict, guild, role_id):
     queue_rez_list = []
     max_number = int(org_dict['Max Number'])
 
-    if (org_dict['Activity'] == 'Raid' or org_dict['Activity'] == 'Dungeon') and org_dict['Type'] != 'Sesiune Raid':
-        max_beg = int(org_dict['Beginners'])
+    if org_dict['Activity'] == 'Raid' or org_dict['Activity'] == 'Dungeon':  # ) and org_dict['Type'] != 'Sesiune Raid'
 
         if org_dict['Participants']['Queue']:
             for exp in org_dict['Participants']['Queue']:
@@ -149,11 +148,14 @@ async def create_part_stings(org_dict: dict, guild, role_id):
         participants = _org['Participants']
         author = participants['Author']
 
+        max_beg = int(org_dict['Beginners'])
+        org_dict['Beginner_Counter'] = 0
+
         if participants['Participants']:
             beginner_status = await get_beginner_status(participants['Participants'], role_id)
             for exp in participants['Participants']:
                 if not beginner_status[exp[1]]:
-                    if max_beg >= org_dict['Beginner_Counter']:
+                    if max_beg > org_dict['Beginner_Counter']:
                         exp[0] = f"{exp[0]}🍼"
                         org_dict['Beginner_Counter'] += 1
                     else:
@@ -412,7 +414,7 @@ async def button_functions(interaction: discord.Interaction, label, org_dict, me
     print(f'{interaction.user.nick if interaction.user.nick else interaction.user.name} a incercat sa dea {label} la org {org_dict["ID"]}')
     await interaction.response.defer()
     button_label = label
-    org_old = copy.deepcopy(org_dict)
+
     org_role = guild.get_role(org_dict['Org_utils']['Part'])
 
     if button_label == 'delete':
@@ -461,6 +463,15 @@ async def button_functions(interaction: discord.Interaction, label, org_dict, me
         author = interaction.user
         player_data = [''.join([author.nick if author.nick else author.name]), author.id]
 
+        role_id = BOT_setup.ORG_DETAILS[org_dict['Type']]["ROLE_ID"]
+        beginner_status = await get_beginner_status([player_data], role_id)
+
+        if player_data not in org_dict['Participants']['Participants'] and player_data not in org_dict['Participants']['Queue'] and player_data not in org_dict['Participants']['Reserve']:
+            return
+
+        if not beginner_status[author.id]:
+            org_dict['Beginner_Counter'] -= 1
+
         if player_data in org_dict['Participants']['Participants']:
             org_dict['Participants']['Participants'].remove(player_data)
 
@@ -472,6 +483,7 @@ async def button_functions(interaction: discord.Interaction, label, org_dict, me
 
         await author.remove_roles(org_role)
         await edit_mesaj(_bot, message, org_dict=org_dict)
+        data_manager(org_dict=org_dict, mode='u')
 
     # data_updater(org_old=org_old, org_new=org_dict)
 
@@ -499,6 +511,8 @@ async def spam_on_edit(bot: commands.Bot, org_dict, changes, jump_url='', delete
         await member_obj.send(content='', embed=EditEmbed(org_id, changes, jump_url))
 
     for member in org_dict['Participants']['Queue']:
+        if member[1] == org_dict['Participants']['Author'][1]:
+            continue
         member_obj = await bot.fetch_user(member[1])
         if deleted:
             await member_obj.send(content='', embed=DeleteEmbed(org_dict))
@@ -506,6 +520,8 @@ async def spam_on_edit(bot: commands.Bot, org_dict, changes, jump_url='', delete
         await member_obj.send(content='', embed=EditEmbed(org_id, changes, jump_url))
 
     for member in org_dict['Participants']['Reserve']:
+        if member[1] == org_dict['Participants']['Author'][1]:
+            continue
         member_obj = await bot.fetch_user(member[1])
         if deleted:
             await member_obj.send(content='', embed=DeleteEmbed(org_dict))

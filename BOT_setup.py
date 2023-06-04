@@ -176,7 +176,7 @@ ORG_DETAILS = {
         "EXPIRED_IMG": "http://buzea.pro/buzea.pro/d2ro/Assets/PESTE_exp.png"
     },
     "Sesiune Raid": {
-        "ROLE_ID": None,
+        "ROLE_ID": 77777777777,
         "HEX_COLOR": 16547587,
         "MAX_PLAYERS": 6,
         "ACTIVE_IMG": "http://buzea.pro/buzea.pro/d2ro/Assets/SES.png",
