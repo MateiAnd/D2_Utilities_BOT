@@ -119,4 +119,25 @@ async def get_beginner_status(part_list, role_id):
         return results
 
 
+async def session_beginner(part_list):
+    """ Mai bine o pun sus ca role_id specific sesiunii de raid"""
+    async with aiosqlite.connect('./evidenta_populatiei/user_role.db') as connection:
+        cursor = await connection.cursor()
+
+        for user_id in part_list:
+            # Prepare the query
+            query = f'SELECT KF, DSC, GOS, LW, VOG, VOD, RON FROM UserRoles WHERE user_id = {user_id[1]}'
+
+            # Execute the query
+            await cursor.execute(query)
+
+            # Fetch the result
+            result = await cursor.fetchone()
+
+            # If a result is found, store it in the dictionary
+            for status in result:
+                if not bool(status):
+                    return False
+            return True
+
 

@@ -1,4 +1,4 @@
-import SETUP
+import BOT_setup
 import json
 import discord
 
@@ -86,7 +86,7 @@ async def add_donator(interaction, bot, member, time):
     await interaction.response.defer()
 
     server = await bot.fetch_guild(SETUP.GUILD_ID)
-    donator_role = server.get_role(SETUP.DONATOR_ROLE)
+    donator_role = server.get_role(BOT_setup.DONATOR_ROLE)
 
     new_donator_dict = {'name': member.display_name,
                         'id': member.id,

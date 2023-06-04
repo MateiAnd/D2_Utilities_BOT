@@ -1,4 +1,4 @@
-import SETUP
+import BOT_setup
 import json
 
 import discord
@@ -610,7 +610,7 @@ class FifthMsgButtons(discord.ui.Button):
                         return
 
                     if not org_dict['Org_utils']:
-                        guild = await _bot.fetch_guild(SETUP.GUILD_ID)
+                        guild = await _bot.fetch_guild(BOT_setup.GUILD_ID)
                         sherpa_role = await guild.create_role(name=f'Sherpa_{org_dict["ID"]}', mentionable=True,
                                                            reason=f'Rol creat pentru org sherpa {org_dict["ID"]}')
                         org_role = await guild.create_role(name=f'Part_{org_dict["ID"]}', mentionable=True,

@@ -1,4 +1,4 @@
-import SETUP
+import BOT_setup
 import copy
 import json
 
@@ -95,7 +95,7 @@ async def compare_users(interaction, author, user):
 
 
 async def get_message(_bot, org_dict):
-    org_channel = await _bot.fetch_channel(SETUP.ORG_CHANNEL)
+    org_channel = await _bot.fetch_channel(BOT_setup.ORG_CHANNEL)
     if not org_dict['Message_id']:
         message = await org_channel.send(content='temp')
         org_dict['Message_id'] = message.id
@@ -382,7 +382,7 @@ class OrgButtons(discord.ui.Button):
                 raise ValueError('Nu exista log pentru aceasta org')
 
             await button_functions(interaction=interaction, label=interaction.data['custom_id'], org_dict=org_dict,
-                                   guild=await bot.fetch_guild(SETUP.GUILD_ID), message=message)
+                                   guild=await bot.fetch_guild(BOT_setup.GUILD_ID), message=message)
 
         self.callback = click
 

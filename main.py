@@ -1,4 +1,4 @@
-import SETUP
+import BOT_setup
 import copy
 import json
 import os
@@ -48,7 +48,7 @@ class UtilsBot(commands.Bot):
         command_tree.add_command(org_command)
 
         if not self.synced:
-            await command_tree.sync(guild=discord.Object(id=SETUP.GUILD_ID))
+            await command_tree.sync(guild=discord.Object(id=BOT_setup.GUILD_ID))
             self.synced = True
 
         # cmd_channel = await bot.fetch_channel(797387549089333268)
@@ -81,8 +81,8 @@ class UtilsBot(commands.Bot):
         discord.utils.setup_logging()
 
         async def main():
-            await sherpa_refresher(bot, SETUP.ORG_CHANNEL)
-            await org_refresher(bot, SETUP.ORG_CHANNEL)
+            await sherpa_refresher(bot, BOT_setup.ORG_CHANNEL)
+            await org_refresher(bot, BOT_setup.ORG_CHANNEL)
 
         if __name__ == "__main__":
             await main()
@@ -93,9 +93,9 @@ class UtilsBot(commands.Bot):
 
 
 sherpa_command = discord.app_commands.Group(name='sherpa', description='Optiuni organizari sherpa de tip SHERPA.',
-                                            guild_ids=[SETUP.GUILD_ID])
+                                            guild_ids=[BOT_setup.GUILD_ID])
 org_command = discord.app_commands.Group(name='organizare', description='Optiuni pentru organizari.',
-                                            guild_ids=[SETUP.GUILD_ID])
+                                         guild_ids=[BOT_setup.GUILD_ID])
 bot = UtilsBot()
 command_tree = bot.tree  # discord.app_commands.CommandTree(bot)
 
@@ -116,24 +116,24 @@ event_last_user = None
 
 
 @command_tree.command(name='curatenie_generala', description='Admin-only',
-                      guild=discord.Object(id=SETUP.GUILD_ID))
+                      guild=discord.Object(id=BOT_setup.GUILD_ID))
 async def privat_1(interaction: discord.Interaction, role_call: discord.Role):
     print(f'{"—" * 10} \nInitializare curatenie pentru {role_call.name} ')
     await bot_clan_members.init(bot, role_call, interaction)
 
 
 @command_tree.command(name='generate_clan_invite_embed', description='Admin-only',
-                      guild=discord.Object(id=SETUP.GUILD_ID))
+                      guild=discord.Object(id=BOT_setup.GUILD_ID))
 async def privat_2(interaction: discord.Interaction):
     print(f'{"—" * 10} \nGenerare embed cu invinte link')
     await clan_invite_embed.init(interaction, bot)
 
 
 
-@command_tree.command(name='fix_uhenp', description='Uhenp-only', guild=discord.Object(id=SETUP.GUILD_ID))
+@command_tree.command(name='fix_uhenp', description='Uhenp-only', guild=discord.Object(id=BOT_setup.GUILD_ID))
 async def privat_69(interaction: discord.Interaction):
     await interaction.response.defer()
-    guild = await bot.fetch_guild(SETUP.GUILD_ID)
+    guild = await bot.fetch_guild(BOT_setup.GUILD_ID)
     uhenp_nou = await guild.fetch_member(1084179145510105138)
     uhenp_vechi = await guild.fetch_member(576077948168437760)
     for role in uhenp_nou.roles:
@@ -142,7 +142,7 @@ async def privat_69(interaction: discord.Interaction):
     await interaction.followup.send(content='Fixed Uhenp')
 
 
-@command_tree.command(name='help_d2ro', description='Meniu help D2 RO', guild=discord.Object(id=SETUP.GUILD_ID))
+@command_tree.command(name='help_d2ro', description='Meniu help D2 RO', guild=discord.Object(id=BOT_setup.GUILD_ID))
 async def privat_70(interaction: discord.Interaction):
     await init_help(interaction, bot)
 
@@ -156,7 +156,7 @@ async def privat_70(interaction: discord.Interaction):
 '''
 
 # @command_tree.command(name='dayone_register', description='Inscrie echipa pentru Day One — Lightfall',
-#                       guild=discord.Object(id=SETUP.GUILD_ID))
+#                       guild=discord.Object(id=BOT_setup.GUILD_ID))
 # async def privat_3(interaction:discord.Interaction, membru_2: discord.User, membru_3: discord.User,
 #                    membru_4: discord.User, membru_5: discord.User, membru_6: discord.User):
 #     print(f'{"—"*10} \nGenerare embed register day one team')
@@ -170,7 +170,7 @@ async def privat_70(interaction: discord.Interaction):
 
 
 # @command_tree.command(name='event_register', description='Inscrie pentru competitia de speedrun — Lightfall',
-#                       guild=discord.Object(id=SETUP.GUILD_ID))
+#                       guild=discord.Object(id=BOT_setup.GUILD_ID))
 # async def privat_4(interaction:discord.Interaction, link: str):
 #     print(f'{"—"*10} Inscriere noua pentru competitie {interaction.user.nick if interaction.user.nick else interaction.user.name}')
 #     global event_processing, event_last_user
@@ -198,7 +198,7 @@ async def privat_70(interaction: discord.Interaction):
 
 
 # @command_tree.command(name='build_leaderboard', description='Setup leaderboard',
-#                       guild=discord.Object(id=SETUP.GUILD_ID))
+#                       guild=discord.Object(id=BOT_setup.GUILD_ID))
 # async def privat_5(interaction:discord.Interaction):
 #     print(f'{"—"*10} Initializare leaderboard competitie')
 #     cmd_channel = await bot.fetch_channel(1075884178731700355)
@@ -227,7 +227,7 @@ async def privat_70(interaction: discord.Interaction):
 
 
 @command_tree.command(name='transfer', description='Poti sa dai join pe un canal voce peste limita',
-                      guild=discord.Object(id=SETUP.GUILD_ID))
+                      guild=discord.Object(id=BOT_setup.GUILD_ID))
 async def transfer_to_channel(interaction: discord.Interaction, canal_voce: discord.VoiceChannel):
     print(
         f'{"—" * 10} Initializare transfer {interaction.user.nick if interaction.user.nick else interaction.user.name}')
@@ -235,13 +235,13 @@ async def transfer_to_channel(interaction: discord.Interaction, canal_voce: disc
     try:
         voice_channel = canal_voce
         author = interaction.user
-        updates_channel = await bot.fetch_channel(SETUP.PLAYER_UPDATES_CHANNEL)
+        updates_channel = await bot.fetch_channel(BOT_setup.PLAYER_UPDATES_CHANNEL)
 
-        if str(SETUP.VIP_ROLE) in str(author.roles):
+        if str(BOT_setup.VIP_ROLE) in str(author.roles):
             transfer_str = f'Transfer VIP {author.mention} pe canalul voce **{voice_channel.name}**'
-        elif str(SETUP.DONATOR_ROLE) in str(author.roles):
+        elif str(BOT_setup.DONATOR_ROLE) in str(author.roles):
             transfer_str = f'Transfer Donator {author.mention} pe canalul voce **{voice_channel.name}**'
-        elif str(SETUP.SERVER_BOOSTER) in str(author.roles):
+        elif str(BOT_setup.SERVER_BOOSTER) in str(author.roles):
             transfer_str = f'Transfer Booster {author.mention} pe canalul voce **{voice_channel.name}**'
         else:
             transfer_str = f'Transfer {author.mention} pe canalul voce **{voice_channel.name}**'
@@ -255,7 +255,7 @@ async def transfer_to_channel(interaction: discord.Interaction, canal_voce: disc
 
 
 @command_tree.command(name='donator_check', description='Vezi donatori peste limita',
-                      guild=discord.Object(id=SETUP.GUILD_ID))
+                      guild=discord.Object(id=BOT_setup.GUILD_ID))
 async def detect_no_donate(interaction: discord.Interaction):
     print(f'{"—" * 10} Initializare detect not donator')
 
@@ -263,7 +263,7 @@ async def detect_no_donate(interaction: discord.Interaction):
 
 
 @command_tree.command(name='donator_add', description='Adauga donator cu limita de timp',
-                      guild=discord.Object(id=SETUP.GUILD_ID))
+                      guild=discord.Object(id=BOT_setup.GUILD_ID))
 async def add_new_ddonator(interaction: discord.Interaction, membru: discord.Member, an: str, luna: str, zi: str):
     print(f'{"—" * 10} Initializare adauga donator {membru.display_name}')
 
@@ -273,9 +273,9 @@ async def add_new_ddonator(interaction: discord.Interaction, membru: discord.Mem
 
 
 @command_tree.command(name='lock_channel', description='Limitare acces canal voce actual',
-                      guild=discord.Object(id=SETUP.GUILD_ID))
+                      guild=discord.Object(id=BOT_setup.GUILD_ID))
 async def lock_for_donator(interaction: discord.Interaction, limita_user:int = 0):
-    updates_channel = await bot.fetch_channel(SETUP.PLAYER_UPDATES_CHANNEL)
+    updates_channel = await bot.fetch_channel(BOT_setup.PLAYER_UPDATES_CHANNEL)
     author = interaction.user
 
     if limita_user > 10:
@@ -330,7 +330,7 @@ async def on_member_update(before:discord.Member, after:discord.Member):
 
 
 # @command_tree.command(name='sherpa_create', description='Creaza o noua organizare de Sherpa.',
-#                       guild=discord.Object(id=SETUP.GUILD_ID))
+#                       guild=discord.Object(id=BOT_setup.GUILD_ID))
 @sherpa_command.command(name='create', description='Creaza o noua organizare de Sherpa.')
 async def create_rog(interaction: discord.Interaction):
     print(f'{"—" * 10} \nInitializare creare ')
@@ -338,7 +338,7 @@ async def create_rog(interaction: discord.Interaction):
 
 
 # @command_tree.command(name='sherpa_edit', description='Editeaza o organizare de Sherpa existenta.',
-#                       guild=discord.Object(id=SETUP.GUILD_ID))
+#                       guild=discord.Object(id=BOT_setup.GUILD_ID))
 @sherpa_command.command(name='edit', description='Editeaza o organizare de Sherpa.')
 async def edit_rog(interaction: discord.Interaction, id: str):
     print(f'{"—" * 10} \nInitializare edit ')
@@ -347,7 +347,7 @@ async def edit_rog(interaction: discord.Interaction, id: str):
 
 @tasks.loop(minutes=1)
 async def post_refresher():
-    reminder_id = SETUP.REMINDER_CHANNEL  # 1078798703902597252
+    reminder_id = BOT_setup.REMINDER_CHANNEL  # 1078798703902597252
 
     with open('sherpa/org_sherpa.json', 'r') as f:
         org_dict = json.load(f)["org"]
@@ -396,15 +396,15 @@ async def post_refresher():
         elif minute_difference < 0 and org['Org_info']['Reminder'] == 3 and org['Org_info']['Active'] == True:
             org['Org_info']['Active'] = False
             functions_sherpa.data_updater(org_old=_org, org_new=org)
-            _org_channel = await bot.fetch_channel(SETUP.ORG_CHANNEL)
+            _org_channel = await bot.fetch_channel(BOT_setup.ORG_CHANNEL)
             message = await _org_channel.fetch_message(org['Message_id'])
             await sherpa_channel.edit_mesaj(bot, message, org, True)
 
         if minute_difference < -240 and org['Org_info']['Active'] is False:
-            _org_channel = await bot.fetch_channel(SETUP.ORG_CHANNEL)
+            _org_channel = await bot.fetch_channel(BOT_setup.ORG_CHANNEL)
             message = await _org_channel.fetch_message(org['Message_id'])
 
-            guild = await bot.fetch_guild(SETUP.GUILD_ID)
+            guild = await bot.fetch_guild(BOT_setup.GUILD_ID)
             sherpa_role = guild.get_role(org['Org_utils']['Sherpa'])
             org_role = guild.get_role(org['Org_utils']['Part'])
             sherpa_voice = await bot.fetch_channel(org['Org_utils']['Voice'])
@@ -441,7 +441,7 @@ async def edit_organizare(interaction: discord.Interaction, id: str):
 
 @tasks.loop(minutes=1)
 async def organizare_refresher():
-    reminder_id = SETUP.REMINDER_CHANNEL  # 1078798703902597252
+    reminder_id = BOT_setup.REMINDER_CHANNEL  # 1078798703902597252
 
     with open('organizari_bot/organizari.json', 'r') as f:
         org_dict = json.load(f)["org"]
@@ -466,7 +466,7 @@ async def organizare_refresher():
 
         if 299 < minute_difference < 301:
             print(f'--- Schimb format org {org["ID"]}')
-            _org_channel = await bot.fetch_channel(SETUP.ORG_CHANNEL)
+            _org_channel = await bot.fetch_channel(BOT_setup.ORG_CHANNEL)
             message = await _org_channel.fetch_message(org['Message_id'])
             await org_channel.edit_mesaj(bot, message, org)
 
@@ -498,16 +498,16 @@ async def organizare_refresher():
             print(f'--- activare org {org["ID"]}')
             org['Org_info']['Active'] = False
             functions.data_updater(org_old=_org, org_new=org)
-            _org_channel = await bot.fetch_channel(SETUP.ORG_CHANNEL)
+            _org_channel = await bot.fetch_channel(BOT_setup.ORG_CHANNEL)
             message = await _org_channel.fetch_message(org['Message_id'])
             await org_channel.edit_mesaj(bot, message, org, True)
 
         if minute_difference < -60 and org['Org_info']['Active'] is False:
             print(f'--- stergere org {org["ID"]}')
-            _org_channel = await bot.fetch_channel(SETUP.ORG_CHANNEL)
+            _org_channel = await bot.fetch_channel(BOT_setup.ORG_CHANNEL)
             message = await _org_channel.fetch_message(org['Message_id'])
 
-            guild = await bot.fetch_guild(SETUP.GUILD_ID)
+            guild = await bot.fetch_guild(BOT_setup.GUILD_ID)
             org_role = guild.get_role(org['Org_utils']['Part'])
 
             await org_role.delete()
@@ -533,14 +533,14 @@ async def on_member_join(member):
     now = datetime.now()
     date_time_string = now.strftime("%d/%m/%Y %H:%M:%S")
     print(f"[{date_time_string}] {'—' * 2} Generare mesaj membru nou - {member.name} {'—' * 5}")
-    welcome_channel = await bot.fetch_channel(SETUP.WELCOME_CHANNEL)
+    welcome_channel = await bot.fetch_channel(BOT_setup.WELCOME_CHANNEL)
     welcome_txt = '''Salut {name} ! Daca joci Destiny 2, o sa fie nevoie sa-ti dai register pentru a vedea canalele aferente jocului.
 Pentru a-ti da register te rog sa mergi pe <#1101677816577273856> si sa apelezi comanda `/register` si sa urmezi pasii din mesajul primit.
 Daca vrei sa te alturi unuia din clanurile noastre, pe <#{CLAN_INVITE_CHANNEL}> gasesti informatiile necesare.
 Dacă întâmpini greutăți pe parcursul procesului, îți recomandăm să vorbești cu ChatBro, un bot de discuții inteligent, în thread-ul de mai jos. Mulțumim! '''
 
     new_message = await welcome_channel.send(content=welcome_txt.format(name=member.mention,
-                                                                        CLAN_INVITE_CHANNEL=SETUP.CLAN_INVITE_CHANNEL))
+                                                                        CLAN_INVITE_CHANNEL=BOT_setup.CLAN_INVITE_CHANNEL))
     new_thread = await new_message.create_thread(name=f'Support Thread - {member.name}', auto_archive_duration=1440)
 
     try:
@@ -577,7 +577,7 @@ async def do_refresh_embed():
     now = datetime.now()
     date_time_string = now.strftime("%d/%m/%Y %H:%M:%S")
     print(f'[{date_time_string}] {"—" * 2} Refresh embed clan link {"—" * 5}')
-    clan_invite_channel = await bot.fetch_channel(SETUP.CLAN_INVITE_CHANNEL)
+    clan_invite_channel = await bot.fetch_channel(BOT_setup.CLAN_INVITE_CHANNEL)
     try:
         with open('embed_msg.txt') as f:
             msg_id = str(f.readline())
@@ -609,7 +609,7 @@ async def do_refresh_bot():
 @tasks.loop(minutes=60)
 async def do_refresh_db():
     print(f'{"—" * 5} Refresh DataBase')
-    await populate_db(bot, SETUP.GUILD_ID)
+    await populate_db(bot, BOT_setup.GUILD_ID)
 
 
 
@@ -619,7 +619,7 @@ async def on_member_remove(member):
     now = datetime.now()
     date_time_string = now.strftime("%d/%m/%Y %H:%M:%S")
     print(f"[{date_time_string}] {'—' * 2} A iesit - {member.name} {'—' * 5}")
-    update_channel = await bot.fetch_channel(SETUP.PLAYER_UPDATES_CHANNEL)
+    update_channel = await bot.fetch_channel(BOT_setup.PLAYER_UPDATES_CHANNEL)
     text = ''
     member_name = f'{member.nick if member.nick else member.name}'
     for role in member.roles:
@@ -645,7 +645,7 @@ async def on_member_remove(member):
 
 
 @command_tree.command(name='support_gpt', description='Intreaba-l pe ChatBro',
-                      guild=discord.Object(id=SETUP.GUILD_ID))
+                      guild=discord.Object(id=BOT_setup.GUILD_ID))
 async def test_gpt_2(interaction: discord.Interaction):
     await interaction.response.defer()
     message = await interaction.followup.send(content='Vorbeste in thread.')
@@ -658,7 +658,7 @@ async def test_gpt_2(interaction: discord.Interaction):
 
 
 @command_tree.command(name='test_gpt', description='Intreaba-l pe ChatBro',
-                      guild=discord.Object(id=SETUP.GUILD_ID))
+                      guild=discord.Object(id=BOT_setup.GUILD_ID))
 async def test_gpt_2(interaction: discord.Interaction):
     await interaction.response.defer()
     message = await interaction.followup.send(content='Vorbeste in thread.')
@@ -769,7 +769,7 @@ async def on_message(message: discord.Message):
 #         thread_ids.replace(f'{after.id} ,', '')
 #         with open('./chat_gpt/threads_ids.txt', 'w') as f:
 #             f.write(thread_ids)
-#         updates_channel = await bot.fetch_channel(SETUP.PLAYER_UPDATES_CHANNEL)
+#         updates_channel = await bot.fetch_channel(BOT_setup.PLAYER_UPDATES_CHANNEL)
 #         await updates_channel.send(content=f'Eliminat fisier pentru {after.mention}')
 #         os.remove(rf'./chat_gpt/threads/{after.id}.json')
 #     if before.archived is False and after.archived is True:
@@ -779,7 +779,7 @@ async def on_message(message: discord.Message):
 #         thread_ids.replace(f'{after.id} ,', '')
 #         with open('./chat_gpt/threads_ids.txt', 'w') as f:
 #             f.write(thread_ids)
-#         updates_channel = await bot.fetch_channel(SETUP.PLAYER_UPDATES_CHANNEL)
+#         updates_channel = await bot.fetch_channel(BOT_setup.PLAYER_UPDATES_CHANNEL)
 #         await updates_channel.send(content=f'Eliminat fisier pentru {after.mention}')
 #         os.remove(rf'./chat_gpt/threads/{after.id}.json')
 
@@ -811,23 +811,23 @@ async def on_message(message: discord.Message):
 #         raise ValueError('Nu exista log pentru aceasta org')
 #
 #     await button_functions(interaction=interaction, label=interaction.data['custom_id'], org_dict=org_dict,
-#                            guild=await bot.fetch_guild(SETUP.GUILD_ID), message=message)
+#                            guild=await bot.fetch_guild(BOT_setup.GUILD_ID), message=message)
 
 
 @command_tree.command(name='test_db', description='Creaza o noua organizare de Sherpa.',
-                      guild=discord.Object(id=SETUP.GUILD_ID))
+                      guild=discord.Object(id=BOT_setup.GUILD_ID))
 async def test_db(interaction: discord.Interaction):
-    await populate_db(bot, SETUP.GUILD_ID)
+    await populate_db(bot, BOT_setup.GUILD_ID)
 
 
 @command_tree.command(name='test_event', description='Creaza o noua organizare de Sherpa.',
-                      guild=discord.Object(id=SETUP.GUILD_ID))
+                      guild=discord.Object(id=BOT_setup.GUILD_ID))
 async def test_voice(interaction: discord.Interaction):
-    await audit_builder.prepare_audit(bot, SETUP.GUILD_ID, SETUP.AUDIT_CHANNEL)
+    await audit_builder.prepare_audit(bot, BOT_setup.GUILD_ID, BOT_setup.AUDIT_CHANNEL)
 
 
 # @command_tree.command(name='test_locale', description='Creaza o noua organizare de Sherpa.',
-#                       guild=discord.Object(id=SETUP.GUILD_ID))
+#                       guild=discord.Object(id=BOT_setup.GUILD_ID))
 # async def test_locale(interaction: discord.Interaction):
 #     view = discord.ui.View()
 #     view.add_item(TimezoneSelect())
@@ -871,7 +871,7 @@ async def test_voice(interaction: discord.Interaction):
 
 #
 # @command_tree.command(name='test_embed', description='Creaza o noua organizare de Sherpa.',
-#                       guild=discord.Object(id=SETUP.GUILD_ID))
+#                       guild=discord.Object(id=BOT_setup.GUILD_ID))
 # async def test_embed(interaction: discord.Interaction):
 #     print(f'{"—" * 10} \nInitializare creare ')
 #     channel = await bot.fetch_channel(1100487208936423556)

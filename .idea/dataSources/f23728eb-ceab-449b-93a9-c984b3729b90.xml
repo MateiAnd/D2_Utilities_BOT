@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataSource name="user_role">
-  <database-model serializer="dbm" dbms="SQLITE" family-id="SQLITE" format-version="4.48">
+  <database-model serializer="dbm" dbms="SQLITE" family-id="SQLITE" format-version="4.45">
     <root id="1">
       <ServerVersion>3.40.1</ServerVersion>
     </root>
@@ -1471,35 +1471,43 @@
       <DasType>INTEGER|0s</DasType>
       <Position>11</Position>
     </column>
-    <column id="517" parent="504" name="PROPH">
+    <column id="517" parent="504" name="PIT">
       <DasType>INTEGER|0s</DasType>
       <Position>12</Position>
     </column>
-    <column id="518" parent="504" name="ST">
+    <column id="518" parent="504" name="PROPH">
       <DasType>INTEGER|0s</DasType>
       <Position>13</Position>
     </column>
-    <column id="519" parent="504" name="GOTD">
+    <column id="519" parent="504" name="ST">
       <DasType>INTEGER|0s</DasType>
       <Position>14</Position>
     </column>
-    <column id="520" parent="505" name="type">
+    <column id="520" parent="504" name="GOTD">
+      <DasType>INTEGER|0s</DasType>
+      <Position>15</Position>
+    </column>
+    <key id="521" parent="504">
+      <ColNames>user_id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="522" parent="505" name="type">
       <DasType>TEXT|0s</DasType>
       <Position>1</Position>
     </column>
-    <column id="521" parent="505" name="name">
+    <column id="523" parent="505" name="name">
       <DasType>TEXT|0s</DasType>
       <Position>2</Position>
     </column>
-    <column id="522" parent="505" name="tbl_name">
+    <column id="524" parent="505" name="tbl_name">
       <DasType>TEXT|0s</DasType>
       <Position>3</Position>
     </column>
-    <column id="523" parent="505" name="rootpage">
+    <column id="525" parent="505" name="rootpage">
       <DasType>INT|0s</DasType>
       <Position>4</Position>
     </column>
-    <column id="524" parent="505" name="sql">
+    <column id="526" parent="505" name="sql">
       <DasType>TEXT|0s</DasType>
       <Position>5</Position>
     </column>

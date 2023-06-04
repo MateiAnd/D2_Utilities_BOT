@@ -1,4 +1,4 @@
-import SETUP
+import BOT_setup
 import discord
 import contact_destiny_api
 from datetime import datetime
@@ -9,7 +9,7 @@ async def init(bot, _role_call, interaction):
     member_dict = {}
     members = bot.get_all_members()
 
-    server = await bot.fetch_guild(SETUP.GUILD_ID)
+    server = await bot.fetch_guild(BOT_setup.GUILD_ID)
     if server:
         role_call = _role_call
         for role in server.roles:

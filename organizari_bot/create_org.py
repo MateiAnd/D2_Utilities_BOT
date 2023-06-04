@@ -1,4 +1,4 @@
-import SETUP
+import BOT_setup
 import json
 
 import discord
@@ -17,7 +17,7 @@ button_labels = {
     'First': ['Raid', 'Dungeon', 'PVP', 'PVE', 'Cancel'],  # tipul de activitate ; de pus pve inapoi
     'Second': {
         'Raid': ["King's fall", 'Deep Stone Crypt', 'Garden of Salvation', 'Last Wish', 'Vault of Glass',
-                 'Vow of the Disciple', 'Root Of Nightmares'],
+                 'Vow of the Disciple', 'Root Of Nightmares', 'Sesiune Raid'],
         'Dungeon': ['Spire of the Watcher', 'Duality', 'Grasp of Averice', 'Pit', 'Prophecy', 'Shattered Throne',
                     'Ghosts of the Deep'],
         'PVP': ['Crucible 6v6', 'Comp 3v3', 'Trials 3v3'],
@@ -28,54 +28,6 @@ button_labels = {
     'Fifth': ['Add Info', 'Finish', 'Cancel']  # final
 }
 
-# activity_details = {
-#     # attribute_list  =      role_id, guide_id, hex_color, active_img, expired_img
-#     "King's fall": 1075455824748621840,
-#     'Deep Stone Crypt': 1075455824765394986,
-#     'Garden of Salvation': 1075455824765394988,
-#     'Last Wish': 1075455824765394990,
-#     'Vault of Glass': 1075455824765394984,
-#     'Vow of the Disciple': 1075455824748621842,
-#     'Root Of Nightmares': 1101410490363686952,
-#     'Spire of the Watcher': 1075455824731852844,
-#     'Duality': 1075455824731852846,
-#     'Grasp of Averice': 1075455824731852848,
-#     'Pit': 1075455824748621836,
-#     'Prophecy': 1075455824748621834,
-#     'Shattered Throne': 1075455824748621838, 1086770644982698024, 0x113045, r'http://buzea.pro/buzea.pro/d2ro/Assets/ST.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/ST_exp.png'],
-#     'Crucible 6v6': [1075455824782184523, None, 0x9e0b1b, r'http://buzea.pro/buzea.pro/d2ro/Assets/PVP_6v6.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/PVP_6v6_exp.png'],
-#     'Comp 3v3': [1075455824782184523, None,0x51050d, r'http://buzea.pro/buzea.pro/d2ro/Assets/PVP_comp.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/PVP_comp_exp.png'],
-#     'Trials 3v3': [1075455824782184523, None, 0xe6b905, r'http://buzea.pro/buzea.pro/d2ro/Assets/PVP_trials.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/PVP_trials_exp.png'],
-#     'Gambit': [1075455824782184523, None, 0x107b10, r'http://buzea.pro/buzea.pro/d2ro/Assets/GAMBIT.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/GAMBIT_EXP.png'],
-#     'Nightfall': [1075455824782184523, None, 0x122258, r'http://buzea.pro/buzea.pro/d2ro/Assets/NF.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/NF_exp.png'],
-#     'GM': [1075455824782184523, None, 0xb09b64, r'http://buzea.pro/buzea.pro/d2ro/Assets/GM.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/GM_exp.png'],
-#     'Defiant Battlegrounds': [1075455824782184523, None, 0x9f8ddf, r'http://buzea.pro/buzea.pro/d2ro/Assets/DBG.png', r'http://buzea.pro/buzea.pro/d2ro/Assets/DBG_exp.png']
-# }
-
-player_numbers = {
-    "King's fall": 6,
-    'Deep Stone Crypt': 6,
-    'Garden of Salvation':  6,
-    'Last Wish':  6,
-    'Vault of Glass':  6,
-    'Vow of the Disciple':  6,
-    'Root Of Nightmares':  6,
-    'Spire of the Watcher':  3,
-    'Duality': 3,
-    'Grasp of Averice': 3,
-    'Pit': 3,
-    'Prophecy': 3,
-    'Shattered Throne': 3,
-    'Crucible 6v6': 6,
-    'Comp 3v3': 3,
-    'Trials 3v3': 3,
-    'Gambit': 4,
-    'Nightfall': 3,
-    'GM': 3,
-    'Defiant Battlegrounds': 3,
-    'Ghosts of the Deep': 3,
-    'Peste': 6,
-}
 
 def rand_id():
     from random import randint
@@ -100,7 +52,7 @@ def time_flagger(date_string, org_dict):
     current_server_time = datetime.now()
     time_difference = user_datetime - current_server_time
     minute_difference = int(time_difference.total_seconds() / 60)
-    print(f'-- setup {minute_difference}')
+    print(f'-- Diferenta timp {minute_difference}')
 
     org_dict['Org_info']['Reminder'] = 0
     if 30 < minute_difference < 60:
@@ -109,8 +61,6 @@ def time_flagger(date_string, org_dict):
         org_dict['Org_info']['Reminder'] = 2
     if minute_difference < 15:
         org_dict['Org_info']['Reminder'] = 3
-
-    print(f"-- setup {org_dict['Org_info']['Reminder']}")
 
     return org_dict
 
@@ -336,7 +286,7 @@ class SecondMsgButtons(discord.ui.Button):
                         pass
                     elif dropdown.call():
                         org_dict['Type'] = dropdown.call()
-                        org_dict['Max Number'] = player_numbers.get(org_dict['Type'])
+                        org_dict['Max Number'] = BOT_setup.ORG_DETAILS[org_dict['Type']]["MAX_PLAYERS"]
                     else:
                         await interaction.followup.send(content='Trebuie sa selectezi ceva!', ephemeral=True)
                         return
@@ -667,7 +617,7 @@ class FifthMsgButtons(discord.ui.Button):
                         return
 
                     if not org_dict['Org_utils']:
-                        guild = await _bot.fetch_guild(SETUP.GUILD_ID)
+                        guild = await _bot.fetch_guild(BOT_setup.GUILD_ID)
                         org_role = await guild.create_role(name=f'Part_{org_dict["ID"]}', mentionable=True,
                                                               reason=f'Rol creat pentru org sherpa {org_dict["ID"]}')
 

@@ -1,4 +1,4 @@
-import SETUP
+import BOT_setup
 import discord.ext.commands
 
 
@@ -43,9 +43,9 @@ async def init_help(interaction: discord.Interaction, bot: discord.ext.commands.
     await interaction.response.defer()
 
     # setup bot
-    server = await bot.fetch_guild(SETUP.GUILD_ID)
-    server_booster = server.get_role(SETUP.SERVER_BOOSTER)
-    donator_role = server.get_role(SETUP.DONATOR_ROLE)
+    server = await bot.fetch_guild(BOT_setup.GUILD_ID)
+    server_booster = server.get_role(BOT_setup.SERVER_BOOSTER)
+    donator_role = server.get_role(BOT_setup.DONATOR_ROLE)
     admin_role = server.get_role(SETUP.ADMIN_ROLE)
 
     admin_class, donator_class = False, False

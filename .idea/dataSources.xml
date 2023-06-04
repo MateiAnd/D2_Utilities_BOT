@@ -5,7 +5,7 @@
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:D:\D2_Utilities_BOT\D2_Utilities_BOT\evidenta_populatiei\user_role.db</jdbc-url>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/evidenta_populatiei/user_role.db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>
