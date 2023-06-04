@@ -88,7 +88,7 @@ async def booster_manage(before:discord.Member, after:discord.Member, bot):
         if lostRole.id == BOT_setup.SERVER_BOOSTER:
 
             # citire donatori manual
-            with aiofiles.open('./utilities/donator_db.json') as f:
+            async with aiofiles.open('./utilities/donator_db.json') as f:
                 _temp = json.loads(await f.read())
                 donator_list = _temp['data']
             manual_donator.append(don["id"] for don in donator_list)
