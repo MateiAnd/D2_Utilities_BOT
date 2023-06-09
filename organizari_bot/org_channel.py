@@ -27,7 +27,7 @@ def data_reader():
 
 def data_logger(org_dict):
     with open('./organizari_bot/organizari.json', 'w') as f:
-        json.dump(org_dict, f)
+        json.dump(org_dict, f, indent=4)
 
 
 def data_manager(org_dict, mode='a'):
