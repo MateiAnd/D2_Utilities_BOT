@@ -181,5 +181,12 @@ ORG_DETAILS = {
         "MAX_PLAYERS": 6,
         "ACTIVE_IMG": "http://buzea.pro/buzea.pro/d2ro/Assets/SES.png",
         "EXPIRED_IMG": "http://buzea.pro/buzea.pro/d2ro/Assets/SES_exp.png"
+    },
+    "Deep Dive": {
+        "ROLE_ID": 1075455824782184523,
+        "HEX_COLOR": 2361971,
+        "MAX_PLAYERS": 3,
+        "ACTIVE_IMG": "http://buzea.pro/buzea.pro/d2ro/Assets/DD.png",
+        "EXPIRED_IMG": "http://buzea.pro/buzea.pro/d2ro/Assets/DD_exp.png"
     }
 }

@@ -21,7 +21,7 @@ button_labels = {
         'Dungeon': ['Spire of the Watcher', 'Duality', 'Grasp of Averice', 'Pit', 'Prophecy', 'Shattered Throne',
                     'Ghosts of the Deep'],
         'PVP': ['Crucible 6v6', 'Comp 3v3', 'Trials 3v3'],
-        'PVE': ['Gambit', 'Nightfall', 'GM', 'Defiant Battlegrounds', 'Peste']
+        'PVE': ['Gambit', 'Nightfall', 'GM', 'Defiant Battlegrounds', 'Peste', 'Deep Dive']
     },  # optiuni pe baza tipului de activitate
     'Third': ['Next', 'Edit', 'Cancel'],  # timp
     'Forth': ['Next', 'Edit', 'Cancel'],  # numar incepatori
