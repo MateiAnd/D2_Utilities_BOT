@@ -186,7 +186,7 @@ ORG_DETAILS = {
         "ROLE_ID": 1075455824782184523,
         "HEX_COLOR": 2361971,
         "MAX_PLAYERS": 3,
-        "ACTIVE_IMG": "http://buzea.pro/buzea.pro/d2ro/Assets/DD.png",
-        "EXPIRED_IMG": "http://buzea.pro/buzea.pro/d2ro/Assets/DD_exp.png"
+        "ACTIVE_IMG": "https://buzea.pro/buzea.pro/d2ro/Assets/DD.png",
+        "EXPIRED_IMG": "https://buzea.pro/buzea.pro/d2ro/Assets/DD_exp.png"
     }
 }
