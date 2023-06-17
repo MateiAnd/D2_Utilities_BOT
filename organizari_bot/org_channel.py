@@ -27,7 +27,7 @@ def data_reader():
 
 def data_logger(org_dict):
     with open('./organizari_bot/organizari.json', 'w') as f:
-        json.dump(org_dict, f)
+        json.dump(org_dict, f, indent=4)
 
 
 def data_manager(org_dict, mode='a'):
@@ -425,7 +425,8 @@ async def button_functions(interaction: discord.Interaction, label, org_dict, me
             await spam_on_edit(interaction.client, org_dict, changes=[], deleted=True)
             await message.delete()
 
-            data_updater(org_old=org_dict, org_new={})
+            data_manager(org_dict=org_dict, mode='r')
+            # data_updater(org_old=org_dict, org_new={})
 
     if button_label == 'join':
         author = interaction.user
