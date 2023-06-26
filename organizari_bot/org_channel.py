@@ -499,7 +499,8 @@ async def button_functions(interaction: discord.Interaction, label, org_dict, me
 
 
 async def spam_on_edit(bot: commands.Bot, org_dict, changes, jump_url='', deleted=False):
-
+    if not changes and not deleted:
+        return
     org_id = org_dict['ID']
 
     for member in org_dict['Participants']['Participants']:
