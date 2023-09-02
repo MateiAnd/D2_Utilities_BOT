@@ -17,7 +17,7 @@ button_labels = {
     'First': ['Raid', 'Dungeon', 'PVP', 'PVE', 'Cancel'],  # tipul de activitate ; de pus pve inapoi
     'Second': {
         'Raid': ["King's fall", 'Deep Stone Crypt', 'Garden of Salvation', 'Last Wish', 'Vault of Glass',
-                 'Vow of the Disciple', 'Root Of Nightmares', 'Sesiune Raid'],
+                 'Vow of the Disciple', 'Root Of Nightmares', "Crota's End", 'Sesiune Raid'],
         'Dungeon': ['Spire of the Watcher', 'Duality', 'Grasp of Averice', 'Pit', 'Prophecy', 'Shattered Throne',
                     'Ghosts of the Deep'],
         'PVP': ['Crucible 6v6', 'Comp 3v3', 'Trials 3v3'],
@@ -147,7 +147,8 @@ async def edit(interaction, bot, author, org_id):
     org_dict['Editing'] = True
 
     global message
-    message = await interaction.followup.send(content='', embed=SecondEmbed(org_dict), view=SecondView(author, org_dict))
+    message = await interaction.followup.send(content='', embed=SecondEmbed(org_dict),
+                                              view=SecondView(author, org_dict))
 
 
 '''
@@ -294,6 +295,7 @@ class SecondMsgButtons(discord.ui.Button):
 
         self.callback = click
 
+
 '''
 
 —————————————————————————————————————————————————————————————————————————————————————————————————
@@ -314,7 +316,7 @@ async def third_message(org_dict, author, string=None):
         current_server_time_naive = datetime.datetime.now().timestamp()
 
         # Add 15 min
-        after_15_min = current_server_time_naive + 15*60  # calculate 15 minutes after current datetime
+        after_15_min = current_server_time_naive + 15 * 60  # calculate 15 minutes after current datetime
 
         # Get the epoch time
         epoch_time = int(after_15_min)
@@ -331,7 +333,7 @@ class ThirdEmbed(discord.Embed):
     def __init__(self, org_dict):
         super().__init__(title=f"Seteaza timpul pentru organizarea {org_dict['Type']} .",
                          description=f"Selecteaza din lista ce activitate doresti sa creezi\n"
-                                     f"Selectat actual: <t:{int(round(float(org_dict['Datetime']),0))}:f>",
+                                     f"Selectat actual: <t:{int(round(float(org_dict['Datetime']), 0))}:f>",
                          color=0xffa600)
 
 
@@ -619,7 +621,7 @@ class FifthMsgButtons(discord.ui.Button):
                     if not org_dict['Org_utils']:
                         guild = await _bot.fetch_guild(BOT_setup.GUILD_ID)
                         org_role = await guild.create_role(name=f'Part_{org_dict["ID"]}', mentionable=True,
-                                                              reason=f'Rol creat pentru org sherpa {org_dict["ID"]}')
+                                                           reason=f'Rol creat pentru org sherpa {org_dict["ID"]}')
 
                         await author.add_roles(org_role, reason=f'Adaugat roluri pentru creatorul org {org_dict["ID"]}')
 
@@ -628,7 +630,9 @@ class FifthMsgButtons(discord.ui.Button):
                         }
 
                     await org_channel.initializare_mesaj(bot=_bot, org_dict=org_dict)
-                    await message.edit(content=f'Organizare de {org_dict["Activity"]} cu ID {org_dict["ID"]} a fost creata cu succes!', embed=None, view=None)
+                    await message.edit(
+                        content=f'Organizare de {org_dict["Activity"]} cu ID {org_dict["ID"]} a fost creata cu succes!',
+                        embed=None, view=None)
 
         self.callback = click
 
