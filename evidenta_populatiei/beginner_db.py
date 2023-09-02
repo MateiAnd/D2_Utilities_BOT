@@ -20,6 +20,7 @@ async def create_db():
             VOG INTEGER,
             VOD INTEGER,
             RON INTEGER,
+            CRE INTEGER,
             SOTW INTEGER,
             DUAL INTEGER,
             GOA INTEGER,
@@ -50,7 +51,8 @@ binding_dict = {
     'PIT': 1075455824748621836,
     'PROPH': 1075455824748621834,
     'ST': 1075455824748621838,
-    'GOTD': 1111895978350497882
+    'GOTD': 1111895978350497882,
+    'CRE': 1147460054967128104
 }
 
 async def populate_db(bot:commands.Bot, GUILD_ID):
@@ -77,8 +79,8 @@ async def populate_db(bot:commands.Bot, GUILD_ID):
         cursor = await connection.cursor()
 
         query = '''
-            INSERT OR REPLACE INTO UserRoles (user_id, KF, DSC, GOS, LW, VOG, VOD, RON, SOTW, DUAL, GOA, PIT, PROPH, ST, GOTD)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+            INSERT OR REPLACE INTO UserRoles (user_id, KF, DSC, GOS, LW, VOG, VOD, RON, CRE, SOTW, DUAL, GOA, PIT, PROPH, ST, GOTD)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
         '''
 
         await cursor.executemany(query, write_list)
@@ -132,7 +134,7 @@ async def session_beginner(part_list):
 
         for user_id in part_list:
             # Prepare the query
-            query = f'SELECT KF, DSC, GOS, LW, VOG, VOD, RON FROM UserRoles WHERE user_id = {user_id[1]}'
+            query = f'SELECT KF, DSC, GOS, LW, VOG, VOD, RON, CRE FROM UserRoles WHERE user_id = {user_id[1]}'
 
             # Execute the query
             await cursor.execute(query)
