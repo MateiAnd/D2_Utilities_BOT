@@ -70,8 +70,8 @@ ORG_DETAILS = {
         "ACTIVE_IMG": "https://buzea.pro/buzea.pro/d2ro/Assets/RON.png",
         "EXPIRED_IMG": "https://buzea.pro/buzea.pro/d2ro/Assets/RON_exp.png"
     },
-    "Crota's End": {
-        "ROLE_ID": 1075455824782184523,  #1147460054967128104,
+    "Crota\'s End": {
+        "ROLE_ID": 1075455824782184523,  #1147460054967128104, 1147460054967128104
         "HEX_COLOR": 0x435c19,
         "MAX_PLAYERS": 6,
         "ACTIVE_IMG": "https://buzea.pro/buzea.pro/d2ro/Assets/CRE.png",

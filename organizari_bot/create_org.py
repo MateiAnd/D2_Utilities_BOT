@@ -17,7 +17,7 @@ button_labels = {
     'First': ['Raid', 'Dungeon', 'PVP', 'PVE', 'Cancel'],  # tipul de activitate ; de pus pve inapoi
     'Second': {
         'Raid': ["King's fall", 'Deep Stone Crypt', 'Garden of Salvation', 'Last Wish', 'Vault of Glass',
-                 'Vow of the Disciple', 'Root Of Nightmares', "Crota's End", 'Sesiune Raid'],
+                 'Vow of the Disciple', 'Root Of Nightmares', "Crota\'s End", 'Sesiune Raid'],
         'Dungeon': ['Spire of the Watcher', 'Duality', 'Grasp of Averice', 'Pit', 'Prophecy', 'Shattered Throne',
                     'Ghosts of the Deep'],
         'PVP': ['Crucible 6v6', 'Comp 3v3', 'Trials 3v3'],
