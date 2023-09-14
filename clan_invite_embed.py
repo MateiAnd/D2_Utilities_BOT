@@ -14,7 +14,7 @@ class ClanEmbed(discord.Embed):
         }
 
         self.clan_admin = {
-            'A': [160472069606342656, 489214493503520778, 496053061962170380],
+            'A': [489214493503520778, 496053061962170380],
             'B': [527863507270631445],
             'X': [740857014439247902]
         }
@@ -25,7 +25,7 @@ class ClanEmbed(discord.Embed):
 
 
         self.add_field(name='',
-                       value=f'Nu se accepta solicitarea fara sa anuntati administratorii de clan cu un @ pe <#1101490205254488064>! \n\n Ultimele 5 locuri din clan sunt rezervate pentru membri ai comunitatii care doresc sa completeze triumfe! \n \n{"—" * 30}',
+                       value=f'Ultimele 5 locuri din clan sunt rezervate pentru membri ai comunitatii care doresc sa completeze triumfe! \n \n{"—" * 30}',
                        inline=False)
 
 
