@@ -494,7 +494,7 @@ async def organizare_refresher():
             org['Org_info']['Reminder'] = 3
             functions.data_updater(org_old=_org, org_new=org)
 
-        elif minute_difference < 0 and org['Org_info']['Reminder'] == 3 and org['Org_info']['Active'] == True:
+        elif minute_difference < 0 and org['Org_info']['Active'] == True:  # and org['Org_info']['Reminder'] == 3 and org['Org_info']['Active'] == True:
             print(f'--- activare org {org["ID"]}')
             org['Org_info']['Active'] = False
             functions.data_updater(org_old=_org, org_new=org)
