@@ -347,12 +347,15 @@ class OrgEmbed(discord.Embed):
                        value=reserve_list,
                        inline=True)
 
-        if not org_dict['Org_info']['Active']:
-            image_url = attribute_list["EXPIRED_IMG"]
-        else:
-            image_url = attribute_list["ACTIVE_IMG"]
+        icon_url = attribute_list['ICON']
+        self.set_thumbnail(url=icon_url)
 
-        self.set_image(url=image_url)
+        # if not org_dict['Org_info']['Active']:
+        #     image_url = attribute_list["EXPIRED_IMG"]
+        # else:
+        #     image_url = attribute_list["ACTIVE_IMG"]
+
+        # self.set_image(url=image_url)
 
         self.set_footer(text=f"Creat de {org_dict['Participants']['Author'][0]}")
 
