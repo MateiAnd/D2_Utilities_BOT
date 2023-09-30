@@ -66,7 +66,7 @@ async def init_help(interaction: discord.Interaction, bot: discord.ext.commands.
 
 class HelpMessage(discord.Embed):
     def __init__(self, admin_class, donator_class, user):
-        super().__init__(title=f"Meniu Help KH",
+        super().__init__(title=f"Meniu Help D2RO",
                          description=f'Salut {user.mention}! Iata comenzile botilor nostri la care ai acces:',
                          color=0xf28f06)
 
