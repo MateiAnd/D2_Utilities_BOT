@@ -29,6 +29,10 @@ from help.help_embed import init_help
 from audit_log import audit_builder
 from utilities.donator_automod import booster_manage
 
+from giveaway.create_giveaway import create_giveaway, giveaway_refresher, edit_giveaway, rig_giveaway, unrig_giveaway, \
+    extract_giveaway_winner, delete_giveaway
+
+
 class UtilsBot(commands.Bot):
     def __init__(self):
         intents = discord.Intents.default()
@@ -46,6 +50,7 @@ class UtilsBot(commands.Bot):
     async def on_ready(self):
         command_tree.add_command(sherpa_command)
         command_tree.add_command(org_command)
+        command_tree.add_command(giveaway_command)
 
         if not self.synced:
             await command_tree.sync(guild=discord.Object(id=BOT_setup.GUILD_ID))
@@ -67,10 +72,12 @@ class UtilsBot(commands.Bot):
             # do_refresh_leaderboard.start()
             post_refresher.start()
             organizare_refresher.start()
+            do_refresh_giveaway.start()
         else:
             print('—— Bot de teste')
             do_refresh_db.start()
             organizare_refresher.start()
+            do_refresh_giveaway.start()
 
 
         print('Done!')
@@ -83,6 +90,7 @@ class UtilsBot(commands.Bot):
         async def main():
             await sherpa_refresher(bot, BOT_setup.ORG_CHANNEL)
             await org_refresher(bot, BOT_setup.ORG_CHANNEL)
+            await giveaway_refresher(bot, BOT_setup.GIVEAWAY_CHANNEL)
 
         if __name__ == "__main__":
             await main()
@@ -95,6 +103,8 @@ class UtilsBot(commands.Bot):
 sherpa_command = discord.app_commands.Group(name='sherpa', description='Optiuni organizari sherpa de tip SHERPA.',
                                             guild_ids=[BOT_setup.GUILD_ID])
 org_command = discord.app_commands.Group(name='organizare', description='Optiuni pentru organizari.',
+                                         guild_ids=[BOT_setup.GUILD_ID])
+giveaway_command = discord.app_commands.Group(name='giveaway', description='Optiuni pentru givaway.',
                                          guild_ids=[BOT_setup.GUILD_ID])
 bot = UtilsBot()
 command_tree = bot.tree  # discord.app_commands.CommandTree(bot)
@@ -519,6 +529,70 @@ async def organizare_refresher():
 '''
 
 —————————————————————————————————————————————————————————————————————————————————————————————————
+                    Giveaway
+—————————————————————————————————————————————————————————————————————————————————————————————————
+
+'''
+@giveaway_command.command(name='create', description='Creaza un nou giveaway.')
+async def create_giveaway_init(interaction: discord.Interaction):
+    print(f'{"—" * 10} \nInitializare creare giveaway ')
+    await create_giveaway(interaction, bot)
+
+
+@giveaway_command.command(name='edit', description='Editeaza giveaway activ.')
+async def edit_giveaway_init(interaction: discord.Interaction):
+    print(f'{"—" * 10} \nInitializare edit giveaway')
+    await edit_giveaway(interaction, bot)
+
+
+@giveaway_command.command(name='delete', description='Sterge giveaway activ.')
+async def delete_giveaway_init(interaction: discord.Interaction):
+    print(f'{"—" * 10} \nInitializare edit giveaway')
+    await delete_giveaway(interaction, bot)
+
+
+@giveaway_command.command(name='rig', description='Forteaza un castigator.')
+async def rig_giveaway_init(interaction: discord.Interaction, member: discord.Member):
+    print(f'{"—" * 10} \nInitializare rig giveaway user {member.nick if member.nick else member.name}')
+    await rig_giveaway(interaction, bot, member.id)
+
+
+@giveaway_command.command(name='unrig', description='Scoate fortare castigator.')
+async def rig_giveaway_init(interaction: discord.Interaction, member: discord.Member):
+    print(f'{"—" * 10} \nInitializare unrig giveaway user {member.nick if member.nick else member.name}')
+    await unrig_giveaway(interaction, bot, member.id)
+
+
+@tasks.loop(minutes=1)
+async def do_refresh_giveaway():
+    with open('./giveaway/giveaway_setup.json', 'r') as f:
+        give_dict = json.load(f)
+
+    if not give_dict:
+        return
+
+    from datetime import datetime
+
+    epoch_time = int(give_dict['Datetime'])
+    user_datetime = datetime.fromtimestamp(epoch_time)
+    current_server_time = datetime.now()
+    time_difference = user_datetime - current_server_time
+    time_difference = int(time_difference.total_seconds())
+
+    # Extract winners
+    if time_difference < 0:
+        print(f'{"—" * 10} \nInitializare extragere giveaway')
+        await extract_giveaway_winner(bot)
+
+        with open('./giveaway/giveaway_setup.json', 'w') as f:
+            json.dump({}, f)
+
+        with open('./giveaway/giveaway_members.txt', 'w') as f:
+            f.write('')
+
+'''
+
+—————————————————————————————————————————————————————————————————————————————————————————————————
                     Bot events si task-uri 
 —————————————————————————————————————————————————————————————————————————————————————————————————
 
@@ -566,6 +640,7 @@ Dacă întâmpini greutăți pe parcursul procesului, îți recomandăm să vorb
             content=f'Dacă întâmpini probleme, te rog să ne lași un mesaj aici și te vom asista în cel mai scurt timp posibil. {member.mention} <@&1104377935009419385>')
 
 
+
 @tasks.loop(minutes=60)
 async def do_refresh_embed():
     """
@@ -610,7 +685,6 @@ async def do_refresh_bot():
 async def do_refresh_db():
     print(f'{"—" * 5} Refresh DataBase')
     await populate_db(bot, BOT_setup.GUILD_ID)
-
 
 
 @bot.event
@@ -869,143 +943,63 @@ async def test_voice(interaction: discord.Interaction):
 #         print(f"{interaction.user}: {selected_timezone}")
 #         await interaction.response.send_message(f"Your timezone has been set to {selected_timezone}.", ephemeral=True)
 
-#
-# @command_tree.command(name='test_embed', description='Creaza o noua organizare de Sherpa.',
-#                       guild=discord.Object(id=BOT_setup.GUILD_ID))
-# async def test_embed(interaction: discord.Interaction):
-#     print(f'{"—" * 10} \nInitializare creare ')
-#     channel = await bot.fetch_channel(1100487208936423556)
-#     await channel.send(embed=TestEmbed(), view=TestView())
-#
-# class TestEmbed(discord.Embed):
-#     def __init__(self):
-#         super().__init__(title=f"test",
-#                          description=f'test',
-#                          color=0x3d3223)
-#
-# class TestView(discord.ui.View):
-#     def __init__(self):
-#         super().__init__(timeout=None)
-#
-#         button = TestButtons()
-#         self.add_item(button)
-#
-#
-# class TestButtons(discord.ui.Button):
-#     def __init__(self):
-#         super().__init__(label='Test', style=discord.ButtonStyle.danger)
-#
-#         async def click(interaction: discord.Interaction):
-#             await interaction.response.defer()
-#
-#             channel = interaction.channel
-#
-#             await channel.send('Test')
-#
-#         self.callback = click
-#
-#
-# class TestEmbed(discord.Embed):
-#     def __init__(self):
-#
-#         self.set_author(name='KH Sherpa',
-#                         url=r'https://destiny2.ro/',
-#                         icon_url='https://cdn.discordapp.com/attachments/1086761501852958820/1086778406210895872/Karp_Disc.png')
-#
-#         attribute_list = [797118742198747146, 1049223783724109834, 0x0088ff,
-#                           r'https://cdn.discordapp.com/attachments/1086761501852958820/1086768506252558416/DSC.png',
-#                           r'https://cdn.discordapp.com/attachments/1086761501852958820/1086768517837234306/DSC_exp.png']
-#
-#         org_dict = {"ID": "8812", "Activity": "Raid", "Type": "Deep Stone Crypt", "Datetime": "1682432321",
-#                     "Info": "Asta chiar se face + teste bot, sa aveti arme de DPS (Linear si Rockets cu perk-uri de dmg), Parasite / Lament",
-#                     "Beginners": "2", "Message_id": 1087121633011040398,
-#                     "Participants": {"Sherpa": ["Dan Diaconescu#8727", 489214493503520778],
-#                                      "Beginners": [["Albert#7319\ud83c\udf7c", 441305325719650304]],
-#                                      "Experts": [["SelectDenis09#1084", 667295895339139072],
-#                                                  ["Flyingaxe#8778", 447762349466583043]],
-#                                      "Reserve": [["PanTeraS#7407 \ud83c\udf7c", 319186530499428373]]},
-#                     "Org_info": {"Active": True, "Reminder": 3}}
-#
-#         role_id, guide_id, hex_color, active_img, expired_img = attribute_list
-#
-#         for i in range(11):
-#             self.add_field(name='',
-#                            value='',
-#                            inline=True)
-#
-#         super().__init__(title=f"{org_dict['Type']} — SHERPA",
-#                          description=f'Canal ghid: <#{1046138519506137208}>',
-#                          color=hex_color)
-#
-#         self.set_field_at(index=0,
-#                           name='Info',
-#                           value=org_dict['Info'],
-#                           inline=True)
-#
-#         self.set_field_at(index=2,
-#                           name='ID',
-#                           value=org_dict['ID'],
-#                           inline=True)
-#
-#         self.set_field_at(index=3,
-#                           name='Data si ora [RO]',
-#                           value=f"<t:{org_dict['Datetime']}:f>",
-#                           inline=False)
-#
-#         self.set_field_at(index=4,
-#                           name='‎',
-#                           value='‎',
-#                           inline=False)
-#
-#         '''
-#         Tratare participanti
-#
-#         '''
-#
-#         participants = org_dict['Participants']
-#
-#         self.set_field_at(index=5,
-#                           name='Sherpa',
-#                           value=participants['Sherpa'][0],
-#                           inline=True)
-#
-#         if participants['Beginners']:
-#             beginner_list = '\n'.join([beg[0] for beg in participants['Beginners']])
-#         else:
-#             beginner_list = '-'
-#
-#         self.set_field_at(index=7,
-#                           name=f'Incepatori (max {org_dict["Beginners"]})',
-#                           value=beginner_list,
-#                           inline=True)
-#
-#         if participants['Experts']:
-#             expert_list = '\n'.join([exp[0] for exp in participants['Experts']])
-#         else:
-#             expert_list = '-'
-#
-#         self.set_field_at(index=8,
-#                           name=f'Experimentati',
-#                           value=expert_list,
-#                           inline=True)
-#
-#         if participants['Reserve']:
-#             reserve_list = '\n'.join([rez[0] for rez in participants['Reserve']])
-#         else:
-#             reserve_list = '-'
-#
-#         self.set_field_at(index=10,
-#                           name=f'Rezerve',
-#                           value=reserve_list,
-#                           inline=True)
-#
-#         if org_dict['Org_info']['Active'] == False:
-#             image_url = expired_img
-#         else:
-#             image_url = active_img
-#
-#         self.set_image(url=image_url)
 
+@command_tree.command(name='test_embed', description='Creaza o noua organizare de Sherpa.',
+                      guild=discord.Object(id=BOT_setup.GUILD_ID))
+async def test_embed(interaction: discord.Interaction):
+    await interaction.response.send_message(embed=TestEmbed())
+
+class TestEmbed(discord.Embed):
+    def __init__(self):
+        super().__init__(title=f"Organizare — Root of Nightmares",
+                         description=f'',
+                         color=0xb32b95)
+
+        self.add_field(name='ID',
+                       value=9999,
+                       inline=True)
+
+        self.add_field(name='‎',
+                       value='‎',
+                       inline=True)
+
+        date_str = '<t:1696066260:D>'
+
+        self.add_field(name='Data si ora',
+                       value=date_str,
+                       inline=True)
+
+        beg_number = f"Maxim 3 incepatori 🍼"
+
+        self.add_field(name='Info',
+                       value=f" Test info \n\n**{beg_number}**",
+                       inline=False)
+
+        self.add_field(name='‎',
+                       value='‎',
+                       inline=False)
+
+        '''
+        Tratare participanti
+        '''
+
+        self.add_field(name=f'Participanti',
+                       value=f'-',
+                       inline=True)
+
+        self.add_field(name='‎',
+                       value='‎',
+                       inline=True)
+
+        self.add_field(name=f'Rezerve',
+                       value='-',
+                       inline=True)
+
+        image_url = 'https://www.bungie.net/common/destiny2_content/icons/f2b6ec58e14244e4972705897667c246.png'
+
+        self.set_thumbnail(url=image_url)
+
+        self.set_footer(text=f"Creat de Lorin")
 
 '''
 
