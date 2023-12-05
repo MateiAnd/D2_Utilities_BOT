@@ -587,8 +587,6 @@ async def do_refresh_giveaway():
         with open('./giveaway/giveaway_setup.json', 'w') as f:
             json.dump({}, f)
 
-        with open('./giveaway/giveaway_members.txt', 'w') as f:
-            f.write('')
 
 '''
 

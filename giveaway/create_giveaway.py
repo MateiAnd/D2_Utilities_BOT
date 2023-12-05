@@ -30,6 +30,9 @@ async def create_giveaway(interaction, bot):
                 content='Un giveaway este deja activ. Foloseste comanda `edit` pentru a modifica givewaway-ul activ')
             return
 
+    with open('./giveaway/giveaway_members.txt', 'w') as f:
+        f.write('')
+
     _, _, datetime_obj = create_one_week_later_time()
 
     give_dict = {
@@ -157,6 +160,7 @@ async def extract_giveaway_winner(bot):
 
     members_list = members.split('\n')
     members_list = [int(mem) for mem in members_list if mem]
+    members_list = list(set(members_list))
 
     # Trateaza rigged winners
     for rig in rigged_winners:
@@ -169,8 +173,11 @@ async def extract_giveaway_winner(bot):
 
     if final_prize_number > 0:
         # Extrage legit winnners
-        import random
-        legit_winners = random.sample(members_list, final_prize_number)
+        if len(members_list) <= final_prize_number:
+            legit_winners = members_list
+        else:
+            import random
+            legit_winners = random.sample(members_list, final_prize_number)
 
         # Trimite mesaj
         winners = rigged_winners + legit_winners
@@ -181,7 +188,7 @@ async def extract_giveaway_winner(bot):
 
     giveaway_channel = await _bot.fetch_channel(BOT_setup.GIVEAWAY_CHANNEL)
     giveaway_message = await giveaway_channel.fetch_message(giveaway_dict['MessageID'])
-    await giveaway_message.edit(content='', embed=ExpiredEmbed(winner_str), view=None)
+    await giveaway_message.edit(content='', embed=ExpiredEmbed(winner_str, giveaway_dict['Prize']), view=None)
 
 
 def create_one_week_later_time():
@@ -250,7 +257,7 @@ class FirstMsgButtons(discord.ui.Button):
             async def click(interaction: discord.Interaction):
                 await interaction.response.defer()
 
-                if giveaway_dict['Editing'] == True:
+                if giveaway_dict['Editing']:
                     string = f"Editare giveaway a fost anulata."
                 else:
                     string = 'Creare giveaway anulata.'
@@ -393,21 +400,39 @@ class FinalEmbed(discord.Embed):
         else:
             _temp_prize_string = f"Premiul acordat este **{give_dict['Number']}x {give_dict['Prize']}**"
 
-        super().__init__(title=f"GHRO — giveaway!",
-                         description=f"""**Se anunta un nou GIVEAWAY!**
+        super().__init__(title=f"🎁 GHRO — giveaway! 🎁",
+                         description=f"""                         
+                         🌟 Suntem încântați să vă anunțăm cel mai recent Giveaway! Este foarte ușor să participi și ai șansa de a câștiga premii!
                          
-                         
-                         Extragerea se face automat pe data de <t:{int(round(float(give_dict['Datetime']), 0))}:f>
-                         
+                         🏆 **Detalii despre Premiu:**
                          
                          {_temp_prize_string}
+                         
+                         📅 **Durata Concursului:**
+                         
+                         Concursul începe acum și se încheie pe <t:{int(round(float(give_dict['Datetime']), 0))}:f>. Nu ratați!
+                         
+                         🥇 **Anunțarea Câștigătorului:**
+                         
+                         Câștigătorul norocos va fi selectat aleatoriu și anunțat pe <t:{int(round(float(give_dict['Datetime']), 0))}:f>.
+                         
+                         🎉 **Cum să intri în concurs:**
+                         
+                         1. Apasă pur și simplu butonul 'Join'\.
+                         2. Atât! Ești acum în cursa pentru a câștiga!
+                         
+                         👥 Toți membrii comunității noastre sunt bineveniți să participe! Alăturați-vă pentru șansa de a câștiga și de a vă distra cu comunitatea noastră. Mult noroc tuturor participanților!
+                         
                          """,
                          color=0x4287f5)
 
 
 class FinalView(discord.ui.View):
-    def __init__(self, ):
+    def __init__(self):
         super().__init__(timeout=None)
+
+        global member_cache
+        member_cache = set()
 
         button = FinalMsgButtons()
         self.add_item(button)
@@ -421,14 +446,25 @@ class FinalMsgButtons(discord.ui.Button):
         async def click(interaction: discord.Interaction):
             await interaction.response.defer()
 
+            # Verifica daca e deja inscris
+
+            if interaction.user.id in member_cache:
+                await interaction.followup.send(content='Deja ai fost inscris in giveaway. Good luck!!', ephemeral=True)
+                return
+            else:
+                member_cache.add(interaction.user.id)
+
             async with aiofiles.open('./giveaway/giveaway_members.txt', 'r') as f:
                 members = await f.read()
 
             if str(interaction.user.id) in members:
                 await interaction.followup.send(content='Deja ai fost inscris in giveaway. Good luck!', ephemeral=True)
+                return
             else:
                 async with aiofiles.open('./giveaway/giveaway_members.txt', 'a') as f:
                     await f.write(f"{interaction.user.id}\n")
+                await interaction.followup.send(content='Ai fost inscris in giveaway. Good luck!', ephemeral=True)
+
 
         self.callback = click
 
@@ -495,15 +531,18 @@ class PreviewMsgButtons(discord.ui.Button):
 
 
 class ExpiredEmbed(discord.Embed):
-    def __init__(self, winners):
+    def __init__(self, winners, prize):
         super().__init__(title=f"GHRO — giveaway finalizat!",
-                         description=f"""Extragerea a luat sfarsit!
-                         **Felicitari {winners}!**
+                         description=f"""Ne bucurăm să anunțăm câștigătorii giveaway-ului. 
+                         Mulțumim tuturor celor care au participat!
+                         
+                         **🎉 Felicitari {winners}! 🎉**
+                         
+                         Premiul castigat **{prize}**
+                         
+                         Pentru a intra în posesia premiului, va trebui să creați un ticket pe <#{BOT_setup.TICKET_CHANNEL}> și un membru <@&{BOT_setup.ADMIN_ROLE}> vă va asista în cel mai scurt timp posibil.
                          
                          
-                         Pentru a intra in posesia premiului, va trebui sa creati un ticket pe <#{BOT_setup.TICKET_CHANNEL}> si un membru <@&{BOT_setup.ADMIN_ROLE}> va va asista in cel mai scurt timp posibil.
-                         
-                         
-                         GLHF!
+                         Urmăriți-ne pentru mai multe concursuri și premii pe viitor! GLHF!
                          """,
                          color=0x8a4cfc)
