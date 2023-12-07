@@ -7,10 +7,12 @@ import discord
 from discord.ext import commands
 from copy import deepcopy
 
+from giveaway.accept_winners import create_accept_entries, write_data
+
 '''
 
 —————————————————————————————————————————————————————————————————————————————————————————————————
-                    Creaza
+                    Functii main
 —————————————————————————————————————————————————————————————————————————————————————————————————
 
 '''
@@ -40,6 +42,9 @@ async def create_giveaway(interaction, bot):
         'Prize': 'Cheie Xbox/PC game pass',
         'Number': 1,
         'Rig': [],
+        'ProposedWinners': [],
+        'DeclinedWinners': [],
+        'AcceptedWinners': [],
         'MessageID': 0,
         'Editing': False
     }
@@ -181,10 +186,54 @@ async def extract_giveaway_winner(bot):
 
         # Trimite mesaj
         winners = rigged_winners + legit_winners
-        winner_str = ', '.join([f'<@{win}>' for win in winners])
-
+        giveaway_dict['ProposedWinners'] = winners
     else:
-        winner_str = ', '.join([f'<@{win}>' for win in rigged_winners])
+        giveaway_dict['ProposedWinners'] = rigged_winners
+
+    write_data(giveaway_dict)
+    await create_accept_entries(bot)
+
+
+async def redraw_declined_winners(bot):
+    global _bot
+    _bot = bot
+
+    with open('./giveaway/giveaway_setup.json', 'r') as f:
+        giveaway_dict = json.load(f)
+
+    declined_winners = giveaway_dict['DeclinedWinners']
+    final_prize_number = len(declined_winners)
+
+    async with aiofiles.open('./giveaway/giveaway_members.txt', 'r') as f:
+        members = await f.read()
+
+    members_list = members.split('\n')
+    members_list = [int(mem) for mem in members_list if mem]
+    members_list = list(set(members_list))
+
+    new_winners = []
+
+    import random
+    while len(new_winners) < final_prize_number:
+        new_winners.append(random.sample(members_list, final_prize_number - len(new_winners)))
+        new_winners = list(set(new_winners))
+
+        for winner in new_winners:
+            if winner in declined_winners:
+                new_winners.remove(winner)
+            else:
+                final_prize_number -= 1
+                declined_winners.remove(winner)
+
+    giveaway_dict['ProposedWinners'] = new_winners
+
+    write_data(giveaway_dict)
+    await create_accept_entries(bot)
+
+
+async def send_winner_messages(giveaway_dict):
+    winner_format = [f'<@{win}>' for win in giveaway_dict['AcceptedWinners']]
+    winner_str = ' ; '.join(winner_format)
 
     giveaway_channel = await _bot.fetch_channel(BOT_setup.GIVEAWAY_CHANNEL)
     giveaway_message = await giveaway_channel.fetch_message(giveaway_dict['MessageID'])
@@ -464,7 +513,6 @@ class FinalMsgButtons(discord.ui.Button):
                 async with aiofiles.open('./giveaway/giveaway_members.txt', 'a') as f:
                     await f.write(f"{interaction.user.id}\n")
                 await interaction.followup.send(content='Ai fost inscris in giveaway. Good luck!', ephemeral=True)
-
 
         self.callback = click
 

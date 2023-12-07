@@ -30,7 +30,7 @@ from audit_log import audit_builder
 from utilities.donator_automod import booster_manage
 
 from giveaway.create_giveaway import create_giveaway, giveaway_refresher, edit_giveaway, rig_giveaway, unrig_giveaway, \
-    extract_giveaway_winner, delete_giveaway
+    extract_giveaway_winner, delete_giveaway, send_winner_messages, redraw_declined_winners
 
 
 class UtilsBot(commands.Bot):
@@ -85,6 +85,7 @@ class UtilsBot(commands.Bot):
         print('Refreshing orgs')
         with open("./chat_gpt/api_key.txt", "r") as f:
             openai.api_key = f.read().strip('\n')
+        chatbro = openai.Client()
         discord.utils.setup_logging()
 
         async def main():
@@ -581,11 +582,24 @@ async def do_refresh_giveaway():
 
     # Extract winners
     if time_difference < 0:
-        print(f'{"—" * 10} \nInitializare extragere giveaway')
-        await extract_giveaway_winner(bot)
+        proposed = give_dict['ProposedWinners']
+        accepted = give_dict['AcceptedWinners']
+        declined = give_dict['DeclinedWinners']
 
-        with open('./giveaway/giveaway_setup.json', 'w') as f:
-            json.dump({}, f)
+        if not proposed and not accepted and not declined:
+            print(f'{"—" * 10} \nInitializare extragere giveaway')
+            await extract_giveaway_winner(bot)
+
+        elif accepted and not proposed and not declined:
+            print(f'{"—" * 10} \nInitializare anuntare castigatori giveaway')
+            await send_winner_messages(give_dict)
+
+            with open('./giveaway/giveaway_setup.json', 'w') as f:
+                json.dump({}, f)
+
+        elif declined:
+            print(f'{"—" * 10} \nInitializare reextragere giveaway')
+            await redraw_declined_winners(bot)
 
 
 '''
@@ -721,7 +735,6 @@ async def on_member_remove(member):
 async def test_gpt_2(interaction: discord.Interaction):
     await interaction.response.defer()
     message = await interaction.followup.send(content='Vorbeste in thread.')
-    message_id = message.id
     new_thread = await interaction.channel.create_thread(name=f'Support Thread - {interaction.user.name}',
                                                          auto_archive_duration=1440, message=message)
 
