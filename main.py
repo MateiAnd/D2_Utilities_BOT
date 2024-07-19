@@ -12,7 +12,7 @@ import sys
 from os import environ
 
 import openai
-from chat_gpt.ask_gpt import init_gpt, hello_gpt
+from chat_gpt.ask_gpt import init_gpt
 from chat_gpt import ask_gpt
 from evidenta_populatiei.beginner_db import populate_db
 
@@ -84,8 +84,7 @@ class UtilsBot(commands.Bot):
         print('------')
         print('Refreshing orgs')
         with open("./chat_gpt/api_key.txt", "r") as f:
-            openai.api_key = f.read().strip('\n')
-        chatbro = openai.Client()
+            os.environ['OPENAI_API_KEY'] = 'your-api-key'
         discord.utils.setup_logging()
 
         async def main():
@@ -312,8 +311,10 @@ async def lock_for_donator(interaction: discord.Interaction, limita_user:int = 0
             new_limit = len(voice_channel.members)
         await voice_channel.edit(user_limit=new_limit)
 
-        await interaction.response.send_message(content=f'Restrangere canal voce __**{voice_channel.name}**__ de catre {author.mention}')
-        await updates_channel.send(content=f'Restrangere canal voce __**{voice_channel.name}**__ de catre {author.mention}')
+        await interaction.response.send_message(
+            content=f'Restrangere canal voce __**{voice_channel.name}**__ de catre {author.mention}')
+        await updates_channel.send(
+            content=f'Restrangere canal voce __**{voice_channel.name}**__ de catre {author.mention}')
     except:
         await interaction.response.send_message(content='Trebuie sa intri intr-un canal voce.', ephemeral=True)
 
@@ -521,7 +522,10 @@ async def organizare_refresher():
             guild = await bot.fetch_guild(BOT_setup.GUILD_ID)
             org_role = guild.get_role(org['Org_utils']['Part'])
 
-            await org_role.delete()
+            try:
+                await org_role.delete()
+            except:
+                pass
             await message.delete()
 
             functions.data_updater(org_old=_org, org_new={})
@@ -649,7 +653,8 @@ Dacă întâmpini greutăți pe parcursul procesului, îți recomandăm să vorb
 
     except:
         await new_thread.send(
-            content=f'Dacă întâmpini probleme, te rog să ne lași un mesaj aici și te vom asista în cel mai scurt timp posibil. {member.mention} <@&1104377935009419385>')
+            content=f'Dacă întâmpini probleme, te rog să ne lași un mesaj aici și te vom asista în cel mai scurt timp '
+                    f'posibil. {member.mention} <@&1104377935009419385>')
 
 
 
@@ -806,7 +811,8 @@ async def on_message(message: discord.Message):
                     f.write(thread_ids)
                 os.remove(rf'./chat_gpt/threads/{message.channel.id}.json')
                 await message.reply(
-                    content="ChatBro a fost a intrat in concediu medical, problema ta va fi preluata de catre un admin <@&1104377935009419385>")
+                    content="ChatBro a fost a intrat in concediu medical, problema ta va fi preluata de catre un "
+                            "admin <@&1104377935009419385>")
                 # await message.channel.edit(archived=True, locked=True)
                 return
 

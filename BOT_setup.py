@@ -8,7 +8,7 @@
 
 GUILD_ID = 1075455824643764314
 PLAYER_UPDATES_CHANNEL = 1100486602922397776
-ORG_CHANNEL = 1101037441999179827
+ORG_CHANNEL = 1075455825205800971 #  1101037441999179827
 REMINDER_CHANNEL = 1075455825788809276
 WELCOME_CHANNEL = 1075455825205800974
 CLAN_INVITE_CHANNEL = 1075455825377763418
@@ -87,6 +87,14 @@ ORG_DETAILS = {
         "EXPIRED_IMG": "https://buzea.pro/buzea.pro/d2ro/Assets/CRE_exp.png",
         "ICON": "https://www.bungie.net/common/destiny2_content/icons/d89e12c918cb0c6b1087b073ad14d6c2.png"
     },
+    "Salvation\'s Edge": {
+        "ROLE_ID": 1075455824782184523,
+        "HEX_COLOR": 0xad324d,
+        "MAX_PLAYERS": 6,
+        "ACTIVE_IMG": "https://buzea.pro/buzea.pro/d2ro/Assets/CRE.png",
+        "EXPIRED_IMG": "https://buzea.pro/buzea.pro/d2ro/Assets/CRE_exp.png",
+        "ICON": "https://www.bungie.net/common/destiny2_content/icons/4da15a79ac0497134721eb8ce11004e3.png"
+    },
     "Spire of the Watcher": {
         "ROLE_ID": 1075455824731852844,
         "HEX_COLOR": 12085764,
@@ -94,6 +102,14 @@ ORG_DETAILS = {
         "ACTIVE_IMG": "https://buzea.pro/buzea.pro/d2ro/Assets/SOTW.png",
         "EXPIRED_IMG": "https://buzea.pro/buzea.pro/d2ro/Assets/SOTW_exp.png",
         "ICON": "https://www.bungie.net/common/destiny2_content/icons/241785dc00e0bf32e30d0031e299cefd.png"
+    },
+    "Warlord\'s Ruin": {
+        "ROLE_ID": 1075455824731852844,
+        "HEX_COLOR": 0x113314,
+        "MAX_PLAYERS": 3,
+        "ACTIVE_IMG": "https://buzea.pro/buzea.pro/d2ro/Assets/SOTW.png",
+        "EXPIRED_IMG": "https://buzea.pro/buzea.pro/d2ro/Assets/SOTW_exp.png",
+        "ICON": "https://www.bungie.net/common/destiny2_content/icons/e5f919f084ce74b117a52e6c6becc98d.png"
     },
     "Duality": {
         "ROLE_ID": 1075455824731852846,
