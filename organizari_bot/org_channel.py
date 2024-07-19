@@ -1,6 +1,8 @@
 import BOT_setup
 import copy
 import json
+import traceback
+import datetime
 
 import discord
 from discord.ext import commands
@@ -121,11 +123,25 @@ async def org_refresher(bot, org_channel_id):
     if not orgs:
         return
 
+    current_server_time = datetime.datetime.now()
     _org_channel = await bot.fetch_channel(org_channel_id)
     for org in orgs:
         print(org['ID'])
-        message = await _org_channel.fetch_message(org['Message_id'])
-        await edit_mesaj(bot, message, org)
+        epoch_time = int(org['Datetime'])
+        user_datetime = datetime.datetime.fromtimestamp(epoch_time)
+        time_difference = user_datetime - current_server_time
+        minute_difference = int(time_difference.total_seconds() / 60)
+
+        if minute_difference < -90:
+            print("Time diff too long, skipping...")
+            continue
+
+        try:
+            message = await _org_channel.fetch_message(org['Message_id'])
+            await edit_mesaj(bot, message, org)
+        except:
+            print(f"Failed to refresh org {org['ID']} - msg id: {org['Message_id']}")
+            traceback.print_exc()
 
 
 async def create_part_stings(org_dict: dict, guild, role_id):
@@ -298,8 +314,7 @@ class OrgEmbed(discord.Embed):
                        value='‎',
                        inline=True)
 
-        from datetime import datetime
-        if int(org_dict['Datetime']) - datetime.now().timestamp() < 3600 * 5:
+        if int(org_dict['Datetime']) - datetime.datetime.now().timestamp() < 3600 * 5:
             date_str = f"<t:{org_dict['Datetime']}:R>"
         else:
             date_str = f"<t:{org_dict['Datetime']}:f>"
