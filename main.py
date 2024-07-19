@@ -516,17 +516,19 @@ async def organizare_refresher():
 
         if minute_difference < -60 and org['Org_info']['Active'] is False:
             print(f'--- stergere org {org["ID"]}')
-            _org_channel = await bot.fetch_channel(BOT_setup.ORG_CHANNEL)
-            message = await _org_channel.fetch_message(org['Message_id'])
-
-            guild = await bot.fetch_guild(BOT_setup.GUILD_ID)
-            org_role = guild.get_role(org['Org_utils']['Part'])
+            try:
+                _org_channel = await bot.fetch_channel(BOT_setup.ORG_CHANNEL)
+                message = await _org_channel.fetch_message(org['Message_id'])
+                await message.delete()
+            except:
+                pass
 
             try:
+                guild = await bot.fetch_guild(BOT_setup.GUILD_ID)
+                org_role = guild.get_role(org['Org_utils']['Part'])
                 await org_role.delete()
             except:
                 pass
-            await message.delete()
 
             functions.data_updater(org_old=_org, org_new={})
 
